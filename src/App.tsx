@@ -1,12 +1,8 @@
-import PokemonBuildEditor from './components/PokemonBuildEditor';
+import DamageCalculatorPage from './features/calculator/DamageCalculatorPage';
 import './App.css';
 
 function App() {
-  return (
-    <main className="app">
-      <PokemonBuildEditor />
-    </main>
-  );
+  return <DamageCalculatorPage />;
 }
 
 export default App;

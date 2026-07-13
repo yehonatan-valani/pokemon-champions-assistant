@@ -1,8 +1,5 @@
-import { useState } from 'react';
-
 import {
   createEmptyPokemonBuild,
-  isPokemonBuildComplete,
   type ChampionsPokemonBuild,
 } from '../domain/pokemonBuild';
 import StatPointEditor from './StatPointEditor';
@@ -10,63 +7,61 @@ import StatPointEditor from './StatPointEditor';
 type TextField = 'species' | 'nature' | 'ability' | 'item';
 type MoveIndex = 0 | 1 | 2 | 3;
 
-function PokemonBuildEditor() {
-  const [build, setBuild] = useState<ChampionsPokemonBuild>(
-    createEmptyPokemonBuild,
-  );
+interface PokemonBuildEditorProps {
+  title: string;
+  build: ChampionsPokemonBuild;
+  onChange: (nextBuild: ChampionsPokemonBuild) => void;
+}
 
-  const isComplete = isPokemonBuildComplete(build);
-
+function PokemonBuildEditor({
+  title,
+  build,
+  onChange,
+}: PokemonBuildEditorProps) {
   function updateTextField(field: TextField, value: string) {
-    setBuild((currentBuild) => ({
-      ...currentBuild,
+    onChange({
+      ...build,
       [field]: value,
-    }));
+    });
   }
 
   function updateMove(index: MoveIndex, value: string) {
-    setBuild((currentBuild) => {
-      const nextMoves = [...currentBuild.moves] as [
-        string,
-        string,
-        string,
-        string,
-      ];
+    const nextMoves = [...build.moves] as [
+      string,
+      string,
+      string,
+      string,
+    ];
 
-      nextMoves[index] = value;
+    nextMoves[index] = value;
 
-      return {
-        ...currentBuild,
-        moves: nextMoves,
-      };
+    onChange({
+      ...build,
+      moves: nextMoves,
     });
   }
 
   function resetBuild() {
-    setBuild(createEmptyPokemonBuild());
+    onChange(createEmptyPokemonBuild());
   }
 
   return (
     <section className="pokemon-build-editor">
       <header className="editor-header">
-        <p className="eyebrow">
-          Pokémon Champions Assistant
-        </p>
-
-        <h1>Pokémon Build Editor</h1>
+        <h2>{title}</h2>
 
         <p>
-          Enter one complete Pokémon Champions build.
-          Autocomplete will be added later.
+          Enter a Pokémon Champions build using Stat Points.
         </p>
       </header>
 
       <section className="form-section">
-        <h2>Pokémon details</h2>
+        <h3>Pokémon details</h3>
 
         <div className="form-grid">
           <label className="form-field">
             <span>Species</span>
+
             <input
               type="text"
               value={build.species}
@@ -79,6 +74,7 @@ function PokemonBuildEditor() {
 
           <label className="form-field">
             <span>Nature</span>
+
             <input
               type="text"
               value={build.nature}
@@ -91,6 +87,7 @@ function PokemonBuildEditor() {
 
           <label className="form-field">
             <span>Ability</span>
+
             <input
               type="text"
               value={build.ability}
@@ -103,6 +100,7 @@ function PokemonBuildEditor() {
 
           <label className="form-field">
             <span>Item</span>
+
             <input
               type="text"
               value={build.item}
@@ -116,7 +114,7 @@ function PokemonBuildEditor() {
       </section>
 
       <section className="form-section">
-        <h2>Moves</h2>
+        <h3>Moves</h3>
 
         <div className="form-grid">
           {build.moves.map((move, index) => (
@@ -142,30 +140,20 @@ function PokemonBuildEditor() {
       <StatPointEditor
         value={build.statPoints}
         onChange={(nextStatPoints) =>
-          setBuild((currentBuild) => ({
-            ...currentBuild,
+          onChange({
+            ...build,
             statPoints: nextStatPoints,
-          }))
+          })
         }
       />
 
-      <div
-        className={
-          isComplete
-            ? 'build-status build-status-valid'
-            : 'build-status build-status-incomplete'
-        }
+      <button
+        className="secondary-button"
+        type="button"
+        onClick={resetBuild}
       >
-        {isComplete
-          ? 'Build is complete and valid.'
-          : 'Complete the required fields and use a legal SP allocation.'}
-      </div>
-
-      <div className="editor-actions">
-        <button type="button" onClick={resetBuild}>
-          Reset entire build
-        </button>
-      </div>
+        Reset {title}
+      </button>
     </section>
   );
 }
