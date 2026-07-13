@@ -4,15 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "dev": "vite",
-  "build": "tsc -b && vite build",
-  "lint": "eslint .",
-  "preview": "vite preview",
-  "test": "vitest",
-  "test:run": "vitest run"
-},
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "vitest --config vitest.config.ts",
+    "test:run": "vitest run --config vitest.config.ts"
+  },
   "dependencies": {
-    "@smogon/calc": "^0.11.0",
+    "@smogon/calc": "file:vendor/damage-calc/calc",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
