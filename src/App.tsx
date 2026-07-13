@@ -1,10 +1,10 @@
-import StatPointEditor from './components/StatPointEditor';
+import PokemonBuildEditor from './components/PokemonBuildEditor';
 import './App.css';
 
 function App() {
   return (
     <main className="app">
-      <StatPointEditor />
+      <PokemonBuildEditor />
     </main>
   );
 }

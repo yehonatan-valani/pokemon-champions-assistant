@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import {
   EMPTY_STAT_POINTS,
   MAX_SP_PER_STAT,
@@ -12,44 +10,51 @@ import {
   type StatPoints,
 } from '../domain/statPoints';
 
-function StatPointEditor() {
-  const [stats, setStats] = useState<StatPoints>({
-    ...EMPTY_STAT_POINTS,
-  });
+interface StatPointEditorProps {
+  value: StatPoints;
+  onChange: (nextValue: StatPoints) => void;
+}
 
-  const total = getTotalStatPoints(stats);
+function StatPointEditor({
+  value,
+  onChange,
+}: StatPointEditorProps) {
+  const total = getTotalStatPoints(value);
   const pointsRemaining = MAX_TOTAL_SP - total;
   const isOverLimit = total > MAX_TOTAL_SP;
 
-  function updateStat(stat: StatKey, value: number) {
-    const safeValue = clampStatPoint(value);
-
-    setStats((currentStats) => ({
-      ...currentStats,
-      [stat]: safeValue,
-    }));
+  function updateStat(stat: StatKey, newValue: number) {
+    onChange({
+      ...value,
+      [stat]: clampStatPoint(newValue),
+    });
   }
 
   function resetStats() {
-    setStats({
+    onChange({
       ...EMPTY_STAT_POINTS,
     });
   }
 
   return (
-    <section className="stat-editor">
-      <header className="editor-header">
-        <p className="eyebrow">
-          Pokémon Champions Assistant
-        </p>
+    <section className="stat-points-section">
+      <div className="section-heading">
+        <div>
+          <h2>Stat Points</h2>
+          <p>
+            Maximum {MAX_SP_PER_STAT} per stat and{' '}
+            {MAX_TOTAL_SP} in total.
+          </p>
+        </div>
 
-        <h1>Stat Point Editor</h1>
-
-        <p>
-          Allocate up to {MAX_TOTAL_SP} Stat Points. Each
-          individual stat can receive up to {MAX_SP_PER_STAT}.
-        </p>
-      </header>
+        <button
+          className="secondary-button"
+          type="button"
+          onClick={resetStats}
+        >
+          Reset
+        </button>
+      </div>
 
       <div className="stat-list">
         {STAT_KEYS.map((stat) => (
@@ -60,7 +65,7 @@ function StatPointEditor() {
               type="number"
               min={0}
               max={MAX_SP_PER_STAT}
-              value={stats[stat]}
+              value={value[stat]}
               onChange={(event) =>
                 updateStat(stat, Number(event.target.value))
               }
@@ -86,10 +91,6 @@ function StatPointEditor() {
             : `${pointsRemaining} points remaining`}
         </span>
       </div>
-
-      <button type="button" onClick={resetStats}>
-        Reset Stat Points
-      </button>
     </section>
   );
 }
