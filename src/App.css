@@ -335,3 +335,56 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.speed-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.speed-controls,
+.speed-result,
+.trick-room-control {
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.speed-controls h3 {
+  margin-top: 0;
+}
+
+.checkbox-field,
+.trick-room-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.speed-controls .form-field {
+  margin-top: 14px;
+}
+
+.speed-controls select {
+  padding: 10px 12px;
+  border: 1px solid #9ca3af;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.trick-room-control {
+  margin-top: 20px;
+}
+
+.speed-result {
+  margin-top: 24px;
+}
+
+@media (max-width: 800px) {
+  .speed-controls-grid {
+    grid-template-columns: 1fr;
+  }
+}

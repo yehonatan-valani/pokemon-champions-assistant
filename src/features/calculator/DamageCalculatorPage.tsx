@@ -1,16 +1,28 @@
 import { useState } from 'react';
 
+import AutocompleteInput from '../../components/AutocompleteInput';
 import PokemonBuildEditor from '../../components/PokemonBuildEditor';
+import SpeedControls from '../../components/SpeedControls';
+
+import { MOVE_NAMES } from '../../data/championsData';
+
 import {
   createEmptyPokemonBuild,
   type ChampionsPokemonBuild,
 } from '../../domain/pokemonBuild';
+
+import {
+  DEFAULT_SPEED_CONDITIONS,
+  type SpeedComparisonResult,
+  type SpeedConditions,
+} from '../../domain/speed';
+
 import {
   calculateChampionsDamage,
   type ChampionsDamageResult,
 } from '../../mechanics/championsCalculator';
-import AutocompleteInput from '../../components/AutocompleteInput';
-import { MOVE_NAMES } from '../../data/championsData';
+
+import { compareSpeed } from '../../mechanics/compareSpeed';
 
 const EXAMPLE_ATTACKER: ChampionsPokemonBuild = {
   species: 'Pikachu',
@@ -65,38 +77,81 @@ function DamageCalculatorPage() {
       createEmptyPokemonBuild,
     );
 
+  const [
+    attackerSpeedConditions,
+    setAttackerSpeedConditions,
+  ] = useState<SpeedConditions>({
+    ...DEFAULT_SPEED_CONDITIONS,
+  });
+
+  const [
+    defenderSpeedConditions,
+    setDefenderSpeedConditions,
+  ] = useState<SpeedConditions>({
+    ...DEFAULT_SPEED_CONDITIONS,
+  });
+
+  const [trickRoom, setTrickRoom] = useState(false);
   const [moveName, setMoveName] = useState('');
+
   const [result, setResult] =
     useState<ChampionsDamageResult | null>(null);
+
+  const [speedResult, setSpeedResult] =
+    useState<SpeedComparisonResult | null>(null);
+
   const [error, setError] = useState('');
 
   function loadExample() {
     setAttacker(EXAMPLE_ATTACKER);
     setDefender(EXAMPLE_DEFENDER);
     setMoveName('Thunderbolt');
+
+    setAttackerSpeedConditions({
+      ...DEFAULT_SPEED_CONDITIONS,
+    });
+
+    setDefenderSpeedConditions({
+      ...DEFAULT_SPEED_CONDITIONS,
+    });
+
+    setTrickRoom(false);
     setResult(null);
+    setSpeedResult(null);
     setError('');
   }
 
   function handleCalculate() {
     setError('');
     setResult(null);
+    setSpeedResult(null);
 
     try {
-      const nextResult = calculateChampionsDamage(
+      const nextDamageResult =
+        calculateChampionsDamage(
+          attacker,
+          defender,
+          moveName,
+        );
+
+      const nextSpeedResult = compareSpeed(
         attacker,
+        attackerSpeedConditions,
         defender,
-        moveName,
+        defenderSpeedConditions,
+        trickRoom,
       );
 
-      setResult(nextResult);
+      setResult(nextDamageResult);
+      setSpeedResult(nextSpeedResult);
     } catch (calculationError) {
       if (calculationError instanceof Error) {
         setError(calculationError.message);
-        return;
+      } else {
+        setError(
+          'An unknown calculation error occurred.',
+        );
       }
-
-      setError('An unknown calculation error occurred.');
     }
   }
 
@@ -116,22 +171,18 @@ function DamageCalculatorPage() {
       ).toFixed(1)
     : null;
 
-  let speedMessage = '';
-
-  if (result) {
-    if (
-      result.attackerStats.spe >
-      result.defenderStats.spe
-    ) {
-      speedMessage = 'The attacker is faster.';
-    } else if (
-      result.attackerStats.spe <
-      result.defenderStats.spe
-    ) {
-      speedMessage = 'The defender is faster.';
-    } else {
-      speedMessage = 'The Pokémon have the same Speed.';
+  function getMoveOrderMessage(
+    comparison: SpeedComparisonResult,
+  ): string {
+    if (comparison.order === 'first') {
+      return 'The attacker moves first.';
     }
+
+    if (comparison.order === 'second') {
+      return 'The defender moves first.';
+    }
+
+    return 'A Speed tie is possible.';
   }
 
   return (
@@ -145,7 +196,7 @@ function DamageCalculatorPage() {
 
         <p>
           Enter two complete builds and calculate damage
-          using Pokémon Champions mechanics.
+          and move order using Pokémon Champions mechanics.
         </p>
 
         <button
@@ -171,27 +222,42 @@ function DamageCalculatorPage() {
         />
       </div>
 
-      <section className="calculation-controls">
-        <label className="form-field">
-          <span><AutocompleteInput
-  id="calculation-move"
-  label="Move used by attacker"
-  value={moveName}
-  options={MOVE_NAMES}
-  placeholder="Search for a move"
-  required
-  onChange={setMoveName}
-/></span>
+      <div className="speed-controls-grid">
+        <SpeedControls
+          title="Attacker"
+          value={attackerSpeedConditions}
+          onChange={setAttackerSpeedConditions}
+        />
 
-          <input
-            type="text"
-            value={moveName}
-            placeholder="Example: Thunderbolt"
-            onChange={(event) =>
-              setMoveName(event.target.value)
-            }
-          />
-        </label>
+        <SpeedControls
+          title="Defender"
+          value={defenderSpeedConditions}
+          onChange={setDefenderSpeedConditions}
+        />
+      </div>
+
+      <label className="trick-room-control">
+        <input
+          type="checkbox"
+          checked={trickRoom}
+          onChange={(event) =>
+            setTrickRoom(event.target.checked)
+          }
+        />
+
+        <span>Trick Room active</span>
+      </label>
+
+      <section className="calculation-controls">
+        <AutocompleteInput
+          id="calculation-move"
+          label="Move used by attacker"
+          value={moveName}
+          options={MOVE_NAMES}
+          placeholder="Search for a move"
+          required
+          onChange={setMoveName}
+        />
 
         <button
           className="primary-button"
@@ -209,9 +275,63 @@ function DamageCalculatorPage() {
         </section>
       )}
 
+      {speedResult && (
+        <section className="speed-result">
+          <h2>Move order</h2>
+
+          <div className="stats-comparison">
+            <section>
+              <h3>Attacker Speed</h3>
+
+              <dl>
+                <div>
+                  <dt>Base Speed</dt>
+                  <dd>
+                    {speedResult.firstBaseSpeed}
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>Effective Speed</dt>
+                  <dd>
+                    {speedResult.firstEffectiveSpeed}
+                  </dd>
+                </div>
+              </dl>
+            </section>
+
+            <section>
+              <h3>Defender Speed</h3>
+
+              <dl>
+                <div>
+                  <dt>Base Speed</dt>
+                  <dd>
+                    {speedResult.secondBaseSpeed}
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>Effective Speed</dt>
+                  <dd>
+                    {speedResult.secondEffectiveSpeed}
+                  </dd>
+                </div>
+              </dl>
+            </section>
+          </div>
+
+          <p className="speed-message">
+            {getMoveOrderMessage(speedResult)}
+          </p>
+
+          <p>{speedResult.reason}</p>
+        </section>
+      )}
+
       {result && (
         <section className="calculation-result">
-          <h2>Calculation result</h2>
+          <h2>Damage result</h2>
 
           <div className="damage-summary">
             <div>
@@ -234,10 +354,6 @@ function DamageCalculatorPage() {
               </strong>
             </div>
           </div>
-
-          <p className="speed-message">
-            {speedMessage}
-          </p>
 
           <div className="stats-comparison">
             <section>
