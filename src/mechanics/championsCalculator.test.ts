@@ -6,6 +6,10 @@ import {
   getChampionsStats,
 } from './championsCalculator';
 
+import {
+  DEFAULT_DAMAGE_FIELD_CONDITIONS,
+} from '../domain/fieldConditions';
+
 const pikachu: ChampionsPokemonBuild = {
   species: 'Pikachu',
   nature: 'Timid',
@@ -49,6 +53,61 @@ const defenderPikachu: ChampionsPokemonBuild = {
 };
 
 describe('Pokémon Champions calculator adapter', () => {
+    it('applies Helping Hand', () => {
+  const normalResult =
+    calculateChampionsDamage(
+      pikachu,
+      defenderPikachu,
+      'Thunderbolt',
+    );
+
+  const helpingHandResult =
+    calculateChampionsDamage(
+      pikachu,
+      defenderPikachu,
+      'Thunderbolt',
+      {
+        ...DEFAULT_DAMAGE_FIELD_CONDITIONS,
+        attackerHelpingHand: true,
+      },
+    );
+
+  expect(helpingHandResult.minDamage).toBeGreaterThan(
+    normalResult.minDamage,
+  );
+
+  expect(helpingHandResult.maxDamage).toBeGreaterThan(
+    normalResult.maxDamage,
+  );
+});
+
+it('applies Light Screen', () => {
+  const normalResult =
+    calculateChampionsDamage(
+      pikachu,
+      defenderPikachu,
+      'Thunderbolt',
+    );
+
+  const screenedResult =
+    calculateChampionsDamage(
+      pikachu,
+      defenderPikachu,
+      'Thunderbolt',
+      {
+        ...DEFAULT_DAMAGE_FIELD_CONDITIONS,
+        defenderLightScreen: true,
+      },
+    );
+
+  expect(screenedResult.minDamage).toBeLessThan(
+    normalResult.minDamage,
+  );
+
+  expect(screenedResult.maxDamage).toBeLessThan(
+    normalResult.maxDamage,
+  );
+});
   it('uses the Champions Stat Point formula', () => {
     const stats = getChampionsStats(pikachu);
 

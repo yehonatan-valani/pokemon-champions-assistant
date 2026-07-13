@@ -10,6 +10,11 @@ import {
 import type { ChampionsPokemonBuild } from '../domain/pokemonBuild';
 import type { StatKey } from '../domain/statPoints';
 
+import {
+  DEFAULT_DAMAGE_FIELD_CONDITIONS,
+  type DamageFieldConditions,
+} from '../domain/fieldConditions';
+
 const GENERATION_9_DATA = Generations.get(9);
 
 const CHAMPIONS_GENERATION = {
@@ -97,6 +102,8 @@ export function calculateChampionsDamage(
   attackerBuild: ChampionsPokemonBuild,
   defenderBuild: ChampionsPokemonBuild,
   moveName: string,
+  fieldConditions: DamageFieldConditions =
+    DEFAULT_DAMAGE_FIELD_CONDITIONS,
 ): ChampionsDamageResult {
   const cleanedMoveName = moveName.trim();
 
@@ -122,9 +129,36 @@ export function calculateChampionsDamage(
     cleanedMoveName,
   );
 
-  const field = new Field({
-    gameType: 'Doubles',
-  });
+  const weather =
+  fieldConditions.weather || undefined;
+
+const terrain =
+  fieldConditions.terrain || undefined;
+
+const field = new Field({
+  gameType: 'Doubles',
+  weather,
+  terrain,
+
+  attackerSide: {
+    isHelpingHand:
+      fieldConditions.attackerHelpingHand,
+  },
+
+  defenderSide: {
+    isReflect:
+      fieldConditions.defenderReflect,
+
+    isLightScreen:
+      fieldConditions.defenderLightScreen,
+
+    isAuroraVeil:
+      fieldConditions.defenderAuroraVeil,
+
+    isFriendGuard:
+      fieldConditions.defenderFriendGuard,
+  },
+});
 
   const result = calculate(
     CHAMPIONS_GENERATION,

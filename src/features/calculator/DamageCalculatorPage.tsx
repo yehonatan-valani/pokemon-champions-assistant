@@ -24,6 +24,13 @@ import {
 
 import { compareSpeed } from '../../mechanics/compareSpeed';
 
+import FieldControls from '../../components/FieldControls';
+
+import {
+  DEFAULT_DAMAGE_FIELD_CONDITIONS,
+  type DamageFieldConditions,
+} from '../../domain/fieldConditions';
+
 const EXAMPLE_ATTACKER: ChampionsPokemonBuild = {
   species: 'Pikachu',
   nature: 'Timid',
@@ -67,6 +74,10 @@ const EXAMPLE_DEFENDER: ChampionsPokemonBuild = {
 };
 
 function DamageCalculatorPage() {
+  const [fieldConditions, setFieldConditions] =
+    useState<DamageFieldConditions>({
+      ...DEFAULT_DAMAGE_FIELD_CONDITIONS,
+    });  
   const [attacker, setAttacker] =
     useState<ChampionsPokemonBuild>(
       createEmptyPokemonBuild,
@@ -103,6 +114,9 @@ function DamageCalculatorPage() {
   const [error, setError] = useState('');
 
   function loadExample() {
+    setFieldConditions({
+      ...DEFAULT_DAMAGE_FIELD_CONDITIONS,
+    });
     setAttacker(EXAMPLE_ATTACKER);
     setDefender(EXAMPLE_DEFENDER);
     setMoveName('Thunderbolt');
@@ -122,6 +136,7 @@ function DamageCalculatorPage() {
   }
 
   function handleCalculate() {
+    
     setError('');
     setResult(null);
     setSpeedResult(null);
@@ -129,9 +144,10 @@ function DamageCalculatorPage() {
     try {
       const nextDamageResult =
         calculateChampionsDamage(
-          attacker,
-          defender,
-          moveName,
+            attacker,
+            defender,
+            moveName,
+            fieldConditions,
         );
 
       const nextSpeedResult = compareSpeed(
@@ -247,6 +263,10 @@ function DamageCalculatorPage() {
 
         <span>Trick Room active</span>
       </label>
+      <FieldControls
+        value={fieldConditions}
+        onChange={setFieldConditions}
+/>
 
       <section className="calculation-controls">
         <AutocompleteInput
