@@ -2,6 +2,16 @@ import {
   createEmptyPokemonBuild,
   type ChampionsPokemonBuild,
 } from '../domain/pokemonBuild';
+
+import {
+  ABILITY_NAMES,
+  ITEM_NAMES,
+  MOVE_NAMES,
+  NATURE_NAMES,
+  POKEMON_NAMES,
+} from '../data/championsData';
+
+import AutocompleteInput from './AutocompleteInput';
 import StatPointEditor from './StatPointEditor';
 
 type TextField = 'species' | 'nature' | 'ability' | 'item';
@@ -18,14 +28,20 @@ function PokemonBuildEditor({
   build,
   onChange,
 }: PokemonBuildEditorProps) {
-  function updateTextField(field: TextField, value: string) {
+  function updateTextField(
+    field: TextField,
+    value: string,
+  ) {
     onChange({
       ...build,
       [field]: value,
     });
   }
 
-  function updateMove(index: MoveIndex, value: string) {
+  function updateMove(
+    index: MoveIndex,
+    value: string,
+  ) {
     const nextMoves = [...build.moves] as [
       string,
       string,
@@ -45,6 +61,11 @@ function PokemonBuildEditor({
     onChange(createEmptyPokemonBuild());
   }
 
+  const idPrefix = title
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-');
+
   return (
     <section className="pokemon-build-editor">
       <header className="editor-header">
@@ -59,57 +80,52 @@ function PokemonBuildEditor({
         <h3>Pokémon details</h3>
 
         <div className="form-grid">
-          <label className="form-field">
-            <span>Species</span>
+          <AutocompleteInput
+            id={`${idPrefix}-species`}
+            label="Species"
+            value={build.species}
+            options={POKEMON_NAMES}
+            placeholder="Search for a Pokémon"
+            required
+            onChange={(value) =>
+              updateTextField('species', value)
+            }
+          />
 
-            <input
-              type="text"
-              value={build.species}
-              placeholder="Example: Pikachu"
-              onChange={(event) =>
-                updateTextField('species', event.target.value)
-              }
-            />
-          </label>
+          <AutocompleteInput
+            id={`${idPrefix}-nature`}
+            label="Nature"
+            value={build.nature}
+            options={NATURE_NAMES}
+            placeholder="Search for a nature"
+            required
+            onChange={(value) =>
+              updateTextField('nature', value)
+            }
+          />
 
-          <label className="form-field">
-            <span>Nature</span>
+          <AutocompleteInput
+            id={`${idPrefix}-ability`}
+            label="Ability"
+            value={build.ability}
+            options={ABILITY_NAMES}
+            placeholder="Search for an ability"
+            required
+            onChange={(value) =>
+              updateTextField('ability', value)
+            }
+          />
 
-            <input
-              type="text"
-              value={build.nature}
-              placeholder="Example: Timid"
-              onChange={(event) =>
-                updateTextField('nature', event.target.value)
-              }
-            />
-          </label>
-
-          <label className="form-field">
-            <span>Ability</span>
-
-            <input
-              type="text"
-              value={build.ability}
-              placeholder="Example: Static"
-              onChange={(event) =>
-                updateTextField('ability', event.target.value)
-              }
-            />
-          </label>
-
-          <label className="form-field">
-            <span>Item</span>
-
-            <input
-              type="text"
-              value={build.item}
-              placeholder="Example: Focus Sash"
-              onChange={(event) =>
-                updateTextField('item', event.target.value)
-              }
-            />
-          </label>
+          <AutocompleteInput
+            id={`${idPrefix}-item`}
+            label="Item"
+            value={build.item}
+            options={ITEM_NAMES}
+            placeholder="Search for an item"
+            onChange={(value) =>
+              updateTextField('item', value)
+            }
+          />
         </div>
       </section>
 
@@ -118,21 +134,18 @@ function PokemonBuildEditor({
 
         <div className="form-grid">
           {build.moves.map((move, index) => (
-            <label className="form-field" key={index}>
-              <span>Move {index + 1}</span>
-
-              <input
-                type="text"
-                value={move}
-                placeholder={`Move ${index + 1}`}
-                onChange={(event) =>
-                  updateMove(
-                    index as MoveIndex,
-                    event.target.value,
-                  )
-                }
-              />
-            </label>
+            <AutocompleteInput
+              key={index}
+              id={`${idPrefix}-move-${index}`}
+              label={`Move ${index + 1}`}
+              value={move}
+              options={MOVE_NAMES}
+              placeholder="Search for a move"
+              required
+              onChange={(value) =>
+                updateMove(index as MoveIndex, value)
+              }
+            />
           ))}
         </div>
       </section>

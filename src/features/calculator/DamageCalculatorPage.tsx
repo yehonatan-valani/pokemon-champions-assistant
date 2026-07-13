@@ -9,6 +9,8 @@ import {
   calculateChampionsDamage,
   type ChampionsDamageResult,
 } from '../../mechanics/championsCalculator';
+import AutocompleteInput from '../../components/AutocompleteInput';
+import { MOVE_NAMES } from '../../data/championsData';
 
 const EXAMPLE_ATTACKER: ChampionsPokemonBuild = {
   species: 'Pikachu',
@@ -171,7 +173,15 @@ function DamageCalculatorPage() {
 
       <section className="calculation-controls">
         <label className="form-field">
-          <span>Move used by attacker</span>
+          <span><AutocompleteInput
+  id="calculation-move"
+  label="Move used by attacker"
+  value={moveName}
+  options={MOVE_NAMES}
+  placeholder="Search for a move"
+  required
+  onChange={setMoveName}
+/></span>
 
           <input
             type="text"
