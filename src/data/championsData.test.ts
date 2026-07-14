@@ -6,9 +6,56 @@ import {
   MOVE_NAMES,
   NATURE_NAMES,
   POKEMON_NAMES,
+  getMoveMetadata,
+  getMovePriority,
 } from './championsData';
 
 describe('Champions calculator data', () => {
+
+  it('reads move information from the database', () => {
+    const thunderbolt =
+        getMoveMetadata('Thunderbolt');
+
+    expect(thunderbolt.name).toBe('Thunderbolt');
+    expect(thunderbolt.basePower).toBeGreaterThan(0);
+    expect(thunderbolt.type).toBe('Electric');
+    expect(thunderbolt.category).toBe('Special');
+    });
+
+it('reads move priority from the database', () => {
+  const fakeOutPriority =
+    getMovePriority('Fake Out');
+
+  const thunderboltPriority =
+    getMovePriority('Thunderbolt');
+
+  expect(fakeOutPriority).toBeGreaterThan(
+    thunderboltPriority,
+  );
+});
+  
+    it('reads move information from the database', () => {
+  const thunderbolt =
+    getMoveMetadata('Thunderbolt');
+
+  expect(thunderbolt.name).toBe('Thunderbolt');
+  expect(thunderbolt.basePower).toBeGreaterThan(0);
+  expect(thunderbolt.type).toBe('Electric');
+  expect(thunderbolt.category).toBe('Special');
+  });
+
+it('reads move priority from the database', () => {
+  const fakeOutPriority =
+    getMovePriority('Fake Out');
+
+  const thunderboltPriority =
+    getMovePriority('Thunderbolt');
+
+  expect(fakeOutPriority).toBeGreaterThan(
+    thunderboltPriority,
+  );
+  });  
+
   it('contains known Pokémon', () => {
     expect(POKEMON_NAMES).toContain('Pikachu');
   });

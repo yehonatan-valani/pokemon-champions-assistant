@@ -4,7 +4,10 @@ import AutocompleteInput from '../../components/AutocompleteInput';
 import PokemonBuildEditor from '../../components/PokemonBuildEditor';
 import SpeedControls from '../../components/SpeedControls';
 
-import { MOVE_NAMES } from '../../data/championsData';
+import {
+  MOVE_NAMES,
+  getMovePriority,
+} from '../../data/championsData';
 
 import {
   createEmptyPokemonBuild,
@@ -103,7 +106,11 @@ function DamageCalculatorPage() {
   });
 
   const [trickRoom, setTrickRoom] = useState(false);
-  const [moveName, setMoveName] = useState('');
+  const [attackerMoveName, setAttackerMoveName] =
+    useState('');
+
+  const [defenderMoveName, setDefenderMoveName] =
+    useState('');
 
   const [result, setResult] =
     useState<ChampionsDamageResult | null>(null);
@@ -119,7 +126,8 @@ function DamageCalculatorPage() {
     });
     setAttacker(EXAMPLE_ATTACKER);
     setDefender(EXAMPLE_DEFENDER);
-    setMoveName('Thunderbolt');
+    setAttackerMoveName('Thunderbolt');
+    setDefenderMoveName('Thunderbolt');
 
     setAttackerSpeedConditions({
       ...DEFAULT_SPEED_CONDITIONS,
@@ -146,17 +154,29 @@ function DamageCalculatorPage() {
         calculateChampionsDamage(
             attacker,
             defender,
-            moveName,
+            attackerMoveName,
             fieldConditions,
         );
 
+      const attackerMovePriority =
+        getMovePriority(attackerMoveName);
+
+        const defenderMovePriority =
+        getMovePriority(defenderMoveName);
+
       const nextSpeedResult = compareSpeed(
         attacker,
-        attackerSpeedConditions,
+        {
+            ...attackerSpeedConditions,
+            movePriority: attackerMovePriority,
+        },
         defender,
-        defenderSpeedConditions,
+        {
+            ...defenderSpeedConditions,
+            movePriority: defenderMovePriority,
+        },
         trickRoom,
-      );
+        );
 
       setResult(nextDamageResult);
       setSpeedResult(nextSpeedResult);
@@ -270,23 +290,33 @@ function DamageCalculatorPage() {
 
       <section className="calculation-controls">
         <AutocompleteInput
-          id="calculation-move"
-          label="Move used by attacker"
-          value={moveName}
-          options={MOVE_NAMES}
-          placeholder="Search for a move"
-          required
-          onChange={setMoveName}
+            id="attacker-action-move"
+            label="Attacker move"
+            value={attackerMoveName}
+            options={MOVE_NAMES}
+            placeholder="Search for a move"
+            required
+            onChange={setAttackerMoveName}
+        />
+
+        <AutocompleteInput
+            id="defender-action-move"
+            label="Defender move"
+            value={defenderMoveName}
+            options={MOVE_NAMES}
+            placeholder="Search for a move"
+            required
+            onChange={setDefenderMoveName}
         />
 
         <button
-          className="primary-button"
-          type="button"
-          onClick={handleCalculate}
+            className="primary-button"
+            type="button"
+            onClick={handleCalculate}
         >
-          Calculate Damage
+            Calculate Damage and Order
         </button>
-      </section>
+        </section>
 
       {error && (
         <section className="calculation-error">

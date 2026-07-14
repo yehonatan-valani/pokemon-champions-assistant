@@ -15,6 +15,10 @@ import {
   compareSpeed,
 } from './compareSpeed';
 
+import {
+    getMovePriority,
+    } from '../data/championsData';
+
 const fastPikachu: ChampionsPokemonBuild = {
   species: 'Pikachu',
   nature: 'Timid',
@@ -69,6 +73,28 @@ function createConditions(
 describe(
   'Pokémon Champions Speed comparison',
   () => {
+
+    it(
+        'lets a slower Fake Out user act before Thunderbolt',
+        () => {
+            const result = compareSpeed(
+            slowPikachu,
+            createConditions({
+                movePriority:
+                getMovePriority('Fake Out'),
+            }),
+            fastPikachu,
+            createConditions({
+                movePriority:
+                getMovePriority('Thunderbolt'),
+            }),
+            false,
+            );
+
+            expect(result.order).toBe('first');
+        },
+        );
+
     it(
       'makes the faster Pokémon move first',
       () => {

@@ -85,23 +85,6 @@ function SpeedControls({
           ))}
         </select>
       </label>
-
-      <label className="form-field">
-        <span>Move priority</span>
-
-        <input
-          type="number"
-          min={-7}
-          max={5}
-          value={value.movePriority}
-          onChange={(event) =>
-            onChange({
-              ...value,
-              movePriority: Number(event.target.value),
-            })
-          }
-        />
-      </label>
     </section>
   );
 }
