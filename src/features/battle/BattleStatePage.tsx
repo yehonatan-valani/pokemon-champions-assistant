@@ -1,0 +1,422 @@
+import { useState } from 'react';
+
+import {
+  createInitialBattleState,
+  setOpponentActiveSlot,
+  setPlayerActiveSlot,
+  type BattleState,
+} from '../../domain/battleState';
+
+import {
+  isOpponentTeamPreviewComplete,
+  type OpponentTeamPreview,
+} from '../../domain/opponentTeam';
+
+import {
+  isTeamComplete,
+  type ChampionsTeam,
+} from '../../domain/team';
+
+import {
+  loadOpponentTeam,
+} from '../../storage/opponentTeamStorage';
+
+import {
+  loadTeam,
+} from '../../storage/teamStorage';
+
+function parseSelectedIndex(
+  value: string,
+): number | null {
+  if (value === '') {
+    return null;
+  }
+
+  return Number(value);
+}
+
+function BattleStatePage() {
+  const [savedTeam, setSavedTeam] =
+    useState<ChampionsTeam | null>(() =>
+      loadTeam(),
+    );
+
+  const [
+    opponentPreview,
+    setOpponentPreview,
+  ] = useState<OpponentTeamPreview | null>(
+    () => loadOpponentTeam(),
+  );
+
+  const [battle, setBattle] =
+    useState<BattleState | null>(null);
+
+  const [error, setError] = useState('');
+
+  function refreshSetup() {
+    setSavedTeam(loadTeam());
+    setOpponentPreview(loadOpponentTeam());
+    setError('');
+  }
+
+  function startBattle() {
+    setError('');
+
+    if (!savedTeam) {
+      setError(
+        'No saved player team was found.',
+      );
+
+      return;
+    }
+
+    if (!isTeamComplete(savedTeam)) {
+      setError(
+        'Your saved team must contain six complete Pokémon builds.',
+      );
+
+      return;
+    }
+
+    if (!opponentPreview) {
+      setError(
+        'No saved opponent preview was found.',
+      );
+
+      return;
+    }
+
+    if (
+      !isOpponentTeamPreviewComplete(
+        opponentPreview,
+      )
+    ) {
+      setError(
+        'The opponent preview must contain six valid species.',
+      );
+
+      return;
+    }
+
+    setBattle(
+      createInitialBattleState(
+        savedTeam,
+        opponentPreview,
+      ),
+    );
+  }
+
+  function updatePlayerActive(
+    position: 0 | 1,
+    selectedValue: string,
+  ) {
+    if (!battle) {
+      return;
+    }
+
+    try {
+      setBattle(
+        setPlayerActiveSlot(
+          battle,
+          position,
+          parseSelectedIndex(
+            selectedValue,
+          ),
+        ),
+      );
+
+      setError('');
+    } catch (selectionError) {
+      if (selectionError instanceof Error) {
+        setError(selectionError.message);
+      }
+    }
+  }
+
+  function updateOpponentActive(
+    position: 0 | 1,
+    selectedValue: string,
+  ) {
+    if (!battle) {
+      return;
+    }
+
+    try {
+      setBattle(
+        setOpponentActiveSlot(
+          battle,
+          position,
+          parseSelectedIndex(
+            selectedValue,
+          ),
+        ),
+      );
+
+      setError('');
+    } catch (selectionError) {
+      if (selectionError instanceof Error) {
+        setError(selectionError.message);
+      }
+    }
+  }
+
+  return (
+    <main className="battle-state-page">
+      <header className="page-header">
+        <p className="eyebrow">
+          Pokémon Champions Assistant
+        </p>
+
+        <h1>Live Battle</h1>
+
+        <p>
+          Start a battle from your saved team and the
+          saved opponent preview.
+        </p>
+      </header>
+
+      {!battle && (
+        <section className="battle-start-card">
+          <h2>Battle information</h2>
+
+          <p>
+            My team:{' '}
+            <strong>
+              {savedTeam?.name ??
+                'No saved team'}
+            </strong>
+          </p>
+
+          <p>
+            Opponent:{' '}
+            <strong>
+              {opponentPreview?.name ??
+                'No saved opponent preview'}
+            </strong>
+          </p>
+
+          <div className="team-actions">
+            <button
+              className="primary-button"
+              type="button"
+              onClick={startBattle}
+            >
+              Start Battle
+            </button>
+
+            <button
+              className="secondary-button"
+              type="button"
+              onClick={refreshSetup}
+            >
+              Refresh Saved Setup
+            </button>
+          </div>
+        </section>
+      )}
+
+      {error && (
+        <section className="calculation-error">
+          <strong>Battle setup problem</strong>
+          <p>{error}</p>
+        </section>
+      )}
+
+      {battle && (
+        <>
+          <section className="battle-header-card">
+            <div>
+              <span>Turn</span>
+              <strong>{battle.turnNumber}</strong>
+            </div>
+
+            <div>
+              <span>My team</span>
+              <strong>
+                {battle.playerTeamName}
+              </strong>
+            </div>
+
+            <div>
+              <span>Opponent</span>
+              <strong>
+                {battle.opponentName}
+              </strong>
+            </div>
+          </section>
+
+          <div className="battle-sides-grid">
+            <section className="battle-side-card">
+              <h2>My active Pokémon</h2>
+
+              <label className="form-field">
+                <span>Left position</span>
+
+                <select
+                  value={
+                    battle.playerActive[0] ??
+                    ''
+                  }
+                  onChange={(event) =>
+                    updatePlayerActive(
+                      0,
+                      event.target.value,
+                    )
+                  }
+                >
+                  <option value="">
+                    Choose a Pokémon
+                  </option>
+
+                  {battle.playerPokemon.map(
+                    (pokemon, index) => (
+                      <option
+                        key={index}
+                        value={index}
+                        disabled={
+                          battle.playerActive[1] ===
+                          index
+                        }
+                      >
+                        Slot {index + 1}:{' '}
+                        {pokemon.build.species}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
+
+              <label className="form-field">
+                <span>Right position</span>
+
+                <select
+                  value={
+                    battle.playerActive[1] ??
+                    ''
+                  }
+                  onChange={(event) =>
+                    updatePlayerActive(
+                      1,
+                      event.target.value,
+                    )
+                  }
+                >
+                  <option value="">
+                    Choose a Pokémon
+                  </option>
+
+                  {battle.playerPokemon.map(
+                    (pokemon, index) => (
+                      <option
+                        key={index}
+                        value={index}
+                        disabled={
+                          battle.playerActive[0] ===
+                          index
+                        }
+                      >
+                        Slot {index + 1}:{' '}
+                        {pokemon.build.species}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
+            </section>
+
+            <section className="battle-side-card">
+              <h2>Opponent active Pokémon</h2>
+
+              <label className="form-field">
+                <span>Left position</span>
+
+                <select
+                  value={
+                    battle.opponentActive[0] ??
+                    ''
+                  }
+                  onChange={(event) =>
+                    updateOpponentActive(
+                      0,
+                      event.target.value,
+                    )
+                  }
+                >
+                  <option value="">
+                    Choose a Pokémon
+                  </option>
+
+                  {battle.opponentPokemon.map(
+                    (pokemon, index) => (
+                      <option
+                        key={index}
+                        value={index}
+                        disabled={
+                          battle.opponentActive[1] ===
+                          index
+                        }
+                      >
+                        Slot {index + 1}:{' '}
+                        {pokemon.species}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
+
+              <label className="form-field">
+                <span>Right position</span>
+
+                <select
+                  value={
+                    battle.opponentActive[1] ??
+                    ''
+                  }
+                  onChange={(event) =>
+                    updateOpponentActive(
+                      1,
+                      event.target.value,
+                    )
+                  }
+                >
+                  <option value="">
+                    Choose a Pokémon
+                  </option>
+
+                  {battle.opponentPokemon.map(
+                    (pokemon, index) => (
+                      <option
+                        key={index}
+                        value={index}
+                        disabled={
+                          battle.opponentActive[0] ===
+                          index
+                        }
+                      >
+                        Slot {index + 1}:{' '}
+                        {pokemon.species}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
+            </section>
+          </div>
+
+          <button
+            className="secondary-button"
+            type="button"
+            onClick={() => {
+              setBattle(null);
+              setError('');
+            }}
+          >
+            End Current Battle
+          </button>
+        </>
+      )}
+    </main>
+  );
+}
+
+export default BattleStatePage;

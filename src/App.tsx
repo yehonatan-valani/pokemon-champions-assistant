@@ -5,11 +5,13 @@ import './App.css';
 import BattleSetupPage from './features/battle/BattleSetupPage';
 import DamageCalculatorPage from './features/calculator/DamageCalculatorPage';
 import TeamPage from './features/team/TeamPage';
+import BattleStatePage from './features/battle/BattleStatePage';
 
 type AppPage =
   | 'calculator'
   | 'team'
-  | 'battle';
+  | 'battle'
+  | 'live-battle';
 
 function App() {
   const [currentPage, setCurrentPage] =
@@ -59,6 +61,19 @@ function App() {
         >
           Battle Setup
         </button>
+        <button
+          type="button"
+          className={
+            currentPage === 'live-battle'
+              ? 'navigation-button active'
+              : 'navigation-button'
+          }
+          onClick={() =>
+            setCurrentPage('live-battle')
+          }
+        >
+          Live Battle
+        </button>
       </nav>
 
       {currentPage === 'calculator' && (
@@ -71,6 +86,9 @@ function App() {
 
       {currentPage === 'battle' && (
         <BattleSetupPage />
+      )}
+      {currentPage === 'live-battle' && (
+        <BattleStatePage />
       )}
     </div>
   );
