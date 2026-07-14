@@ -429,3 +429,78 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #d1d5db;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.navigation-button {
+  padding: 10px 18px;
+  border: 1px solid #9ca3af;
+  border-radius: 8px;
+  background: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.navigation-button.active {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+}
+
+.team-page {
+  width: min(1500px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+
+.team-toolbar {
+  margin: 24px 0;
+  padding: 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.team-name-field {
+  max-width: 420px;
+}
+
+.team-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.team-summary,
+.team-status {
+  margin-bottom: 0;
+}
+
+.team-member-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .team-member-grid {
+    grid-template-columns: 1fr;
+  }
+}
