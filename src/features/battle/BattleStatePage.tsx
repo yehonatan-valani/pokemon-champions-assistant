@@ -25,6 +25,11 @@ import {
   loadTeam,
 } from '../../storage/teamStorage';
 
+import {
+  createTestOpponentPreview,
+  createTestTeam,
+} from '../../data/testData';
+
 function parseSelectedIndex(
   value: string,
 ): number | null {
@@ -36,6 +41,7 @@ function parseSelectedIndex(
 }
 
 function BattleStatePage() {
+    
   const [savedTeam, setSavedTeam] =
     useState<ChampionsTeam | null>(() =>
       loadTeam(),
@@ -58,6 +64,22 @@ function BattleStatePage() {
     setOpponentPreview(loadOpponentTeam());
     setError('');
   }
+
+  function startTestBattle() {
+  const testTeam = createTestTeam();
+
+  const testOpponent =
+    createTestOpponentPreview();
+
+  setBattle(
+    createInitialBattleState(
+      testTeam,
+      testOpponent,
+    ),
+  );
+
+  setError('');
+}
 
   function startBattle() {
     setError('');
@@ -211,6 +233,14 @@ function BattleStatePage() {
             >
               Refresh Saved Setup
             </button>
+
+            <button
+                className="secondary-button"
+                type="button"
+                onClick={startTestBattle}
+                >
+                Start Test Battle
+                </button>
           </div>
         </section>
       )}

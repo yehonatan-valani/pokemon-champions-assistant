@@ -12,7 +12,7 @@ export type StatKey = (typeof STAT_KEYS)[number];
 export type StatPoints = Record<StatKey, number>;
 
 export const MAX_SP_PER_STAT = 32;
-export const MAX_TOTAL_SP = 65;
+export const MAX_TOTAL_SP = 66;
 
 export const EMPTY_STAT_POINTS: StatPoints = {
   hp: 0,

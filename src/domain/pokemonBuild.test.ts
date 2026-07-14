@@ -37,7 +37,7 @@ describe('Pokémon Champions build', () => {
     build.statPoints = {
       hp: 0,
       atk: 0,
-      def: 1,
+      def: 2,
       spa: 32,
       spd: 0,
       spe: 32,
@@ -62,7 +62,7 @@ describe('Pokémon Champions build', () => {
     build.statPoints = {
       hp: 32,
       atk: 32,
-      def: 2,
+      def: 3,
       spa: 0,
       spd: 0,
       spe: 0,
