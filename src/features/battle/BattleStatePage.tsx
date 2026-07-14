@@ -497,6 +497,9 @@ function BattleStatePage() {
                         : 'Right'
                     }: ${pokemon.build.species}`}
                     value={pokemon}
+                    hpValue={pokemon.currentHp}
+                    hpMaximum={pokemon.maxHp}
+                    hpLabel="Current HP"
                     onHpChange={(nextHp) =>
                         updateBattle((current) =>
                         setPlayerPokemonHp(
@@ -581,6 +584,9 @@ function BattleStatePage() {
                             : 'Right'
                         }: ${pokemon.species}`}
                         value={pokemon}
+                        hpValue={pokemon.currentHpPercent}
+                        hpMaximum={100}
+                        hpLabel="Current HP percentage"
                         onHpChange={(nextHp) =>
                         updateBattle((current) =>
                             setOpponentPokemonHp(

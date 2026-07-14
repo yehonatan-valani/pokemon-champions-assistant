@@ -7,6 +7,9 @@ import type {
 interface PokemonRuntimeControlsProps {
   title: string;
   value: RuntimePokemonState;
+  hpValue: number;
+  hpMaximum: number;
+  hpLabel: string;
   onHpChange: (nextHp: number) => void;
   onStatusChange: (
     nextStatus: MajorStatus,
@@ -77,6 +80,9 @@ const STAT_STAGE_FIELDS: Array<{
 function PokemonRuntimeControls({
   title,
   value,
+  hpValue,
+  hpMaximum,
+  hpLabel,
   onHpChange,
   onStatusChange,
   onFaintedChange,
@@ -88,20 +94,24 @@ function PokemonRuntimeControls({
 
       <div className="runtime-basic-grid">
         <label className="form-field">
-          <span>Current HP percentage</span>
+            <span>{hpLabel}</span>
 
-          <input
-            type="number"
-            min={0}
-            max={100}
-            value={value.currentHpPercent}
-            onChange={(event) =>
-              onHpChange(
-                Number(event.target.value),
-              )
-            }
-          />
-        </label>
+            <input
+                type="number"
+                min={0}
+                max={hpMaximum}
+                value={hpValue}
+                onChange={(event) =>
+                onHpChange(
+                    Number(event.target.value),
+                )
+                }
+            />
+
+            <small>
+                {hpValue} / {hpMaximum}
+            </small>
+            </label>
 
         <label className="form-field">
           <span>Major status</span>

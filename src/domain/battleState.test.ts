@@ -5,36 +5,31 @@ import {
 } from 'vitest';
 
 import {
+  createTestOpponentPreview,
+  createTestTeam,
+} from '../data/testData';
+
+import {
   createInitialBattleState,
-  setOpponentActiveSlot,
-  setPlayerActiveSlot,
   removeOpponentRevealedMove,
   revealOpponentMove,
+  setOpponentActiveSlot,
   setOpponentPokemonFainted,
   setOpponentPokemonHp,
   setOpponentPokemonStatStage,
   setOpponentPokemonStatus,
   setOpponentRevealedAbility,
   setOpponentRevealedItem,
+  setPlayerActiveSlot,
+  setPlayerPokemonHp,
 } from './battleState';
 
-import {
-  createEmptyOpponentTeamPreview,
-} from './opponentTeam';
-
-import {
-  createEmptyTeam,
-} from './team';
-
 function createTestBattle() {
-  const team = createEmptyTeam();
-
+  const team = createTestTeam();
   team.name = 'Test Team';
-  team.members[0].species = 'Pikachu';
-  team.members[1].species = 'Charizard';
 
   const opponent =
-    createEmptyOpponentTeamPreview();
+    createTestOpponentPreview();
 
   opponent.name = 'Test Opponent';
   opponent.species[0] = 'Bulbasaur';
@@ -78,6 +73,17 @@ describe('battle state', () => {
         battle.opponentPokemon[0]
           .revealedMoves,
       ).toEqual([]);
+
+      expect(
+        battle.playerPokemon[0].currentHp,
+      ).toBe(
+        battle.playerPokemon[0].maxHp,
+      );
+
+      expect(
+        battle.opponentPokemon[0]
+          .currentHpPercent,
+      ).toBe(100);
     },
   );
 
@@ -139,152 +145,193 @@ describe('battle state', () => {
     ]);
   });
 
-  it('updates opponent HP and fainted state', () => {
-  let { battle } = createTestBattle();
+  it(
+    'tracks player HP using exact points',
+    () => {
+      let { battle } = createTestBattle();
 
-  battle = setOpponentPokemonHp(
-    battle,
-    0,
-    42,
+      const maxHp =
+        battle.playerPokemon[0].maxHp;
+
+      battle = setPlayerPokemonHp(
+        battle,
+        0,
+        maxHp - 10,
+      );
+
+      expect(
+        battle.playerPokemon[0].currentHp,
+      ).toBe(maxHp - 10);
+
+      expect(
+        battle.playerPokemon[0].fainted,
+      ).toBe(false);
+    },
   );
 
-  expect(
-    battle.opponentPokemon[0]
-      .currentHpPercent,
-  ).toBe(42);
+  it(
+    'updates opponent HP using percentage',
+    () => {
+      let { battle } = createTestBattle();
 
-  expect(
-    battle.opponentPokemon[0].fainted,
-  ).toBe(false);
+      battle = setOpponentPokemonHp(
+        battle,
+        0,
+        42,
+      );
 
-  battle = setOpponentPokemonHp(
-    battle,
-    0,
-    0,
+      expect(
+        battle.opponentPokemon[0]
+          .currentHpPercent,
+      ).toBe(42);
+
+      expect(
+        battle.opponentPokemon[0].fainted,
+      ).toBe(false);
+
+      battle = setOpponentPokemonHp(
+        battle,
+        0,
+        0,
+      );
+
+      expect(
+        battle.opponentPokemon[0].fainted,
+      ).toBe(true);
+    },
   );
 
-  expect(
-    battle.opponentPokemon[0].fainted,
-  ).toBe(true);
-});
+  it(
+    'updates status and stat stages',
+    () => {
+      let { battle } = createTestBattle();
 
-it('updates status and stat stages', () => {
-  let { battle } = createTestBattle();
+      battle = setOpponentPokemonStatus(
+        battle,
+        0,
+        'Burn',
+      );
 
-  battle = setOpponentPokemonStatus(
-    battle,
-    0,
-    'Burn',
+      battle = setOpponentPokemonStatStage(
+        battle,
+        0,
+        'spe',
+        -2,
+      );
+
+      expect(
+        battle.opponentPokemon[0].status,
+      ).toBe('Burn');
+
+      expect(
+        battle.opponentPokemon[0]
+          .statStages.spe,
+      ).toBe(-2);
+    },
   );
 
-  battle = setOpponentPokemonStatStage(
-    battle,
-    0,
-    'spe',
-    -2,
+  it(
+    'clamps stat stages between -6 and 6',
+    () => {
+      let { battle } = createTestBattle();
+
+      battle = setOpponentPokemonStatStage(
+        battle,
+        0,
+        'atk',
+        12,
+      );
+
+      expect(
+        battle.opponentPokemon[0]
+          .statStages.atk,
+      ).toBe(6);
+    },
   );
 
-  expect(
-    battle.opponentPokemon[0].status,
-  ).toBe('Burn');
+  it(
+    'records revealed opponent information',
+    () => {
+      let { battle } = createTestBattle();
 
-  expect(
-    battle.opponentPokemon[0]
-      .statStages.spe,
-  ).toBe(-2);
-});
+      battle = revealOpponentMove(
+        battle,
+        0,
+        'Protect',
+      );
 
-it('clamps stat stages between -6 and 6', () => {
-  let { battle } = createTestBattle();
+      battle = revealOpponentMove(
+        battle,
+        0,
+        'Protect',
+      );
 
-  battle = setOpponentPokemonStatStage(
-    battle,
-    0,
-    'atk',
-    12,
+      battle = setOpponentRevealedItem(
+        battle,
+        0,
+        'Focus Sash',
+      );
+
+      battle = setOpponentRevealedAbility(
+        battle,
+        0,
+        'Overgrow',
+      );
+
+      expect(
+        battle.opponentPokemon[0]
+          .revealedMoves,
+      ).toEqual(['Protect']);
+
+      expect(
+        battle.opponentPokemon[0]
+          .revealedItem,
+      ).toBe('Focus Sash');
+
+      expect(
+        battle.opponentPokemon[0]
+          .revealedAbility,
+      ).toBe('Overgrow');
+
+      battle = removeOpponentRevealedMove(
+        battle,
+        0,
+        'Protect',
+      );
+
+      expect(
+        battle.opponentPokemon[0]
+          .revealedMoves,
+      ).toEqual([]);
+    },
   );
 
-  expect(
-    battle.opponentPokemon[0]
-      .statStages.atk,
-  ).toBe(6);
-});
+  it(
+    'removes a fainted Pokémon from active play',
+    () => {
+      let { battle } = createTestBattle();
 
-it('records revealed opponent information', () => {
-  let { battle } = createTestBattle();
+      battle = setOpponentActiveSlot(
+        battle,
+        0,
+        0,
+      );
 
-  battle = revealOpponentMove(
-    battle,
-    0,
-    'Protect',
+      battle = setOpponentPokemonFainted(
+        battle,
+        0,
+        true,
+      );
+
+      expect(
+        battle.opponentActive[0],
+      ).toBeNull();
+
+      expect(
+        battle.opponentPokemon[0].fainted,
+      ).toBe(true);
+    },
   );
-
-  battle = revealOpponentMove(
-    battle,
-    0,
-    'Protect',
-  );
-
-  battle = setOpponentRevealedItem(
-    battle,
-    0,
-    'Focus Sash',
-  );
-
-  battle = setOpponentRevealedAbility(
-    battle,
-    0,
-    'Overgrow',
-  );
-
-  expect(
-    battle.opponentPokemon[0]
-      .revealedMoves,
-  ).toEqual(['Protect']);
-
-  expect(
-    battle.opponentPokemon[0]
-      .revealedItem,
-  ).toBe('Focus Sash');
-
-  expect(
-    battle.opponentPokemon[0]
-      .revealedAbility,
-  ).toBe('Overgrow');
-
-  battle = removeOpponentRevealedMove(
-    battle,
-    0,
-    'Protect',
-  );
-
-  expect(
-    battle.opponentPokemon[0]
-      .revealedMoves,
-  ).toEqual([]);
-});
-
-it('removes a fainted Pokémon from active play', () => {
-  let { battle } = createTestBattle();
-
-  battle = setOpponentActiveSlot(
-    battle,
-    0,
-    0,
-  );
-
-  battle = setOpponentPokemonFainted(
-    battle,
-    0,
-    true,
-  );
-
-  expect(battle.opponentActive[0]).toBeNull();
-
-  expect(
-    battle.opponentPokemon[0].fainted,
-  ).toBe(true);
-});
 
   it(
     'prevents one Pokémon occupying both positions',

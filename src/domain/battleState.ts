@@ -16,6 +16,10 @@ import type {
   ChampionsTeam,
 } from './team';
 
+import {
+  getChampionsStats,
+} from '../mechanics/championsCalculator';
+
 export type MajorStatus =
   | ''
   | 'Burn'
@@ -39,7 +43,6 @@ export type BattleStatStageKey =
   keyof BattleStatStages;
 
 export interface RuntimePokemonState {
-  currentHpPercent: number;
   status: MajorStatus;
   statStages: BattleStatStages;
   fainted: boolean;
@@ -48,11 +51,14 @@ export interface RuntimePokemonState {
 export interface PlayerBattlePokemonState
   extends RuntimePokemonState {
   build: ChampionsPokemonBuild;
+  currentHp: number;
+  maxHp: number;
 }
 
 export interface OpponentBattlePokemonState
   extends RuntimePokemonState {
   species: string;
+  currentHpPercent: number;
   revealedMoves: string[];
   revealedItem: string;
   revealedAbility: string;
@@ -132,7 +138,6 @@ BattleFieldState = {
 function createRuntimeState():
 RuntimePokemonState {
   return {
-    currentHpPercent: 100,
     status: '',
     statStages: {
       ...EMPTY_BATTLE_STAT_STAGES,
@@ -152,22 +157,33 @@ export function createInitialBattleState(
     opponentName: opponentPreview.name,
 
     playerPokemon: team.members.map(
-      (build) => ({
-        ...createRuntimeState(),
-        build: clonePokemonBuild(build),
-      }),
-    ),
+        (build) => {
+            const clonedBuild =
+            clonePokemonBuild(build);
+
+            const maxHp =
+            getChampionsStats(clonedBuild).hp;
+
+            return {
+            ...createRuntimeState(),
+            build: clonedBuild,
+            currentHp: maxHp,
+            maxHp,
+            };
+        },
+        ),
 
     opponentPokemon:
-      opponentPreview.species.map(
-        (species) => ({
-          ...createRuntimeState(),
-          species,
-          revealedMoves: [],
-          revealedItem: '',
-          revealedAbility: '',
-        }),
-      ),
+        opponentPreview.species.map(
+            (species) => ({
+            ...createRuntimeState(),
+            species,
+            currentHpPercent: 100,
+            revealedMoves: [],
+            revealedItem: '',
+            revealedAbility: '',
+            }),
+        ),
 
     playerActive: [null, null],
     opponentActive: [null, null],
@@ -291,6 +307,20 @@ function clampHpPercent(
   );
 }
 
+function clampExactHp(
+  hp: number,
+  maxHp: number,
+): number {
+  if (!Number.isFinite(hp)) {
+    return maxHp;
+  }
+
+  return Math.max(
+    0,
+    Math.min(maxHp, Math.round(hp)),
+  );
+}
+
 function clampStatStage(
   stage: number,
 ): number {
@@ -365,16 +395,27 @@ function updateOpponentPokemon(
 export function setPlayerPokemonHp(
   battle: BattleState,
   pokemonIndex: number,
-  hpPercent: number,
+  hp: number,
 ): BattleState {
-  const nextHp = clampHpPercent(hpPercent);
+  validatePokemonIndex(
+    pokemonIndex,
+    battle.playerPokemon.length,
+  );
+
+  const pokemon =
+    battle.playerPokemon[pokemonIndex];
+
+  const nextHp = clampExactHp(
+    hp,
+    pokemon.maxHp,
+  );
 
   const nextBattle = updatePlayerPokemon(
     battle,
     pokemonIndex,
-    (pokemon) => ({
-      ...pokemon,
-      currentHpPercent: nextHp,
+    (currentPokemon) => ({
+      ...currentPokemon,
+      currentHp: nextHp,
       fainted: nextHp === 0,
     }),
   );
@@ -459,9 +500,9 @@ export function setPlayerPokemonFainted(
     (pokemon) => ({
       ...pokemon,
       fainted,
-      currentHpPercent: fainted
+      currentHp: fainted
         ? 0
-        : Math.max(1, pokemon.currentHpPercent),
+        : Math.max(1, pokemon.currentHp),
     }),
   );
 
