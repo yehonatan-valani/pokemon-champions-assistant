@@ -35,6 +35,9 @@ export interface BattleStatStages {
   evasion: number;
 }
 
+export type BattleStatStageKey =
+  keyof BattleStatStages;
+
 export interface RuntimePokemonState {
   currentHpPercent: number;
   status: MajorStatus;
@@ -258,4 +261,381 @@ export function setOpponentActiveSlot(
     ...battle,
     opponentActive: nextActive,
   };
+}
+
+function validatePokemonIndex(
+  pokemonIndex: number,
+  teamSize: number,
+): void {
+  if (
+    !Number.isInteger(pokemonIndex) ||
+    pokemonIndex < 0 ||
+    pokemonIndex >= teamSize
+  ) {
+    throw new Error(
+      'The selected Pokémon slot is invalid.',
+    );
+  }
+}
+
+function clampHpPercent(
+  hpPercent: number,
+): number {
+  if (!Number.isFinite(hpPercent)) {
+    return 100;
+  }
+
+  return Math.max(
+    0,
+    Math.min(100, Math.round(hpPercent)),
+  );
+}
+
+function clampStatStage(
+  stage: number,
+): number {
+  if (!Number.isFinite(stage)) {
+    return 0;
+  }
+
+  return Math.max(
+    -6,
+    Math.min(6, Math.trunc(stage)),
+  );
+}
+
+function removeFromActiveSlots(
+  activeSlots: ActiveSlots,
+  pokemonIndex: number,
+): ActiveSlots {
+  return activeSlots.map((activeIndex) =>
+    activeIndex === pokemonIndex
+      ? null
+      : activeIndex,
+  ) as ActiveSlots;
+}
+
+function updatePlayerPokemon(
+  battle: BattleState,
+  pokemonIndex: number,
+  updater: (
+    pokemon: PlayerBattlePokemonState,
+  ) => PlayerBattlePokemonState,
+): BattleState {
+  validatePokemonIndex(
+    pokemonIndex,
+    battle.playerPokemon.length,
+  );
+
+  return {
+    ...battle,
+    playerPokemon: battle.playerPokemon.map(
+      (pokemon, index) =>
+        index === pokemonIndex
+          ? updater(pokemon)
+          : pokemon,
+    ),
+  };
+}
+
+function updateOpponentPokemon(
+  battle: BattleState,
+  pokemonIndex: number,
+  updater: (
+    pokemon: OpponentBattlePokemonState,
+  ) => OpponentBattlePokemonState,
+): BattleState {
+  validatePokemonIndex(
+    pokemonIndex,
+    battle.opponentPokemon.length,
+  );
+
+  return {
+    ...battle,
+    opponentPokemon:
+      battle.opponentPokemon.map(
+        (pokemon, index) =>
+          index === pokemonIndex
+            ? updater(pokemon)
+            : pokemon,
+      ),
+  };
+}
+
+export function setPlayerPokemonHp(
+  battle: BattleState,
+  pokemonIndex: number,
+  hpPercent: number,
+): BattleState {
+  const nextHp = clampHpPercent(hpPercent);
+
+  const nextBattle = updatePlayerPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      currentHpPercent: nextHp,
+      fainted: nextHp === 0,
+    }),
+  );
+
+  return nextHp === 0
+    ? {
+        ...nextBattle,
+        playerActive: removeFromActiveSlots(
+          nextBattle.playerActive,
+          pokemonIndex,
+        ),
+      }
+    : nextBattle;
+}
+
+export function setOpponentPokemonHp(
+  battle: BattleState,
+  pokemonIndex: number,
+  hpPercent: number,
+): BattleState {
+  const nextHp = clampHpPercent(hpPercent);
+
+  const nextBattle = updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      currentHpPercent: nextHp,
+      fainted: nextHp === 0,
+    }),
+  );
+
+  return nextHp === 0
+    ? {
+        ...nextBattle,
+        opponentActive: removeFromActiveSlots(
+          nextBattle.opponentActive,
+          pokemonIndex,
+        ),
+      }
+    : nextBattle;
+}
+
+export function setPlayerPokemonStatus(
+  battle: BattleState,
+  pokemonIndex: number,
+  status: MajorStatus,
+): BattleState {
+  return updatePlayerPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      status,
+    }),
+  );
+}
+
+export function setOpponentPokemonStatus(
+  battle: BattleState,
+  pokemonIndex: number,
+  status: MajorStatus,
+): BattleState {
+  return updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      status,
+    }),
+  );
+}
+
+export function setPlayerPokemonFainted(
+  battle: BattleState,
+  pokemonIndex: number,
+  fainted: boolean,
+): BattleState {
+  const nextBattle = updatePlayerPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      fainted,
+      currentHpPercent: fainted
+        ? 0
+        : Math.max(1, pokemon.currentHpPercent),
+    }),
+  );
+
+  return fainted
+    ? {
+        ...nextBattle,
+        playerActive: removeFromActiveSlots(
+          nextBattle.playerActive,
+          pokemonIndex,
+        ),
+      }
+    : nextBattle;
+}
+
+export function setOpponentPokemonFainted(
+  battle: BattleState,
+  pokemonIndex: number,
+  fainted: boolean,
+): BattleState {
+  const nextBattle = updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      fainted,
+      currentHpPercent: fainted
+        ? 0
+        : Math.max(1, pokemon.currentHpPercent),
+    }),
+  );
+
+  return fainted
+    ? {
+        ...nextBattle,
+        opponentActive: removeFromActiveSlots(
+          nextBattle.opponentActive,
+          pokemonIndex,
+        ),
+      }
+    : nextBattle;
+}
+
+export function setPlayerPokemonStatStage(
+  battle: BattleState,
+  pokemonIndex: number,
+  statKey: BattleStatStageKey,
+  stage: number,
+): BattleState {
+  return updatePlayerPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      statStages: {
+        ...pokemon.statStages,
+        [statKey]: clampStatStage(stage),
+      },
+    }),
+  );
+}
+
+export function setOpponentPokemonStatStage(
+  battle: BattleState,
+  pokemonIndex: number,
+  statKey: BattleStatStageKey,
+  stage: number,
+): BattleState {
+  return updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      statStages: {
+        ...pokemon.statStages,
+        [statKey]: clampStatStage(stage),
+      },
+    }),
+  );
+}
+
+export function revealOpponentMove(
+  battle: BattleState,
+  pokemonIndex: number,
+  moveName: string,
+): BattleState {
+  const cleanedMoveName = moveName.trim();
+
+  if (!cleanedMoveName) {
+    throw new Error(
+      'A revealed move name is required.',
+    );
+  }
+
+  validatePokemonIndex(
+    pokemonIndex,
+    battle.opponentPokemon.length,
+  );
+
+  const pokemon =
+    battle.opponentPokemon[pokemonIndex];
+
+  if (
+    pokemon.revealedMoves.includes(
+      cleanedMoveName,
+    )
+  ) {
+    return battle;
+  }
+
+  if (pokemon.revealedMoves.length >= 4) {
+    throw new Error(
+      'This Pokémon already has four revealed moves.',
+    );
+  }
+
+  return updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (currentPokemon) => ({
+      ...currentPokemon,
+      revealedMoves: [
+        ...currentPokemon.revealedMoves,
+        cleanedMoveName,
+      ],
+    }),
+  );
+}
+
+export function removeOpponentRevealedMove(
+  battle: BattleState,
+  pokemonIndex: number,
+  moveName: string,
+): BattleState {
+  return updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      revealedMoves:
+        pokemon.revealedMoves.filter(
+          (revealedMove) =>
+            revealedMove !== moveName,
+        ),
+    }),
+  );
+}
+
+export function setOpponentRevealedItem(
+  battle: BattleState,
+  pokemonIndex: number,
+  itemName: string,
+): BattleState {
+  return updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      revealedItem: itemName.trim(),
+    }),
+  );
+}
+
+export function setOpponentRevealedAbility(
+  battle: BattleState,
+  pokemonIndex: number,
+  abilityName: string,
+): BattleState {
+  return updateOpponentPokemon(
+    battle,
+    pokemonIndex,
+    (pokemon) => ({
+      ...pokemon,
+      revealedAbility:
+        abilityName.trim(),
+    }),
+  );
 }

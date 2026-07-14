@@ -4,6 +4,18 @@ import {
   createInitialBattleState,
   setOpponentActiveSlot,
   setPlayerActiveSlot,
+  removeOpponentRevealedMove,
+  revealOpponentMove,
+  setOpponentPokemonFainted,
+  setOpponentPokemonHp,
+  setOpponentPokemonStatStage,
+  setOpponentPokemonStatus,
+  setOpponentRevealedAbility,
+  setOpponentRevealedItem,
+  setPlayerPokemonFainted,
+  setPlayerPokemonHp,
+  setPlayerPokemonStatStage,
+  setPlayerPokemonStatus,
   type BattleState,
 } from '../../domain/battleState';
 
@@ -29,6 +41,9 @@ import {
   createTestOpponentPreview,
   createTestTeam,
 } from '../../data/testData';
+
+import OpponentRevealControls from '../../components/OpponentRevealControls';
+import PokemonRuntimeControls from '../../components/PokemonRuntimeControls';
 
 function parseSelectedIndex(
   value: string,
@@ -59,6 +74,20 @@ function BattleStatePage() {
 
   const [error, setError] = useState('');
 
+  function updateBattle(
+  updater: (
+    currentBattle: BattleState,
+  ) => BattleState,
+) {
+  setBattle((currentBattle) =>
+    currentBattle
+      ? updater(currentBattle)
+      : currentBattle,
+  );
+
+  setError('');
+}
+  
   function refreshSetup() {
     setSavedTeam(loadTeam());
     setOpponentPreview(loadOpponentTeam());
@@ -432,6 +461,233 @@ function BattleStatePage() {
               </label>
             </section>
           </div>
+
+          <div className="runtime-sides-grid">
+            <section>
+                <h2>My active battle state</h2>
+
+                {([0, 1] as const).map((position) => {
+                const pokemonIndex =
+                    battle.playerActive[position];
+
+                if (pokemonIndex === null) {
+                    return (
+                    <section
+                        className="runtime-empty-card"
+                        key={position}
+                    >
+                        No Pokémon selected in the{' '}
+                        {position === 0
+                        ? 'left'
+                        : 'right'}{' '}
+                        position.
+                    </section>
+                    );
+                }
+
+                const pokemon =
+                    battle.playerPokemon[pokemonIndex];
+
+                return (
+                    <PokemonRuntimeControls
+                    key={position}
+                    title={`${
+                        position === 0
+                        ? 'Left'
+                        : 'Right'
+                    }: ${pokemon.build.species}`}
+                    value={pokemon}
+                    onHpChange={(nextHp) =>
+                        updateBattle((current) =>
+                        setPlayerPokemonHp(
+                            current,
+                            pokemonIndex,
+                            nextHp,
+                        ),
+                        )
+                    }
+                    onStatusChange={(nextStatus) =>
+                        updateBattle((current) =>
+                        setPlayerPokemonStatus(
+                            current,
+                            pokemonIndex,
+                            nextStatus,
+                        ),
+                        )
+                    }
+                    onFaintedChange={(fainted) =>
+                        updateBattle((current) =>
+                        setPlayerPokemonFainted(
+                            current,
+                            pokemonIndex,
+                            fainted,
+                        ),
+                        )
+                    }
+                    onStatStageChange={(
+                        statKey,
+                        nextStage,
+                    ) =>
+                        updateBattle((current) =>
+                        setPlayerPokemonStatStage(
+                            current,
+                            pokemonIndex,
+                            statKey,
+                            nextStage,
+                        ),
+                        )
+                    }
+                    />
+                );
+                })}
+            </section>
+
+            <section>
+                <h2>Opponent active battle state</h2>
+
+                {([0, 1] as const).map((position) => {
+                const pokemonIndex =
+                    battle.opponentActive[position];
+
+                if (pokemonIndex === null) {
+                    return (
+                    <section
+                        className="runtime-empty-card"
+                        key={position}
+                    >
+                        No Pokémon selected in the{' '}
+                        {position === 0
+                        ? 'left'
+                        : 'right'}{' '}
+                        position.
+                    </section>
+                    );
+                }
+
+                const pokemon =
+                    battle.opponentPokemon[
+                    pokemonIndex
+                    ];
+
+                return (
+                    <section
+                    className="opponent-runtime-wrapper"
+                    key={position}
+                    >
+                    <PokemonRuntimeControls
+                        title={`${
+                        position === 0
+                            ? 'Left'
+                            : 'Right'
+                        }: ${pokemon.species}`}
+                        value={pokemon}
+                        onHpChange={(nextHp) =>
+                        updateBattle((current) =>
+                            setOpponentPokemonHp(
+                            current,
+                            pokemonIndex,
+                            nextHp,
+                            ),
+                        )
+                        }
+                        onStatusChange={(nextStatus) =>
+                        updateBattle((current) =>
+                            setOpponentPokemonStatus(
+                            current,
+                            pokemonIndex,
+                            nextStatus,
+                            ),
+                        )
+                        }
+                        onFaintedChange={(fainted) =>
+                        updateBattle((current) =>
+                            setOpponentPokemonFainted(
+                            current,
+                            pokemonIndex,
+                            fainted,
+                            ),
+                        )
+                        }
+                        onStatStageChange={(
+                        statKey,
+                        nextStage,
+                        ) =>
+                        updateBattle((current) =>
+                            setOpponentPokemonStatStage(
+                            current,
+                            pokemonIndex,
+                            statKey,
+                            nextStage,
+                            ),
+                        )
+                        }
+                    />
+
+                    <OpponentRevealControls
+                        idPrefix={`opponent-${pokemonIndex}`}
+                        revealedMoves={
+                        pokemon.revealedMoves
+                        }
+                        revealedItem={
+                        pokemon.revealedItem
+                        }
+                        revealedAbility={
+                        pokemon.revealedAbility
+                        }
+                        onRevealMove={(moveName) => {
+                        try {
+                            updateBattle((current) =>
+                            revealOpponentMove(
+                                current,
+                                pokemonIndex,
+                                moveName,
+                            ),
+                            );
+                        } catch (revealError) {
+                            if (
+                            revealError instanceof Error
+                            ) {
+                            setError(
+                                revealError.message,
+                            );
+                            }
+                        }
+                        }}
+                        onRemoveMove={(moveName) =>
+                        updateBattle((current) =>
+                            removeOpponentRevealedMove(
+                            current,
+                            pokemonIndex,
+                            moveName,
+                            ),
+                        )
+                        }
+                        onItemChange={(itemName) =>
+                        updateBattle((current) =>
+                            setOpponentRevealedItem(
+                            current,
+                            pokemonIndex,
+                            itemName,
+                            ),
+                        )
+                        }
+                        onAbilityChange={(
+                        abilityName,
+                        ) =>
+                        updateBattle((current) =>
+                            setOpponentRevealedAbility(
+                            current,
+                            pokemonIndex,
+                            abilityName,
+                            ),
+                        )
+                        }
+                    />
+                    </section>
+                );
+                })}
+            </section>
+            </div>
 
           <button
             className="secondary-button"

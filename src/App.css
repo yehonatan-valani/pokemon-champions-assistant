@@ -636,3 +636,106 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.runtime-sides-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.runtime-sides-grid > section > h2 {
+  margin-top: 0;
+}
+
+.runtime-pokemon-card,
+.runtime-empty-card,
+.opponent-reveal-controls {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.runtime-pokemon-card h3,
+.runtime-pokemon-card h4,
+.opponent-reveal-controls h4 {
+  margin-top: 0;
+}
+
+.runtime-basic-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.runtime-stat-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.runtime-pokemon-card input,
+.runtime-pokemon-card select,
+.opponent-reveal-controls select {
+  padding: 9px 10px;
+  border: 1px solid #9ca3af;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.opponent-runtime-wrapper {
+  margin-bottom: 24px;
+}
+
+.reveal-move-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.revealed-move-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.revealed-move-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #9ca3af;
+  border-radius: 999px;
+  background: #f9fafb;
+}
+
+.revealed-move-chip button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .runtime-sides-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .runtime-basic-grid,
+  .runtime-stat-grid,
+  .reveal-move-row {
+    grid-template-columns: 1fr;
+  }
+}
