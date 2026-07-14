@@ -34,6 +34,8 @@ import {
   type DamageFieldConditions,
 } from '../../domain/fieldConditions';
 
+import SavedTeamPicker from '../../components/SavedTeamPicker';
+
 const EXAMPLE_ATTACKER: ChampionsPokemonBuild = {
   species: 'Pikachu',
   nature: 'Timid',
@@ -244,6 +246,28 @@ function DamageCalculatorPage() {
         </button>
       </header>
 
+      <div className="saved-team-picker-grid">
+        <SavedTeamPicker
+            title="Load attacker from My Team"
+            onSelect={(build) => {
+            setAttacker(build);
+            setResult(null);
+            setSpeedResult(null);
+            setError('');
+            }}
+        />
+
+        <SavedTeamPicker
+            title="Load defender from My Team"
+            onSelect={(build) => {
+            setDefender(build);
+            setResult(null);
+            setSpeedResult(null);
+            setError('');
+            }}
+        />
+        </div>
+      
       <div className="calculator-build-grid">
         <PokemonBuildEditor
           title="Attacker"

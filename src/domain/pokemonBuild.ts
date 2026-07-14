@@ -86,3 +86,15 @@ export function isPokemonBuildComplete(
 ): boolean {
   return validatePokemonBuild(build).valid;
 }
+
+export function clonePokemonBuild(
+  build: ChampionsPokemonBuild,
+): ChampionsPokemonBuild {
+  return {
+    ...build,
+    moves: [...build.moves] as MoveList,
+    statPoints: {
+      ...build.statPoints,
+    },
+  };
+}
