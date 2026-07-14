@@ -540,3 +540,31 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.battle-setup-page {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+
+.opponent-preview-card {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.opponent-species-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+@media (max-width: 700px) {
+  .opponent-species-grid {
+    grid-template-columns: 1fr;
+  }
+}

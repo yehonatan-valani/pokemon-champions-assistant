@@ -2,10 +2,14 @@ import { useState } from 'react';
 
 import './App.css';
 
+import BattleSetupPage from './features/battle/BattleSetupPage';
 import DamageCalculatorPage from './features/calculator/DamageCalculatorPage';
 import TeamPage from './features/team/TeamPage';
 
-type AppPage = 'calculator' | 'team';
+type AppPage =
+  | 'calculator'
+  | 'team'
+  | 'battle';
 
 function App() {
   const [currentPage, setCurrentPage] =
@@ -41,13 +45,33 @@ function App() {
         >
           My Team
         </button>
+
+        <button
+          type="button"
+          className={
+            currentPage === 'battle'
+              ? 'navigation-button active'
+              : 'navigation-button'
+          }
+          onClick={() =>
+            setCurrentPage('battle')
+          }
+        >
+          Battle Setup
+        </button>
       </nav>
 
       {currentPage === 'calculator' && (
         <DamageCalculatorPage />
       )}
 
-      {currentPage === 'team' && <TeamPage />}
+      {currentPage === 'team' && (
+        <TeamPage />
+      )}
+
+      {currentPage === 'battle' && (
+        <BattleSetupPage />
+      )}
     </div>
   );
 }
