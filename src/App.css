@@ -739,3 +739,94 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.battle-field-controls,
+.battle-event-card {
+  margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.battle-field-controls h2,
+.battle-event-card h2 {
+  margin-top: 0;
+}
+
+.battle-field-main-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.battle-turn-fields-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.battle-field-controls input,
+.battle-field-controls select,
+.battle-event-card input {
+  padding: 9px 10px;
+  border: 1px solid #9ca3af;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.field-help-text {
+  margin-bottom: 0;
+  color: #6b7280;
+}
+
+.battle-event-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.battle-event-entry {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.battle-event-history {
+  max-height: 320px;
+  margin-bottom: 0;
+  padding-left: 24px;
+  overflow-y: auto;
+}
+
+.battle-event-history li {
+  padding: 6px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (max-width: 800px) {
+  .battle-turn-fields-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .battle-event-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .battle-field-main-grid,
+  .battle-turn-fields-grid,
+  .battle-event-entry {
+    grid-template-columns: 1fr;
+  }
+}

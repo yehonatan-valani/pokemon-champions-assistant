@@ -16,6 +16,11 @@ import {
   setPlayerPokemonHp,
   setPlayerPokemonStatStage,
   setPlayerPokemonStatus,
+  advanceBattleTurn,
+  recordBattleEvent,
+  setBattleFieldTurns,
+  setBattleTerrain,
+  setBattleWeather,
   type BattleState,
 } from '../../domain/battleState';
 
@@ -44,6 +49,7 @@ import {
 
 import OpponentRevealControls from '../../components/OpponentRevealControls';
 import PokemonRuntimeControls from '../../components/PokemonRuntimeControls';
+import BattleFieldControls from '../../components/BattleFieldControls';
 
 function parseSelectedIndex(
   value: string,
@@ -69,6 +75,9 @@ function BattleStatePage() {
     () => loadOpponentTeam(),
   );
 
+  const [eventDraft, setEventDraft] =
+    useState('');
+  
   const [battle, setBattle] =
     useState<BattleState | null>(null);
 
@@ -184,6 +193,29 @@ function BattleStatePage() {
     }
   }
 
+  function handleAdvanceTurn() {
+    updateBattle((currentBattle) =>
+        advanceBattleTurn(currentBattle),
+    );
+    }
+
+function handleRecordEvent() {
+  const cleanedEvent = eventDraft.trim();
+
+  if (!cleanedEvent) {
+    return;
+  }
+
+  updateBattle((currentBattle) =>
+    recordBattleEvent(
+      currentBattle,
+      cleanedEvent,
+    ),
+  );
+
+  setEventDraft('');
+}
+  
   function updateOpponentActive(
     position: 0 | 1,
     selectedValue: string,
@@ -303,6 +335,35 @@ function BattleStatePage() {
               </strong>
             </div>
           </section>
+
+          <BattleFieldControls
+            value={battle.field}
+            onWeatherChange={(weather) =>
+                updateBattle((currentBattle) =>
+                setBattleWeather(
+                    currentBattle,
+                    weather,
+                ),
+                )
+            }
+            onTerrainChange={(terrain) =>
+                updateBattle((currentBattle) =>
+                setBattleTerrain(
+                    currentBattle,
+                    terrain,
+                ),
+                )
+            }
+            onTurnsChange={(fieldKey, turns) =>
+                updateBattle((currentBattle) =>
+                setBattleFieldTurns(
+                    currentBattle,
+                    fieldKey,
+                    turns,
+                ),
+                )
+            }
+            />
 
           <div className="battle-sides-grid">
             <section className="battle-side-card">
@@ -695,16 +756,70 @@ function BattleStatePage() {
             </section>
             </div>
 
-          <button
+          <section className="battle-event-card">
+            <div className="battle-event-header">
+                <h2>Turn and event history</h2>
+
+                <button
+                className="primary-button"
+                type="button"
+                onClick={handleAdvanceTurn}
+                >
+                Advance to Turn {battle.turnNumber + 1}
+                </button>
+            </div>
+
+            <div className="battle-event-entry">
+                <label className="form-field">
+                <span>Record an event</span>
+
+                <input
+                    type="text"
+                    value={eventDraft}
+                    placeholder="Example: Opponent used Protect"
+                    onChange={(event) =>
+                    setEventDraft(event.target.value)
+                    }
+                    onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                        handleRecordEvent();
+                    }
+                    }}
+                />
+                </label>
+
+                <button
+                className="secondary-button"
+                type="button"
+                disabled={!eventDraft.trim()}
+                onClick={handleRecordEvent}
+                >
+                Add Event
+                </button>
+            </div>
+
+            <ol className="battle-event-history">
+                {battle.eventHistory.map(
+                (historyEvent, index) => (
+                    <li key={`${index}-${historyEvent}`}>
+                    {historyEvent}
+                    </li>
+                ),
+                )}
+            </ol>
+            </section>
+
+            <button
             className="secondary-button"
             type="button"
             onClick={() => {
-              setBattle(null);
-              setError('');
+                setBattle(null);
+                setError('');
+                setEventDraft('');
             }}
-          >
+            >
             End Current Battle
-          </button>
+            </button>
         </>
       )}
     </main>

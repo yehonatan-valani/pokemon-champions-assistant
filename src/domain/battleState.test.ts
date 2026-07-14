@@ -22,6 +22,11 @@ import {
   setOpponentRevealedItem,
   setPlayerActiveSlot,
   setPlayerPokemonHp,
+  advanceBattleTurn,
+  recordBattleEvent,
+  setBattleFieldTurns,
+  setBattleTerrain,
+  setBattleWeather,
 } from './battleState';
 
 function createTestBattle() {
@@ -46,7 +51,97 @@ function createTestBattle() {
 }
 
 describe('battle state', () => {
+  it('updates battle field conditions', () => {
+    let { battle } = createTestBattle();
+
+    battle = setBattleWeather(
+        battle,
+        'Rain',
+    );
+
+    battle = setBattleTerrain(
+        battle,
+        'Electric',
+    );
+
+    battle = setBattleFieldTurns(
+        battle,
+        'trickRoomTurns',
+        5,
+    );
+
+    battle = setBattleFieldTurns(
+        battle,
+        'playerTailwindTurns',
+        4,
+    );
+
+    expect(battle.field.weather).toBe(
+        'Rain',
+    );
+
+    expect(battle.field.terrain).toBe(
+        'Electric',
+    );
+
+    expect(
+        battle.field.trickRoomTurns,
+    ).toBe(5);
+
+    expect(
+        battle.field.playerTailwindTurns,
+    ).toBe(4);
+    });
+
   it(
+    'decreases timed effects when advancing the turn',
+    () => {
+        let { battle } = createTestBattle();
+
+        battle = setBattleFieldTurns(
+        battle,
+        'trickRoomTurns',
+        5,
+        );
+
+        battle = setBattleFieldTurns(
+        battle,
+        'playerTailwindTurns',
+        1,
+        );
+
+        battle = advanceBattleTurn(battle);
+
+        expect(battle.turnNumber).toBe(2);
+
+        expect(
+        battle.field.trickRoomTurns,
+        ).toBe(4);
+
+        expect(
+        battle.field.playerTailwindTurns,
+        ).toBe(0);
+    },
+    );
+
+    it('records battle events', () => {
+    let { battle } = createTestBattle();
+
+    battle = recordBattleEvent(
+        battle,
+        'Pikachu used Fake Out.',
+    );
+
+    expect(
+        battle.eventHistory[
+        battle.eventHistory.length - 1
+        ],
+    ).toBe(
+        'Turn 1: Pikachu used Fake Out.',
+    );
+    });
+  
+    it(
     'creates a battle from team preview data',
     () => {
       const { battle } = createTestBattle();
@@ -355,4 +450,99 @@ describe('battle state', () => {
       );
     },
   );
+  it('updates battle field conditions', () => {
+  let { battle } = createTestBattle();
+
+  battle = setBattleWeather(
+    battle,
+    'Rain',
+  );
+
+  battle = setBattleTerrain(
+    battle,
+    'Electric',
+  );
+
+  battle = setBattleFieldTurns(
+    battle,
+    'trickRoomTurns',
+    5,
+  );
+
+  battle = setBattleFieldTurns(
+    battle,
+    'playerTailwindTurns',
+    4,
+  );
+
+  expect(battle.field.weather).toBe(
+    'Rain',
+  );
+
+  expect(battle.field.terrain).toBe(
+    'Electric',
+  );
+
+  expect(
+    battle.field.trickRoomTurns,
+  ).toBe(5);
+
+  expect(
+    battle.field.playerTailwindTurns,
+  ).toBe(4);
+});
+
+it(
+  'decreases timed effects when advancing the turn',
+  () => {
+    let { battle } = createTestBattle();
+
+    battle = setBattleFieldTurns(
+      battle,
+      'trickRoomTurns',
+      5,
+    );
+
+    battle = setBattleFieldTurns(
+      battle,
+      'playerTailwindTurns',
+      1,
+    );
+
+    battle = advanceBattleTurn(battle);
+
+    expect(battle.turnNumber).toBe(2);
+
+    expect(
+      battle.field.trickRoomTurns,
+    ).toBe(4);
+
+    expect(
+      battle.field.playerTailwindTurns,
+    ).toBe(0);
+
+    expect(
+      battle.eventHistory[
+        battle.eventHistory.length - 1
+      ],
+    ).toBe('Turn 2 started.');
+  },
+);
+
+it('records battle events', () => {
+  let { battle } = createTestBattle();
+
+  battle = recordBattleEvent(
+    battle,
+    'Pikachu used Fake Out.',
+  );
+
+  expect(
+    battle.eventHistory[
+      battle.eventHistory.length - 1
+    ],
+  ).toBe(
+    'Turn 1: Pikachu used Fake Out.',
+  );
+});
 });

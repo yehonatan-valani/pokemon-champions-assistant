@@ -88,6 +88,17 @@ export interface BattleFieldState {
   opponentAuroraVeilTurns: number;
 }
 
+export type TimedBattleFieldKey =
+  | 'trickRoomTurns'
+  | 'playerTailwindTurns'
+  | 'opponentTailwindTurns'
+  | 'playerReflectTurns'
+  | 'opponentReflectTurns'
+  | 'playerLightScreenTurns'
+  | 'opponentLightScreenTurns'
+  | 'playerAuroraVeilTurns'
+  | 'opponentAuroraVeilTurns';
+
 export interface BattleState {
   turnNumber: number;
 
@@ -679,4 +690,142 @@ export function setOpponentRevealedAbility(
         abilityName.trim(),
     }),
   );
+}
+
+function clampFieldTurns(
+  turns: number,
+): number {
+  if (!Number.isFinite(turns)) {
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.min(8, Math.trunc(turns)),
+  );
+}
+
+export function setBattleWeather(
+  battle: BattleState,
+  weather: WeatherCondition,
+): BattleState {
+  return {
+    ...battle,
+    field: {
+      ...battle.field,
+      weather,
+    },
+  };
+}
+
+export function setBattleTerrain(
+  battle: BattleState,
+  terrain: TerrainCondition,
+): BattleState {
+  return {
+    ...battle,
+    field: {
+      ...battle.field,
+      terrain,
+    },
+  };
+}
+
+export function setBattleFieldTurns(
+  battle: BattleState,
+  fieldKey: TimedBattleFieldKey,
+  turns: number,
+): BattleState {
+  return {
+    ...battle,
+    field: {
+      ...battle.field,
+      [fieldKey]: clampFieldTurns(turns),
+    },
+  };
+}
+
+export function recordBattleEvent(
+  battle: BattleState,
+  message: string,
+): BattleState {
+  const cleanedMessage = message.trim();
+
+  if (!cleanedMessage) {
+    return battle;
+  }
+
+  return {
+    ...battle,
+    eventHistory: [
+      ...battle.eventHistory,
+      `Turn ${battle.turnNumber}: ${cleanedMessage}`,
+    ],
+  };
+}
+
+export function advanceBattleTurn(
+  battle: BattleState,
+): BattleState {
+  const nextTurnNumber =
+    battle.turnNumber + 1;
+
+  return {
+    ...battle,
+    turnNumber: nextTurnNumber,
+
+    field: {
+      ...battle.field,
+
+      trickRoomTurns: Math.max(
+        0,
+        battle.field.trickRoomTurns - 1,
+      ),
+
+      playerTailwindTurns: Math.max(
+        0,
+        battle.field.playerTailwindTurns - 1,
+      ),
+
+      opponentTailwindTurns: Math.max(
+        0,
+        battle.field.opponentTailwindTurns - 1,
+      ),
+
+      playerReflectTurns: Math.max(
+        0,
+        battle.field.playerReflectTurns - 1,
+      ),
+
+      opponentReflectTurns: Math.max(
+        0,
+        battle.field.opponentReflectTurns - 1,
+      ),
+
+      playerLightScreenTurns: Math.max(
+        0,
+        battle.field.playerLightScreenTurns - 1,
+      ),
+
+      opponentLightScreenTurns: Math.max(
+        0,
+        battle.field.opponentLightScreenTurns - 1,
+      ),
+
+      playerAuroraVeilTurns: Math.max(
+        0,
+        battle.field.playerAuroraVeilTurns - 1,
+      ),
+
+      opponentAuroraVeilTurns: Math.max(
+        0,
+        battle.field.opponentAuroraVeilTurns - 1,
+      ),
+    },
+
+    eventHistory: [
+      ...battle.eventHistory,
+      `Turn ${nextTurnNumber} started.`,
+    ],
+  };
 }
