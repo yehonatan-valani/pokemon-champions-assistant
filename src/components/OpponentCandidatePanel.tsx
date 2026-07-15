@@ -7,17 +7,8 @@ import type {
 } from '../domain/opponentCandidate';
 
 import {
-  evaluateOpponentCandidate,
-  getCandidatesForSpecies,
-} from '../mechanics/filterOpponentCandidates';
-
-import {
-  deriveSpeedEvidence,
-} from '../mechanics/deriveSpeedEvidence';
-
-import {
-  evaluateCandidateSpeedEvidence,
-} from '../mechanics/evaluateCandidateSpeedEvidence';
+  resolveOpponentCandidateSets,
+} from '../mechanics/resolveOpponentCandidateSets';
 
 interface OpponentCandidatePanelProps {
   battle: BattleState;
@@ -44,9 +35,10 @@ function OpponentCandidatePanel({
   battle,
   candidates,
 }: OpponentCandidatePanelProps) {
-  const speedEvidence =
-    deriveSpeedEvidence(
-      battle.actionHistory,
+  const resolved =
+    resolveOpponentCandidateSets(
+      battle,
+      candidates,
     );
 
   return (
@@ -55,8 +47,10 @@ function OpponentCandidatePanel({
 
       <p>
         Candidates are removed when they
-        contradict revealed information or
-        usable Speed evidence.
+        contradict revealed information,
+        comparisons with your Pokémon, or
+        comparisons with another opponent
+        Pokémon.
       </p>
 
       <p className="candidate-warning">
@@ -64,236 +58,206 @@ function OpponentCandidatePanel({
         fixtures, not current metagame usage data.
       </p>
 
+      {resolved.jointSpeedEvidenceCount >
+        0 && (
+        <p>
+          <strong>
+            Joint opponent Speed comparisons:
+          </strong>{' '}
+          {
+            resolved.jointSpeedEvidenceCount
+          }
+        </p>
+      )}
+
       <div className="candidate-species-grid">
-        {battle.opponentPokemon.map(
-          (observation, pokemonIndex) => {
-            const speciesCandidates =
-              getCandidatesForSpecies(
-                candidates,
-                observation.species,
-              );
+        {resolved.slots.map((slot) => {
+          const compatible =
+            slot.evaluations.filter(
+              (evaluation) =>
+                evaluation.compatible,
+            );
 
-            const evaluations =
-              speciesCandidates.map(
-                (candidate) => {
-                  const revealEvaluation =
-                    evaluateOpponentCandidate(
-                      candidate,
-                      observation,
-                    );
+          const rejected =
+            slot.evaluations.filter(
+              (evaluation) =>
+                !evaluation.compatible,
+            );
 
-                  const speedEvaluation =
-                    evaluateCandidateSpeedEvidence(
-                      battle,
-                      candidate,
-                      pokemonIndex,
-                      speedEvidence,
-                    );
+          return (
+            <article
+              className="candidate-species-card"
+              key={`${slot.pokemonIndex}-${slot.species}`}
+            >
+              <h3>
+                Slot {slot.pokemonIndex + 1}:{' '}
+                {slot.species}
+              </h3>
 
-                  return {
-                    candidate,
+              {slot.totalCandidates === 0 && (
+                <p>
+                  No candidate data has been
+                  loaded for this species.
+                </p>
+              )}
 
-                    compatible:
-                      revealEvaluation.compatible &&
-                      speedEvaluation.compatible,
-
-                    rejections: [
-                      ...revealEvaluation.rejections,
-                      ...speedEvaluation.rejections,
-                    ],
-
-                    usableSpeedEvidence:
-                      speedEvaluation
-                        .usableEvidenceCount,
-
-                    ignoredSpeedEvidence:
-                      speedEvaluation
-                        .ignoredEvidenceCount,
-                  };
-                },
-              );
-
-            const compatible =
-              evaluations.filter(
-                (evaluation) =>
-                  evaluation.compatible,
-              );
-
-            const rejected =
-              evaluations.filter(
-                (evaluation) =>
-                  !evaluation.compatible,
-              );
-
-            return (
-              <article
-                className="candidate-species-card"
-                key={`${pokemonIndex}-${observation.species}`}
-              >
-                <h3>
-                  Slot {pokemonIndex + 1}:{' '}
-                  {observation.species}
-                </h3>
-
-                {speciesCandidates.length ===
-                  0 && (
+              {slot.totalCandidates > 0 && (
+                <>
                   <p>
-                    No candidate data has been
-                    loaded for this species.
+                    <strong>
+                      {compatible.length}
+                    </strong>{' '}
+                    of{' '}
+                    <strong>
+                      {slot.totalCandidates}
+                    </strong>{' '}
+                    candidates remain.
                   </p>
-                )}
 
-                {speciesCandidates.length >
-                  0 && (
-                  <>
-                    <p>
-                      <strong>
-                        {compatible.length}
-                      </strong>{' '}
-                      of{' '}
-                      <strong>
-                        {
-                          speciesCandidates.length
-                        }
-                      </strong>{' '}
-                      candidates remain.
-                    </p>
+                  <div className="candidate-compatible-list">
+                    {compatible.map(
+                      ({
+                        candidate,
+                        usablePlayerSpeedEvidence,
+                        ignoredPlayerSpeedEvidence,
+                      }) => (
+                        <section
+                          className="candidate-compatible-card"
+                          key={candidate.id}
+                        >
+                          <h4>
+                            {candidate.label}
+                          </h4>
 
-                    <div className="candidate-compatible-list">
-                      {compatible.map(
+                          <p>
+                            <strong>
+                              Nature:
+                            </strong>{' '}
+                            {
+                              candidate.build
+                                .nature
+                            }
+                          </p>
+
+                          <p>
+                            <strong>
+                              Ability:
+                            </strong>{' '}
+                            {
+                              candidate.build
+                                .ability
+                            }
+                          </p>
+
+                          <p>
+                            <strong>
+                              Item:
+                            </strong>{' '}
+                            {
+                              candidate.build
+                                .item
+                            }
+                          </p>
+
+                          <p>
+                            <strong>
+                              Moves:
+                            </strong>{' '}
+                            {candidate.build.moves.join(
+                              ', ',
+                            )}
+                          </p>
+
+                          <p>
+                            <strong>
+                              Stat Points:
+                            </strong>{' '}
+                            {formatStatPoints(
+                              candidate,
+                            )}
+                          </p>
+
+                          {usablePlayerSpeedEvidence >
+                            0 && (
+                            <p>
+                              <strong>
+                                Known-player Speed
+                                checks passed:
+                              </strong>{' '}
+                              {
+                                usablePlayerSpeedEvidence
+                              }
+                            </p>
+                          )}
+
+                          {ignoredPlayerSpeedEvidence >
+                            0 && (
+                            <p>
+                              <strong>
+                                Speed checks ignored:
+                              </strong>{' '}
+                              {
+                                ignoredPlayerSpeedEvidence
+                              }
+                            </p>
+                          )}
+
+                          <small>
+                            {
+                              candidate.sourceLabel
+                            }
+                          </small>
+                        </section>
+                      ),
+                    )}
+                  </div>
+
+                  {rejected.length > 0 && (
+                    <details className="candidate-rejected-details">
+                      <summary>
+                        Show rejected candidates (
+                        {rejected.length})
+                      </summary>
+
+                      {rejected.map(
                         ({
                           candidate,
-                          usableSpeedEvidence,
-                          ignoredSpeedEvidence,
+                          rejections,
                         }) => (
                           <section
-                            className="candidate-compatible-card"
+                            className="candidate-rejected-card"
                             key={candidate.id}
                           >
-                            <h4>
+                            <strong>
                               {candidate.label}
-                            </h4>
+                            </strong>
 
-                            <p>
-                              <strong>
-                                Nature:
-                              </strong>{' '}
-                              {candidate.build.nature}
-                            </p>
-
-                            <p>
-                              <strong>
-                                Ability:
-                              </strong>{' '}
-                              {candidate.build.ability}
-                            </p>
-
-                            <p>
-                              <strong>
-                                Item:
-                              </strong>{' '}
-                              {candidate.build.item}
-                            </p>
-
-                            <p>
-                              <strong>
-                                Moves:
-                              </strong>{' '}
-                              {candidate.build.moves.join(
-                                ', ',
+                            <ul>
+                              {rejections.map(
+                                (
+                                  rejection,
+                                  rejectionIndex,
+                                ) => (
+                                  <li
+                                    key={`${rejection.code}-${rejectionIndex}`}
+                                  >
+                                    {
+                                      rejection.message
+                                    }
+                                  </li>
+                                ),
                               )}
-                            </p>
-
-                            <p>
-                              <strong>
-                                Stat Points:
-                              </strong>{' '}
-                              {formatStatPoints(
-                                candidate,
-                              )}
-                            </p>
-
-                            {usableSpeedEvidence >
-                              0 && (
-                              <p>
-                                <strong>
-                                  Speed checks passed:
-                                </strong>{' '}
-                                {
-                                  usableSpeedEvidence
-                                }
-                              </p>
-                            )}
-
-                            {ignoredSpeedEvidence >
-                              0 && (
-                              <p>
-                                <strong>
-                                  Speed checks ignored:
-                                </strong>{' '}
-                                {
-                                  ignoredSpeedEvidence
-                                }
-                              </p>
-                            )}
-
-                            <small>
-                              {
-                                candidate.sourceLabel
-                              }
-                            </small>
+                            </ul>
                           </section>
                         ),
                       )}
-                    </div>
-
-                    {rejected.length > 0 && (
-                      <details className="candidate-rejected-details">
-                        <summary>
-                          Show rejected candidates (
-                          {rejected.length})
-                        </summary>
-
-                        {rejected.map(
-                          ({
-                            candidate,
-                            rejections,
-                          }) => (
-                            <section
-                              className="candidate-rejected-card"
-                              key={candidate.id}
-                            >
-                              <strong>
-                                {candidate.label}
-                              </strong>
-
-                              <ul>
-                                {rejections.map(
-                                  (
-                                    rejection,
-                                    rejectionIndex,
-                                  ) => (
-                                    <li
-                                      key={`${rejection.code}-${rejectionIndex}`}
-                                    >
-                                      {
-                                        rejection.message
-                                      }
-                                    </li>
-                                  ),
-                                )}
-                              </ul>
-                            </section>
-                          ),
-                        )}
-                      </details>
-                    )}
-                  </>
-                )}
-              </article>
-            );
-          },
-        )}
+                    </details>
+                  )}
+                </>
+              )}
+            </article>
+          );
+        })}
       </div>
     </section>
   );
