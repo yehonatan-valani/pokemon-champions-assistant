@@ -904,3 +904,82 @@ button:hover {
 .speed-evidence-list small {
   color: #6b7280;
 }
+
+.opponent-candidate-panel {
+  margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.opponent-candidate-panel h2 {
+  margin-top: 0;
+}
+
+.candidate-warning {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef3c7;
+}
+
+.candidate-species-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.candidate-species-card {
+  padding: 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+}
+
+.candidate-species-card h3 {
+  margin-top: 0;
+}
+
+.candidate-compatible-card {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  background: #f0fdf4;
+}
+
+.candidate-compatible-card h4 {
+  margin-top: 0;
+}
+
+.candidate-compatible-card p {
+  margin: 7px 0;
+}
+
+.candidate-rejected-details {
+  margin-top: 16px;
+}
+
+.candidate-rejected-details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.candidate-rejected-card {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+}
+
+.candidate-rejected-card ul {
+  margin-bottom: 0;
+}
+
+@media (max-width: 800px) {
+  .candidate-species-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -53,6 +53,12 @@ import BattleFieldControls from '../../components/BattleFieldControls';
 import BattleActionRecorder from '../../components/BattleActionRecorder';
 import SpeedEvidencePanel from '../../components/SpeedEvidencePanel';
 
+import OpponentCandidatePanel from '../../components/OpponentCandidatePanel';
+
+import {
+  DEVELOPMENT_OPPONENT_CANDIDATES,
+} from '../../data/developmentOpponentCandidates';
+
 function parseSelectedIndex(
   value: string,
 ): number | null {
@@ -379,6 +385,15 @@ function handleRecordEvent() {
             <SpeedEvidencePanel
               actionHistory={battle.actionHistory}
             />
+
+           <OpponentCandidatePanel
+                opponentPokemon={
+                    battle.opponentPokemon
+                }
+                candidates={
+                    DEVELOPMENT_OPPONENT_CANDIDATES
+                }
+                />
 
           <div className="battle-sides-grid">
             <section className="battle-side-card">
