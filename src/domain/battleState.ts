@@ -20,6 +20,10 @@ import {
   getChampionsStats,
 } from '../mechanics/championsCalculator';
 
+import type {
+  BattleActionRecord,
+} from './battleAction';
+
 export type MajorStatus =
   | ''
   | 'Burn'
@@ -113,6 +117,8 @@ export interface BattleState {
 
   field: BattleFieldState;
   eventHistory: string[];
+
+  actionHistory: BattleActionRecord[];
 }
 
 export const EMPTY_BATTLE_STAT_STAGES:
@@ -200,13 +206,15 @@ export function createInitialBattleState(
     opponentActive: [null, null],
 
     field: {
-      ...DEFAULT_BATTLE_FIELD_STATE,
-    },
+        ...DEFAULT_BATTLE_FIELD_STATE,
+        },
 
-    eventHistory: [
-      'Battle state created.',
-    ],
-  };
+        actionHistory: [],
+
+        eventHistory: [
+        'Battle state created.',
+        ],
+    };
 }
 
 function validateActiveSelection(

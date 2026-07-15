@@ -50,6 +50,7 @@ import {
 import OpponentRevealControls from '../../components/OpponentRevealControls';
 import PokemonRuntimeControls from '../../components/PokemonRuntimeControls';
 import BattleFieldControls from '../../components/BattleFieldControls';
+import BattleActionRecorder from '../../components/BattleActionRecorder';
 
 function parseSelectedIndex(
   value: string,
@@ -364,6 +365,15 @@ function handleRecordEvent() {
                 )
             }
             />
+
+            <BattleActionRecorder
+                battle={battle}
+                onBattleChange={(nextBattle) => {
+                    setBattle(nextBattle);
+                    setError('');
+                }}
+                onError={setError}
+/>
 
           <div className="battle-sides-grid">
             <section className="battle-side-card">

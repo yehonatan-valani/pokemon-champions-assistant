@@ -830,3 +830,47 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.battle-action-recorder {
+  margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.battle-action-recorder h2 {
+  margin-top: 0;
+}
+
+.battle-action-entry {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.battle-action-recorder select {
+  padding: 9px 10px;
+  border: 1px solid #9ca3af;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.structured-action-list {
+  margin-bottom: 0;
+  padding-left: 24px;
+}
+
+.structured-action-list li {
+  padding: 7px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (max-width: 600px) {
+  .battle-action-entry {
+    grid-template-columns: 1fr;
+  }
+}
