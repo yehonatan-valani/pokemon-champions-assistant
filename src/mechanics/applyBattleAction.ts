@@ -24,6 +24,12 @@ import {
   type BattleState,
 } from '../domain/battleState';
 
+import {
+  CURRENT_REGULATION,
+  isAbilityLegalForSpecies,
+  isMoveLegalForSpecies,
+} from '../data/currentRegulation';
+
 export interface RecordMoveUsedOptions {
   speedInferenceAllowed?: boolean;
 }
@@ -79,6 +85,50 @@ function getActorName(
   }
 
   return pokemon.species;
+}
+
+function assertMoveLegalForActor(
+  battle: BattleState,
+  actor: BattleActorReference,
+  moveName: string,
+): void {
+  const species = getActorName(
+    battle,
+    actor,
+  );
+
+  if (
+    !isMoveLegalForSpecies(
+      species,
+      moveName,
+    )
+  ) {
+    throw new Error(
+      `${moveName} is not legal for ${species} in ${CURRENT_REGULATION.formatName}.`,
+    );
+  }
+}
+
+function assertAbilityLegalForActor(
+  battle: BattleState,
+  actor: BattleActorReference,
+  abilityName: string,
+): void {
+  const species = getActorName(
+    battle,
+    actor,
+  );
+
+  if (
+    !isAbilityLegalForSpecies(
+      species,
+      abilityName,
+    )
+  ) {
+    throw new Error(
+      `${abilityName} is not legal for ${species} in ${CURRENT_REGULATION.formatName}.`,
+    );
+  }
 }
 
 function getNextSequence(
@@ -257,6 +307,12 @@ export function recordMoveUsed(
   const moveMetadata =
     getMoveMetadata(moveName);
 
+  assertMoveLegalForActor(
+    battle,
+    actor,
+    moveMetadata.name,
+    );
+
   const pokemonName = getActorName(
     battle,
     actor,
@@ -340,6 +396,12 @@ export function recordAbilityActivated(
       'Select a valid ability.',
     );
   }
+
+  assertAbilityLegalForActor(
+    battle,
+    actor,
+    canonicalAbility,
+    );
 
   const pokemonName = getActorName(
     battle,
