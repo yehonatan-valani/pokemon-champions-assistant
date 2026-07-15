@@ -1024,3 +1024,28 @@ button:hover {
   border-radius: inherit;
   background: #4b5563;
 }
+
+.build-regulation-status {
+  margin: 18px 0;
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.build-regulation-status p {
+  margin-bottom: 0;
+}
+
+.build-regulation-status ul {
+  margin-bottom: 0;
+  padding-left: 22px;
+}
+
+.build-regulation-valid {
+  border: 1px solid #86efac;
+  background: #f0fdf4;
+}
+
+.build-regulation-invalid {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+}

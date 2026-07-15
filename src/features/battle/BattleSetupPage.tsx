@@ -1,8 +1,14 @@
 import { useState } from 'react';
 
+import { toID } from '@smogon/calc';
+
 import AutocompleteInput from '../../components/AutocompleteInput';
 
-import { POKEMON_NAMES } from '../../data/championsData';
+import {
+  CURRENT_REGULATION,
+  REGULATION_POKEMON_NAMES,
+  isSpeciesLegalInCurrentRegulation,
+} from '../../data/currentRegulation';
 
 import {
   createEmptyOpponentTeamPreview,
@@ -17,32 +23,107 @@ import {
   saveOpponentTeam,
 } from '../../storage/opponentTeamStorage';
 
+function getPreviewProblems(
+  opponentTeam: OpponentTeamPreview,
+): string[] {
+  const problems: string[] = [];
+
+  const seenSpeciesIds =
+    new Set<string>();
+
+  opponentTeam.species.forEach(
+    (speciesName, slotIndex) => {
+      const cleanedSpecies =
+        speciesName.trim();
+
+      /*
+       * Empty slots are allowed when saving
+       * an incomplete opponent preview.
+       */
+      if (!cleanedSpecies) {
+        return;
+      }
+
+      if (
+        !isSpeciesLegalInCurrentRegulation(
+          cleanedSpecies,
+        )
+      ) {
+        problems.push(
+          `Slot ${slotIndex + 1}: ` +
+            `${cleanedSpecies} is not legal in ` +
+            `${CURRENT_REGULATION.formatName}.`,
+        );
+
+        return;
+      }
+
+      const speciesId =
+        toID(cleanedSpecies);
+
+      if (
+        seenSpeciesIds.has(speciesId)
+      ) {
+        problems.push(
+          `Slot ${slotIndex + 1}: ` +
+            `${cleanedSpecies} appears more than once.`,
+        );
+      } else {
+        seenSpeciesIds.add(
+          speciesId,
+        );
+      }
+    },
+  );
+
+  return problems;
+}
+
 function BattleSetupPage() {
-  const [opponentTeam, setOpponentTeam] =
-    useState<OpponentTeamPreview>(() =>
+  const [
+    opponentTeam,
+    setOpponentTeam,
+  ] = useState<OpponentTeamPreview>(
+    () =>
       loadOpponentTeam() ??
       createEmptyOpponentTeamPreview(),
-    );
+  );
 
-  const [statusMessage, setStatusMessage] =
-    useState('');
+  const [
+    statusMessage,
+    setStatusMessage,
+  ] = useState('');
 
   const speciesCount =
-    getOpponentSpeciesCount(opponentTeam);
+    getOpponentSpeciesCount(
+      opponentTeam,
+    );
+
+  const previewProblems =
+    getPreviewProblems(
+      opponentTeam,
+    );
 
   function updateSpecies(
     slotIndex: number,
     speciesName: string,
   ) {
-    setOpponentTeam((currentTeam) => ({
-      ...currentTeam,
-      species: currentTeam.species.map(
-        (currentSpecies, index) =>
-          index === slotIndex
-            ? speciesName
-            : currentSpecies,
-      ),
-    }));
+    setOpponentTeam(
+      (currentTeam) => ({
+        ...currentTeam,
+
+        species:
+          currentTeam.species.map(
+            (
+              currentSpecies,
+              index,
+            ) =>
+              index === slotIndex
+                ? speciesName
+                : currentSpecies,
+          ),
+      }),
+    );
 
     setStatusMessage(
       'You have unsaved changes.',
@@ -50,19 +131,61 @@ function BattleSetupPage() {
   }
 
   function handleSave() {
-    saveOpponentTeam(opponentTeam);
+    const currentProblems =
+      getPreviewProblems(
+        opponentTeam,
+      );
+
+    if (
+      currentProblems.length > 0
+    ) {
+      const visibleProblems =
+        currentProblems
+          .slice(0, 3)
+          .join(' ');
+
+      const remainingProblemCount =
+        currentProblems.length - 3;
+
+      setStatusMessage(
+        [
+          'Opponent preview was not saved.',
+          visibleProblems,
+
+          remainingProblemCount > 0
+            ? `${remainingProblemCount} additional problem${
+                remainingProblemCount === 1
+                  ? ''
+                  : 's'
+              } must be corrected.`
+            : '',
+        ]
+          .filter(Boolean)
+          .join(' '),
+      );
+
+      return;
+    }
+
+    saveOpponentTeam(
+      opponentTeam,
+    );
 
     setStatusMessage(
       isOpponentTeamPreviewComplete(
         opponentTeam,
       )
-        ? 'Complete opponent preview saved.'
-        : `Opponent preview saved. ${speciesCount} of 6 species are valid.`,
+        ? 'Complete regulation-legal opponent preview saved.'
+        : [
+            'Regulation-legal opponent preview draft saved.',
+            `${speciesCount} of 6 species are selected.`,
+          ].join(' '),
     );
   }
 
   function handleLoad() {
-    const savedTeam = loadOpponentTeam();
+    const savedTeam =
+      loadOpponentTeam();
 
     if (!savedTeam) {
       setStatusMessage(
@@ -72,9 +195,31 @@ function BattleSetupPage() {
       return;
     }
 
-    setOpponentTeam(savedTeam);
+    setOpponentTeam(
+      savedTeam,
+    );
+
+    const loadedProblems =
+      getPreviewProblems(
+        savedTeam,
+      );
+
+    if (
+      loadedProblems.length > 0
+    ) {
+      setStatusMessage(
+        [
+          'Saved opponent preview loaded.',
+          'It contains species that do not match the current regulation.',
+          'Correct the displayed problems before saving again.',
+        ].join(' '),
+      );
+
+      return;
+    }
+
     setStatusMessage(
-      'Saved opponent preview loaded.',
+      'Saved regulation-legal opponent preview loaded.',
     );
   }
 
@@ -100,14 +245,27 @@ function BattleSetupPage() {
         <h1>Battle Setup</h1>
 
         <p>
-          Enter the opponent’s six Pokémon from team
-          preview. Their builds remain unknown.
+          Enter the opponent’s six Pokémon
+          from team preview. Their builds
+          remain unknown.
+        </p>
+
+        <p className="field-help-text">
+          Current legality snapshot:{' '}
+          <strong>
+            {
+              CURRENT_REGULATION
+                .formatName
+            }
+          </strong>
         </p>
       </header>
 
       <section className="opponent-preview-card">
         <label className="form-field">
-          <span>Opponent name or label</span>
+          <span>
+            Opponent name or label
+          </span>
 
           <input
             type="text"
@@ -117,7 +275,9 @@ function BattleSetupPage() {
               setOpponentTeam(
                 (currentTeam) => ({
                   ...currentTeam,
-                  name: event.target.value,
+
+                  name:
+                    event.target.value,
                 }),
               );
 
@@ -130,16 +290,23 @@ function BattleSetupPage() {
 
         <div className="opponent-species-grid">
           {opponentTeam.species.map(
-            (speciesName, slotIndex) => (
+            (
+              speciesName,
+              slotIndex,
+            ) => (
               <AutocompleteInput
                 key={slotIndex}
                 id={`opponent-species-${slotIndex}`}
                 label={`Opponent slot ${slotIndex + 1}`}
                 value={speciesName}
-                options={POKEMON_NAMES}
-                placeholder="Search for a Pokémon"
+                options={
+                  REGULATION_POKEMON_NAMES
+                }
+                placeholder="Search legal Pokémon"
                 required
-                onChange={(nextSpecies) =>
+                onChange={(
+                  nextSpecies,
+                ) =>
                   updateSpecies(
                     slotIndex,
                     nextSpecies,
@@ -151,9 +318,42 @@ function BattleSetupPage() {
         </div>
 
         <p>
-          Valid species:{' '}
-          <strong>{speciesCount} / 6</strong>
+          Selected species:{' '}
+          <strong>
+            {speciesCount} / 6
+          </strong>
         </p>
+
+        <p>
+          Regulation problems:{' '}
+          <strong>
+            {previewProblems.length}
+          </strong>
+        </p>
+
+        {previewProblems.length >
+          0 && (
+          <section className="build-regulation-status build-regulation-invalid">
+            <strong>
+              Opponent preview problems
+            </strong>
+
+            <ul>
+              {previewProblems.map(
+                (
+                  problem,
+                  problemIndex,
+                ) => (
+                  <li
+                    key={problemIndex}
+                  >
+                    {problem}
+                  </li>
+                ),
+              )}
+            </ul>
+          </section>
+        )}
 
         <div className="team-actions">
           <button

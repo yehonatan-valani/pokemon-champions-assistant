@@ -2,6 +2,10 @@ import { useState } from 'react';
 
 import PokemonBuildEditor from '../../components/PokemonBuildEditor';
 
+import {
+  CURRENT_REGULATION,
+} from '../../data/currentRegulation';
+
 import type {
   ChampionsPokemonBuild,
 } from '../../domain/pokemonBuild';
@@ -14,50 +18,146 @@ import {
 } from '../../domain/team';
 
 import {
+  validateBuildAgainstCurrentRegulation,
+} from '../../mechanics/validateRegulationBuild';
+
+import {
   clearSavedTeam,
   loadTeam,
   saveTeam,
 } from '../../storage/teamStorage';
 
+function hasBuildStarted(
+  build: ChampionsPokemonBuild,
+): boolean {
+  return Boolean(
+    build.species.trim() ||
+    build.ability.trim() ||
+    build.item.trim() ||
+    build.moves.some((moveName) =>
+      Boolean(moveName.trim()),
+    ) ||
+    Object.values(
+      build.statPoints,
+    ).some(
+      (statPointValue) =>
+        statPointValue !== 0,
+    ),
+  );
+}
+
+function getTeamRegulationProblems(
+  team: ChampionsTeam,
+): string[] {
+  return team.members.flatMap(
+    (member, memberIndex) => {
+      /*
+       * Completely empty slots are allowed
+       * when saving a team draft.
+       */
+      if (!hasBuildStarted(member)) {
+        return [];
+      }
+
+      return validateBuildAgainstCurrentRegulation(
+        member,
+      ).map(
+        (issue) =>
+          `Slot ${memberIndex + 1}: ${issue.message}`,
+      );
+    },
+  );
+}
+
 function TeamPage() {
   const [team, setTeam] =
-    useState<ChampionsTeam>(createEmptyTeam);
+    useState<ChampionsTeam>(
+      createEmptyTeam,
+    );
 
-  const [statusMessage, setStatusMessage] =
-    useState('');
+  const [
+    statusMessage,
+    setStatusMessage,
+  ] = useState('');
 
   const completeMemberCount =
     getCompleteMemberCount(team);
 
+  const regulationProblems =
+    getTeamRegulationProblems(team);
+
   function updateTeamMember(
     memberIndex: number,
-    nextBuild: ChampionsPokemonBuild,
+    nextBuild:
+      ChampionsPokemonBuild,
   ) {
     setTeam((currentTeam) => ({
       ...currentTeam,
-      members: currentTeam.members.map(
-        (member, index) =>
-          index === memberIndex
-            ? nextBuild
-            : member,
-      ),
+
+      members:
+        currentTeam.members.map(
+          (member, index) =>
+            index === memberIndex
+              ? nextBuild
+              : member,
+        ),
     }));
 
-    setStatusMessage('You have unsaved changes.');
+    setStatusMessage(
+      'You have unsaved changes.',
+    );
   }
 
   function handleSaveTeam() {
+    const currentProblems =
+      getTeamRegulationProblems(team);
+
+    if (
+      currentProblems.length > 0
+    ) {
+      const displayedProblems =
+        currentProblems
+          .slice(0, 3)
+          .join(' ');
+
+      const remainingCount =
+        currentProblems.length - 3;
+
+      setStatusMessage(
+        [
+          'Team was not saved.',
+          displayedProblems,
+
+          remainingCount > 0
+            ? `${remainingCount} additional problem${
+                remainingCount === 1
+                  ? ''
+                  : 's'
+              } must be corrected.`
+            : '',
+        ]
+          .filter(Boolean)
+          .join(' '),
+      );
+
+      return;
+    }
+
     saveTeam(team);
 
     setStatusMessage(
       isTeamComplete(team)
-        ? 'Complete team saved.'
-        : `Team draft saved. ${completeMemberCount} of 6 Pokémon are complete.`,
+        ? 'Complete regulation-legal team saved.'
+        : [
+            'Regulation-legal team draft saved.',
+            `${completeMemberCount} of 6 Pokémon are complete.`,
+          ].join(' '),
     );
   }
 
   function handleLoadTeam() {
-    const savedTeam = loadTeam();
+    const savedTeam =
+      loadTeam();
 
     if (!savedTeam) {
       setStatusMessage(
@@ -68,12 +168,37 @@ function TeamPage() {
     }
 
     setTeam(savedTeam);
-    setStatusMessage('Saved team loaded.');
+
+    const loadedProblems =
+      getTeamRegulationProblems(
+        savedTeam,
+      );
+
+    if (
+      loadedProblems.length > 0
+    ) {
+      setStatusMessage(
+        [
+          'Saved team loaded.',
+          'Some builds do not match the current regulation snapshot.',
+          'Correct the displayed problems before saving again.',
+        ].join(' '),
+      );
+
+      return;
+    }
+
+    setStatusMessage(
+      'Saved regulation-legal team loaded.',
+    );
   }
 
   function handleClearTeam() {
     clearSavedTeam();
-    setTeam(createEmptyTeam());
+
+    setTeam(
+      createEmptyTeam(),
+    );
 
     setStatusMessage(
       'Saved team and current editor were cleared.',
@@ -90,8 +215,18 @@ function TeamPage() {
         <h1>My Team</h1>
 
         <p>
-          Configure your six Pokémon and save them in
-          this browser.
+          Configure your six Pokémon and
+          save them in this browser.
+        </p>
+
+        <p className="field-help-text">
+          Current legality snapshot:{' '}
+          <strong>
+            {
+              CURRENT_REGULATION
+                .formatName
+            }
+          </strong>
         </p>
       </header>
 
@@ -104,10 +239,14 @@ function TeamPage() {
             value={team.name}
             placeholder="My Champions Team"
             onChange={(event) => {
-              setTeam((currentTeam) => ({
-                ...currentTeam,
-                name: event.target.value,
-              }));
+              setTeam(
+                (currentTeam) => ({
+                  ...currentTeam,
+
+                  name:
+                    event.target.value,
+                }),
+              );
 
               setStatusMessage(
                 'You have unsaved changes.',
@@ -149,6 +288,13 @@ function TeamPage() {
           </strong>
         </p>
 
+        <p className="team-summary">
+          Regulation problems:{' '}
+          <strong>
+            {regulationProblems.length}
+          </strong>
+        </p>
+
         {statusMessage && (
           <p className="team-status">
             {statusMessage}
@@ -158,12 +304,17 @@ function TeamPage() {
 
       <div className="team-member-grid">
         {team.members.map(
-          (member, memberIndex) => (
+          (
+            member,
+            memberIndex,
+          ) => (
             <PokemonBuildEditor
               key={memberIndex}
               title={`Team slot ${memberIndex + 1}`}
               build={member}
-              onChange={(nextBuild) =>
+              onChange={(
+                nextBuild,
+              ) =>
                 updateTeamMember(
                   memberIndex,
                   nextBuild,
