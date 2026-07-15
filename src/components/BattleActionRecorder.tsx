@@ -122,6 +122,11 @@ function BattleActionRecorder({
 
   const [abilityName, setAbilityName] =
     useState('');
+  
+    const [
+      excludeFromSpeedInference,
+      setExcludeFromSpeedInference,
+      ] = useState(false);
 
   const actorOptions =
     createActorOptions(battle);
@@ -141,13 +146,18 @@ function BattleActionRecorder({
     try {
       onBattleChange(
         recordMoveUsed(
-          battle,
-          selectedActor,
-          moveName,
-        ),
+            battle,
+            selectedActor,
+            moveName,
+            {
+                speedInferenceAllowed:
+                !excludeFromSpeedInference,
+            },
+            ),
       );
 
       setMoveName('');
+      setExcludeFromSpeedInference(false);
       onError('');
     } catch (recordError) {
       if (recordError instanceof Error) {
@@ -271,6 +281,24 @@ function BattleActionRecorder({
         </button>
       </div>
 
+      <label className="checkbox-field battle-speed-exclusion">
+        <input
+            type="checkbox"
+            checked={excludeFromSpeedInference}
+            onChange={(event) =>
+            setExcludeFromSpeedInference(
+                event.target.checked,
+            )
+          }
+        />
+
+        <span>
+            Do not use this move for Speed inference
+            because its order may have been forced or
+            uncertain.
+        </span>
+        </label>
+
       <div className="battle-action-entry">
         <AutocompleteInput
           id="battle-action-ability"
@@ -307,8 +335,15 @@ function BattleActionRecorder({
         {currentTurnActions.map((action) => (
           <li key={action.id}>
             {action.type === 'move-used'
-              ? `Move ${action.moveOrder}: ${action.pokemonName} used ${action.moveName}`
-              : `${action.pokemonName}'s ${action.abilityName} activated`}
+                ? [
+                    `Move ${action.moveOrder}: `,
+                    `${action.pokemonName} used `,
+                    action.moveName,
+                    action.speedInferenceAllowed
+                        ? ''
+                        : ' — excluded from Speed inference',
+                    ].join('')
+                : `${action.pokemonName}'s ${action.abilityName} activated`}
           </li>
         ))}
       </ol>

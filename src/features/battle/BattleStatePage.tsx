@@ -51,6 +51,7 @@ import OpponentRevealControls from '../../components/OpponentRevealControls';
 import PokemonRuntimeControls from '../../components/PokemonRuntimeControls';
 import BattleFieldControls from '../../components/BattleFieldControls';
 import BattleActionRecorder from '../../components/BattleActionRecorder';
+import SpeedEvidencePanel from '../../components/SpeedEvidencePanel';
 
 function parseSelectedIndex(
   value: string,
@@ -373,7 +374,11 @@ function handleRecordEvent() {
                     setError('');
                 }}
                 onError={setError}
-/>
+            />
+
+            <SpeedEvidencePanel
+              actionHistory={battle.actionHistory}
+            />
 
           <div className="battle-sides-grid">
             <section className="battle-side-card">

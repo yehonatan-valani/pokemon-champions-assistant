@@ -24,6 +24,10 @@ import {
   type BattleState,
 } from '../domain/battleState';
 
+export interface RecordMoveUsedOptions {
+  speedInferenceAllowed?: boolean;
+}
+
 function assertActorIsActive(
   battle: BattleState,
   actor: BattleActorReference,
@@ -184,6 +188,23 @@ function getOrderContext(
   actor: BattleActorReference,
   basePriority: number,
 ) {
+  const sharedContext = {
+    basePriority,
+
+    trickRoomActive:
+      battle.field.trickRoomTurns > 0,
+
+    playerTailwindActive:
+      battle.field.playerTailwindTurns > 0,
+
+    opponentTailwindActive:
+      battle.field.opponentTailwindTurns >
+      0,
+
+    weather: battle.field.weather,
+    terrain: battle.field.terrain,
+  };
+
   if (actor.side === 'player') {
     const pokemon =
       battle.playerPokemon[
@@ -191,17 +212,17 @@ function getOrderContext(
       ];
 
     return {
-      basePriority,
-      trickRoomActive:
-        battle.field.trickRoomTurns > 0,
-      tailwindActive:
-        battle.field.playerTailwindTurns >
-        0,
+      ...sharedContext,
+
       paralyzed:
         pokemon.status === 'Paralysis',
+
       speedStage:
         pokemon.statStages.spe,
+
       knownItem: pokemon.build.item,
+      knownAbility:
+        pokemon.build.ability,
     };
   }
 
@@ -211,17 +232,17 @@ function getOrderContext(
     ];
 
   return {
-    basePriority,
-    trickRoomActive:
-      battle.field.trickRoomTurns > 0,
-    tailwindActive:
-      battle.field.opponentTailwindTurns >
-      0,
+    ...sharedContext,
+
     paralyzed:
       pokemon.status === 'Paralysis',
+
     speedStage:
       pokemon.statStages.spe,
+
     knownItem: pokemon.revealedItem,
+    knownAbility:
+      pokemon.revealedAbility,
   };
 }
 
@@ -229,6 +250,7 @@ export function recordMoveUsed(
   battle: BattleState,
   actor: BattleActorReference,
   moveName: string,
+  options: RecordMoveUsedOptions = {},
 ): BattleState {
   assertActorIsActive(battle, actor);
 
@@ -279,6 +301,8 @@ export function recordMoveUsed(
     actor,
     pokemonName,
     moveName: moveMetadata.name,
+    speedInferenceAllowed:
+      options.speedInferenceAllowed ?? true,
 
     orderContext: getOrderContext(
       battle,

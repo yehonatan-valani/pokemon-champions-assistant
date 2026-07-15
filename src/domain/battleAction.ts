@@ -1,3 +1,8 @@
+import type {
+  TerrainCondition,
+  WeatherCondition,
+} from './fieldConditions';
+
 export type BattleSide =
   | 'player'
   | 'opponent';
@@ -9,11 +14,19 @@ export interface BattleActorReference {
 
 export interface ActionOrderContext {
   basePriority: number;
+
   trickRoomActive: boolean;
-  tailwindActive: boolean;
+  playerTailwindActive: boolean;
+  opponentTailwindActive: boolean;
+
+  weather: WeatherCondition;
+  terrain: TerrainCondition;
+
   paralyzed: boolean;
   speedStage: number;
+
   knownItem: string;
+  knownAbility: string;
 }
 
 interface BaseBattleActionRecord {
@@ -21,8 +34,8 @@ interface BaseBattleActionRecord {
   turnNumber: number;
 
   /**
-   * Order among all structured events recorded
-   * during this turn.
+   * Order among all structured actions
+   * recorded during this turn.
    */
   sequence: number;
 
@@ -35,14 +48,18 @@ export interface MoveUsedBattleAction
   type: 'move-used';
 
   /**
-   * Order among move actions only.
-   *
-   * This is the value that will later be used
-   * for Speed inference.
+   * Observed order among moves this turn.
    */
   moveOrder: number;
 
   moveName: string;
+
+  /**
+   * False when another effect may have forced
+   * the move's position in the action order.
+   */
+  speedInferenceAllowed: boolean;
+
   orderContext: ActionOrderContext;
 }
 
