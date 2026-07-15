@@ -1,5 +1,5 @@
 import type {
-  OpponentBattlePokemonState,
+  BattleState,
 } from '../domain/battleState';
 
 import type {
@@ -7,14 +7,20 @@ import type {
 } from '../domain/opponentCandidate';
 
 import {
-  evaluateOpponentCandidates,
+  evaluateOpponentCandidate,
   getCandidatesForSpecies,
 } from '../mechanics/filterOpponentCandidates';
 
-interface OpponentCandidatePanelProps {
-  opponentPokemon:
-    OpponentBattlePokemonState[];
+import {
+  deriveSpeedEvidence,
+} from '../mechanics/deriveSpeedEvidence';
 
+import {
+  evaluateCandidateSpeedEvidence,
+} from '../mechanics/evaluateCandidateSpeedEvidence';
+
+interface OpponentCandidatePanelProps {
+  battle: BattleState;
   candidates: OpponentSetCandidate[];
 }
 
@@ -35,17 +41,22 @@ function formatStatPoints(
 }
 
 function OpponentCandidatePanel({
-  opponentPokemon,
+  battle,
   candidates,
 }: OpponentCandidatePanelProps) {
+  const speedEvidence =
+    deriveSpeedEvidence(
+      battle.actionHistory,
+    );
+
   return (
     <section className="opponent-candidate-panel">
       <h2>Opponent candidate sets</h2>
 
       <p>
         Candidates are removed when they
-        contradict a revealed move, item, or
-        ability.
+        contradict revealed information or
+        usable Speed evidence.
       </p>
 
       <p className="candidate-warning">
@@ -54,7 +65,7 @@ function OpponentCandidatePanel({
       </p>
 
       <div className="candidate-species-grid">
-        {opponentPokemon.map(
+        {battle.opponentPokemon.map(
           (observation, pokemonIndex) => {
             const speciesCandidates =
               getCandidatesForSpecies(
@@ -63,9 +74,43 @@ function OpponentCandidatePanel({
               );
 
             const evaluations =
-              evaluateOpponentCandidates(
-                speciesCandidates,
-                observation,
+              speciesCandidates.map(
+                (candidate) => {
+                  const revealEvaluation =
+                    evaluateOpponentCandidate(
+                      candidate,
+                      observation,
+                    );
+
+                  const speedEvaluation =
+                    evaluateCandidateSpeedEvidence(
+                      battle,
+                      candidate,
+                      pokemonIndex,
+                      speedEvidence,
+                    );
+
+                  return {
+                    candidate,
+
+                    compatible:
+                      revealEvaluation.compatible &&
+                      speedEvaluation.compatible,
+
+                    rejections: [
+                      ...revealEvaluation.rejections,
+                      ...speedEvaluation.rejections,
+                    ],
+
+                    usableSpeedEvidence:
+                      speedEvaluation
+                        .usableEvidenceCount,
+
+                    ignoredSpeedEvidence:
+                      speedEvaluation
+                        .ignoredEvidenceCount,
+                  };
+                },
               );
 
             const compatible =
@@ -116,47 +161,38 @@ function OpponentCandidatePanel({
 
                     <div className="candidate-compatible-list">
                       {compatible.map(
-                        ({ candidate }) => (
+                        ({
+                          candidate,
+                          usableSpeedEvidence,
+                          ignoredSpeedEvidence,
+                        }) => (
                           <section
                             className="candidate-compatible-card"
-                            key={
-                              candidate.id
-                            }
+                            key={candidate.id}
                           >
                             <h4>
-                              {
-                                candidate.label
-                              }
+                              {candidate.label}
                             </h4>
 
                             <p>
                               <strong>
                                 Nature:
                               </strong>{' '}
-                              {
-                                candidate.build
-                                  .nature
-                              }
+                              {candidate.build.nature}
                             </p>
 
                             <p>
                               <strong>
                                 Ability:
                               </strong>{' '}
-                              {
-                                candidate.build
-                                  .ability
-                              }
+                              {candidate.build.ability}
                             </p>
 
                             <p>
                               <strong>
                                 Item:
                               </strong>{' '}
-                              {
-                                candidate.build
-                                  .item
-                              }
+                              {candidate.build.item}
                             </p>
 
                             <p>
@@ -176,6 +212,30 @@ function OpponentCandidatePanel({
                                 candidate,
                               )}
                             </p>
+
+                            {usableSpeedEvidence >
+                              0 && (
+                              <p>
+                                <strong>
+                                  Speed checks passed:
+                                </strong>{' '}
+                                {
+                                  usableSpeedEvidence
+                                }
+                              </p>
+                            )}
+
+                            {ignoredSpeedEvidence >
+                              0 && (
+                              <p>
+                                <strong>
+                                  Speed checks ignored:
+                                </strong>{' '}
+                                {
+                                  ignoredSpeedEvidence
+                                }
+                              </p>
+                            )}
 
                             <small>
                               {
@@ -201,14 +261,10 @@ function OpponentCandidatePanel({
                           }) => (
                             <section
                               className="candidate-rejected-card"
-                              key={
-                                candidate.id
-                              }
+                              key={candidate.id}
                             >
                               <strong>
-                                {
-                                  candidate.label
-                                }
+                                {candidate.label}
                               </strong>
 
                               <ul>

@@ -387,13 +387,11 @@ function handleRecordEvent() {
             />
 
            <OpponentCandidatePanel
-                opponentPokemon={
-                    battle.opponentPokemon
-                }
+                battle={battle}
                 candidates={
                     DEVELOPMENT_OPPONENT_CANDIDATES
                 }
-                />
+            />
 
           <div className="battle-sides-grid">
             <section className="battle-side-card">
