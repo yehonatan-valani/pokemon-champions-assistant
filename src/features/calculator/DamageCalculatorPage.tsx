@@ -1,13 +1,9 @@
 import { useState } from 'react';
 
 import AutocompleteInput from '../../components/AutocompleteInput';
+import FieldControls from '../../components/FieldControls';
 import PokemonBuildEditor from '../../components/PokemonBuildEditor';
 import SpeedControls from '../../components/SpeedControls';
-
-import {
-  MOVE_NAMES,
-  getMovePriority,
-} from '../../data/championsData';
 
 import {
   createEmptyPokemonBuild,
@@ -21,32 +17,33 @@ import {
 } from '../../domain/speed';
 
 import {
-  calculateChampionsDamage,
-  type ChampionsDamageResult,
-} from '../../mechanics/championsCalculator';
-
-import { compareSpeed } from '../../mechanics/compareSpeed';
-
-import FieldControls from '../../components/FieldControls';
-
-import {
   DEFAULT_DAMAGE_FIELD_CONDITIONS,
   type DamageFieldConditions,
 } from '../../domain/fieldConditions';
 
-import SavedTeamPicker from '../../components/SavedTeamPicker';
+import {
+  calculateChampionsDamage,
+  type ChampionsDamageResult,
+} from '../../mechanics/championsCalculator';
 
-const EXAMPLE_ATTACKER: ChampionsPokemonBuild = {
+import {
+  compareSpeed,
+} from '../../mechanics/compareSpeed';
+
+const EXAMPLE_ATTACKER:
+ChampionsPokemonBuild = {
   species: 'Pikachu',
   nature: 'Timid',
   ability: 'Static',
   item: '',
+
   moves: [
     'Thunderbolt',
     'Protect',
     'Fake Out',
     'Electroweb',
   ],
+
   statPoints: {
     hp: 0,
     atk: 0,
@@ -57,17 +54,20 @@ const EXAMPLE_ATTACKER: ChampionsPokemonBuild = {
   },
 };
 
-const EXAMPLE_DEFENDER: ChampionsPokemonBuild = {
+const EXAMPLE_DEFENDER:
+ChampionsPokemonBuild = {
   species: 'Pikachu',
   nature: 'Bold',
   ability: 'Static',
   item: '',
+
   moves: [
     'Thunderbolt',
     'Protect',
     'Fake Out',
     'Electroweb',
   ],
+
   statPoints: {
     hp: 32,
     atk: 0,
@@ -78,20 +78,35 @@ const EXAMPLE_DEFENDER: ChampionsPokemonBuild = {
   },
 };
 
-function DamageCalculatorPage() {
-  const [fieldConditions, setFieldConditions] =
-    useState<DamageFieldConditions>({
-      ...DEFAULT_DAMAGE_FIELD_CONDITIONS,
-    });  
-  const [attacker, setAttacker] =
-    useState<ChampionsPokemonBuild>(
-      createEmptyPokemonBuild,
-    );
+function percentageText(
+  probability: number,
+): string {
+  return `${(
+    probability * 100
+  ).toFixed(1)}%`;
+}
 
-  const [defender, setDefender] =
-    useState<ChampionsPokemonBuild>(
-      createEmptyPokemonBuild,
-    );
+function DamageCalculatorPage() {
+  const [
+    fieldConditions,
+    setFieldConditions,
+  ] = useState<DamageFieldConditions>({
+    ...DEFAULT_DAMAGE_FIELD_CONDITIONS,
+  });
+
+  const [
+    attacker,
+    setAttacker,
+  ] = useState<ChampionsPokemonBuild>(
+    createEmptyPokemonBuild,
+  );
+
+  const [
+    defender,
+    setDefender,
+  ] = useState<ChampionsPokemonBuild>(
+    createEmptyPokemonBuild,
+  );
 
   const [
     attackerSpeedConditions,
@@ -107,29 +122,120 @@ function DamageCalculatorPage() {
     ...DEFAULT_SPEED_CONDITIONS,
   });
 
-  const [trickRoom, setTrickRoom] = useState(false);
-  const [attackerMoveName, setAttackerMoveName] =
-    useState('');
+  const [
+    trickRoom,
+    setTrickRoom,
+  ] = useState(false);
 
-  const [defenderMoveName, setDefenderMoveName] =
-    useState('');
+  const [
+    moveName,
+    setMoveName,
+  ] = useState('');
 
-  const [result, setResult] =
-    useState<ChampionsDamageResult | null>(null);
+  /*
+   * Blank means full HP.
+   *
+   * Keeping this as text allows the input
+   * to be temporarily empty while typing.
+   */
+  const [
+    defenderCurrentHpInput,
+    setDefenderCurrentHpInput,
+  ] = useState('');
 
-  const [speedResult, setSpeedResult] =
-    useState<SpeedComparisonResult | null>(null);
+  const [
+    result,
+    setResult,
+  ] =
+    useState<ChampionsDamageResult | null>(
+      null,
+    );
 
-  const [error, setError] = useState('');
+  const [
+    speedResult,
+    setSpeedResult,
+  ] =
+    useState<SpeedComparisonResult | null>(
+      null,
+    );
+
+  const [
+    error,
+    setError,
+  ] = useState('');
+
+  const attackerMoveOptions = [
+    ...new Set(
+      attacker.moves.filter(
+        (attackerMove) =>
+          Boolean(
+            attackerMove.trim(),
+          ),
+      ),
+    ),
+  ];
+
+  function clearResults() {
+    setResult(null);
+    setSpeedResult(null);
+    setError('');
+  }
+
+  function handleAttackerChange(
+    nextAttacker:
+      ChampionsPokemonBuild,
+  ) {
+    setAttacker(nextAttacker);
+
+    const selectedMoveStillExists =
+      nextAttacker.moves.some(
+        (attackerMove) =>
+          attackerMove
+            .trim()
+            .toLowerCase() ===
+          moveName
+            .trim()
+            .toLowerCase(),
+      );
+
+    if (
+      moveName &&
+      !selectedMoveStillExists
+    ) {
+      setMoveName('');
+    }
+
+    clearResults();
+  }
+
+  function handleDefenderChange(
+    nextDefender:
+      ChampionsPokemonBuild,
+  ) {
+    setDefender(nextDefender);
+    clearResults();
+  }
 
   function loadExample() {
     setFieldConditions({
       ...DEFAULT_DAMAGE_FIELD_CONDITIONS,
     });
-    setAttacker(EXAMPLE_ATTACKER);
-    setDefender(EXAMPLE_DEFENDER);
-    setAttackerMoveName('Thunderbolt');
-    setDefenderMoveName('Thunderbolt');
+
+    setAttacker(
+      EXAMPLE_ATTACKER,
+    );
+
+    setDefender(
+      EXAMPLE_DEFENDER,
+    );
+
+    setMoveName(
+      'Thunderbolt',
+    );
+
+    setDefenderCurrentHpInput(
+      '',
+    );
 
     setAttackerSpeedConditions({
       ...DEFAULT_SPEED_CONDITIONS,
@@ -146,45 +252,68 @@ function DamageCalculatorPage() {
   }
 
   function handleCalculate() {
-    
     setError('');
     setResult(null);
     setSpeedResult(null);
 
     try {
+      const cleanedCurrentHp =
+        defenderCurrentHpInput.trim();
+
+      const defenderCurrentHp =
+        cleanedCurrentHp
+          ? Number(
+              cleanedCurrentHp,
+            )
+          : undefined;
+
+      if (
+        defenderCurrentHp !==
+          undefined &&
+        !Number.isFinite(
+          defenderCurrentHp,
+        )
+      ) {
+        throw new Error(
+          'Defender current HP must be a valid number.',
+        );
+      }
+
       const nextDamageResult =
         calculateChampionsDamage(
-            attacker,
-            defender,
-            attackerMoveName,
-            fieldConditions,
+          attacker,
+          defender,
+          moveName,
+          fieldConditions,
+          {
+            defenderCurrentHp,
+          },
         );
 
-      const attackerMovePriority =
-        getMovePriority(attackerMoveName);
-
-        const defenderMovePriority =
-        getMovePriority(defenderMoveName);
-
-      const nextSpeedResult = compareSpeed(
-        attacker,
-        {
-            ...attackerSpeedConditions,
-            movePriority: attackerMovePriority,
-        },
-        defender,
-        {
-            ...defenderSpeedConditions,
-            movePriority: defenderMovePriority,
-        },
-        trickRoom,
+      const nextSpeedResult =
+        compareSpeed(
+          attacker,
+          attackerSpeedConditions,
+          defender,
+          defenderSpeedConditions,
+          trickRoom,
         );
 
-      setResult(nextDamageResult);
-      setSpeedResult(nextSpeedResult);
+      setResult(
+        nextDamageResult,
+      );
+
+      setSpeedResult(
+        nextSpeedResult,
+      );
     } catch (calculationError) {
-      if (calculationError instanceof Error) {
-        setError(calculationError.message);
+      if (
+        calculationError instanceof
+        Error
+      ) {
+        setError(
+          calculationError.message,
+        );
       } else {
         setError(
           'An unknown calculation error occurred.',
@@ -195,32 +324,49 @@ function DamageCalculatorPage() {
 
   const minimumPercent = result
     ? (
-        (result.minDamage /
-          result.defenderStats.hp) *
+        (
+          result.minDamage /
+          result.defenderMaxHp
+        ) *
         100
       ).toFixed(1)
     : null;
 
   const maximumPercent = result
     ? (
-        (result.maxDamage /
-          result.defenderStats.hp) *
+        (
+          result.maxDamage /
+          result.defenderMaxHp
+        ) *
         100
       ).toFixed(1)
     : null;
 
   function getMoveOrderMessage(
-    comparison: SpeedComparisonResult,
+    comparison:
+      SpeedComparisonResult,
   ): string {
-    if (comparison.order === 'first') {
-      return 'The attacker moves first.';
+    if (
+      comparison.order ===
+      'first'
+    ) {
+      return (
+        'The attacker moves first.'
+      );
     }
 
-    if (comparison.order === 'second') {
-      return 'The defender moves first.';
+    if (
+      comparison.order ===
+      'second'
+    ) {
+      return (
+        'The defender moves first.'
+      );
     }
 
-    return 'A Speed tie is possible.';
+    return (
+      'A Speed tie is possible.'
+    );
   }
 
   return (
@@ -230,11 +376,16 @@ function DamageCalculatorPage() {
           Pokémon Champions Assistant
         </p>
 
-        <h1>Known-versus-Known Calculator</h1>
+        <h1>
+          Known-versus-Known Calculator
+        </h1>
 
         <p>
-          Enter two complete builds and calculate damage
-          and move order using Pokémon Champions mechanics.
+          Enter two complete builds and
+          calculate damage, current-HP
+          faint chance, and move order
+          using Pokémon Champions
+          mechanics.
         </p>
 
         <button
@@ -246,53 +397,43 @@ function DamageCalculatorPage() {
         </button>
       </header>
 
-      <div className="saved-team-picker-grid">
-        <SavedTeamPicker
-            title="Load attacker from My Team"
-            onSelect={(build) => {
-            setAttacker(build);
-            setResult(null);
-            setSpeedResult(null);
-            setError('');
-            }}
-        />
-
-        <SavedTeamPicker
-            title="Load defender from My Team"
-            onSelect={(build) => {
-            setDefender(build);
-            setResult(null);
-            setSpeedResult(null);
-            setError('');
-            }}
-        />
-        </div>
-      
       <div className="calculator-build-grid">
         <PokemonBuildEditor
           title="Attacker"
           build={attacker}
-          onChange={setAttacker}
+          onChange={
+            handleAttackerChange
+          }
         />
 
         <PokemonBuildEditor
           title="Defender"
           build={defender}
-          onChange={setDefender}
+          onChange={
+            handleDefenderChange
+          }
         />
       </div>
 
       <div className="speed-controls-grid">
         <SpeedControls
           title="Attacker"
-          value={attackerSpeedConditions}
-          onChange={setAttackerSpeedConditions}
+          value={
+            attackerSpeedConditions
+          }
+          onChange={
+            setAttackerSpeedConditions
+          }
         />
 
         <SpeedControls
           title="Defender"
-          value={defenderSpeedConditions}
-          onChange={setDefenderSpeedConditions}
+          value={
+            defenderSpeedConditions
+          }
+          onChange={
+            setDefenderSpeedConditions
+          }
         />
       </div>
 
@@ -300,51 +441,99 @@ function DamageCalculatorPage() {
         <input
           type="checkbox"
           checked={trickRoom}
-          onChange={(event) =>
-            setTrickRoom(event.target.checked)
-          }
+          onChange={(event) => {
+            setTrickRoom(
+              event.target.checked,
+            );
+
+            clearResults();
+          }}
         />
 
-        <span>Trick Room active</span>
+        <span>
+          Trick Room active
+        </span>
       </label>
+
       <FieldControls
         value={fieldConditions}
-        onChange={setFieldConditions}
-/>
+        onChange={(
+          nextFieldConditions,
+        ) => {
+          setFieldConditions(
+            nextFieldConditions,
+          );
+
+          clearResults();
+        }}
+      />
 
       <section className="calculation-controls">
         <AutocompleteInput
-            id="attacker-action-move"
-            label="Attacker move"
-            value={attackerMoveName}
-            options={MOVE_NAMES}
-            placeholder="Search for a move"
-            required
-            onChange={setAttackerMoveName}
+          id="calculation-move"
+          label="Move used by attacker"
+          value={moveName}
+          options={
+            attackerMoveOptions
+          }
+          placeholder={
+            attacker.species
+              ? 'Choose one of the attacker’s moves'
+              : 'Configure the attacker first'
+          }
+          required
+          onChange={(value) => {
+            setMoveName(value);
+            clearResults();
+          }}
         />
 
-        <AutocompleteInput
-            id="defender-action-move"
-            label="Defender move"
-            value={defenderMoveName}
-            options={MOVE_NAMES}
-            placeholder="Search for a move"
-            required
-            onChange={setDefenderMoveName}
-        />
+        <label className="form-field">
+          <span>
+            Defender current HP
+          </span>
+
+          <input
+            type="number"
+            min="1"
+            step="1"
+            value={
+              defenderCurrentHpInput
+            }
+            placeholder="Blank means full HP"
+            onChange={(event) => {
+              setDefenderCurrentHpInput(
+                event.target.value,
+              );
+
+              clearResults();
+            }}
+          />
+
+          <small className="field-help-text">
+            Enter exact HP. Leave blank
+            to calculate from full HP.
+          </small>
+        </label>
 
         <button
-            className="primary-button"
-            type="button"
-            onClick={handleCalculate}
+          className="primary-button"
+          type="button"
+          disabled={
+            !moveName.trim()
+          }
+          onClick={handleCalculate}
         >
-            Calculate Damage and Order
+          Calculate Damage
         </button>
-        </section>
+      </section>
 
       {error && (
         <section className="calculation-error">
-          <strong>Calculation failed</strong>
+          <strong>
+            Calculation failed
+          </strong>
+
           <p>{error}</p>
         </section>
       )}
@@ -355,40 +544,68 @@ function DamageCalculatorPage() {
 
           <div className="stats-comparison">
             <section>
-              <h3>Attacker Speed</h3>
+              <h3>
+                Attacker Speed
+              </h3>
 
               <dl>
                 <div>
-                  <dt>Base Speed</dt>
+                  <dt>
+                    Base Speed
+                  </dt>
+
                   <dd>
-                    {speedResult.firstBaseSpeed}
+                    {
+                      speedResult
+                        .firstBaseSpeed
+                    }
                   </dd>
                 </div>
 
                 <div>
-                  <dt>Effective Speed</dt>
+                  <dt>
+                    Effective Speed
+                  </dt>
+
                   <dd>
-                    {speedResult.firstEffectiveSpeed}
+                    {
+                      speedResult
+                        .firstEffectiveSpeed
+                    }
                   </dd>
                 </div>
               </dl>
             </section>
 
             <section>
-              <h3>Defender Speed</h3>
+              <h3>
+                Defender Speed
+              </h3>
 
               <dl>
                 <div>
-                  <dt>Base Speed</dt>
+                  <dt>
+                    Base Speed
+                  </dt>
+
                   <dd>
-                    {speedResult.secondBaseSpeed}
+                    {
+                      speedResult
+                        .secondBaseSpeed
+                    }
                   </dd>
                 </div>
 
                 <div>
-                  <dt>Effective Speed</dt>
+                  <dt>
+                    Effective Speed
+                  </dt>
+
                   <dd>
-                    {speedResult.secondEffectiveSpeed}
+                    {
+                      speedResult
+                        .secondEffectiveSpeed
+                    }
                   </dd>
                 </div>
               </dl>
@@ -396,10 +613,14 @@ function DamageCalculatorPage() {
           </div>
 
           <p className="speed-message">
-            {getMoveOrderMessage(speedResult)}
+            {getMoveOrderMessage(
+              speedResult,
+            )}
           </p>
 
-          <p>{speedResult.reason}</p>
+          <p>
+            {speedResult.reason}
+          </p>
         </section>
       )}
 
@@ -414,98 +635,216 @@ function DamageCalculatorPage() {
               </span>
 
               <strong className="result-value">
-                {result.minDamage}–{result.maxDamage} HP
+                {result.minDamage}–
+                {result.maxDamage} HP
               </strong>
             </div>
 
             <div>
               <span className="result-label">
-                Percentage
+                Percentage of maximum HP
               </span>
 
               <strong className="result-value">
-                {minimumPercent}%–{maximumPercent}%
+                {minimumPercent}%–
+                {maximumPercent}%
+              </strong>
+            </div>
+
+            <div>
+              <span className="result-label">
+                Defender HP
+              </span>
+
+              <strong className="result-value">
+                {
+                  result.defenderCurrentHp
+                }{' '}
+                /{' '}
+                {
+                  result.defenderMaxHp
+                }
+              </strong>
+            </div>
+
+            <div>
+              <span className="result-label">
+                Faint chance if move hits
+              </span>
+
+              <strong className="result-value">
+                {percentageText(
+                  result.oneHitKoChance,
+                )}
               </strong>
             </div>
           </div>
 
+          <p className="field-help-text">
+            This faint probability uses
+            the damage rolls and the
+            defender’s current HP. Move
+            accuracy is not included yet.
+          </p>
+
           <div className="stats-comparison">
             <section>
-              <h3>Attacker stats</h3>
+              <h3>
+                Attacker stats
+              </h3>
 
               <dl>
                 <div>
                   <dt>HP</dt>
-                  <dd>{result.attackerStats.hp}</dd>
+                  <dd>
+                    {
+                      result
+                        .attackerStats.hp
+                    }
+                  </dd>
                 </div>
 
                 <div>
                   <dt>Attack</dt>
-                  <dd>{result.attackerStats.atk}</dd>
+                  <dd>
+                    {
+                      result
+                        .attackerStats.atk
+                    }
+                  </dd>
                 </div>
 
                 <div>
                   <dt>Defense</dt>
-                  <dd>{result.attackerStats.def}</dd>
+                  <dd>
+                    {
+                      result
+                        .attackerStats.def
+                    }
+                  </dd>
                 </div>
 
                 <div>
-                  <dt>Special Attack</dt>
-                  <dd>{result.attackerStats.spa}</dd>
+                  <dt>
+                    Special Attack
+                  </dt>
+
+                  <dd>
+                    {
+                      result
+                        .attackerStats.spa
+                    }
+                  </dd>
                 </div>
 
                 <div>
-                  <dt>Special Defense</dt>
-                  <dd>{result.attackerStats.spd}</dd>
+                  <dt>
+                    Special Defense
+                  </dt>
+
+                  <dd>
+                    {
+                      result
+                        .attackerStats.spd
+                    }
+                  </dd>
                 </div>
 
                 <div>
                   <dt>Speed</dt>
-                  <dd>{result.attackerStats.spe}</dd>
+                  <dd>
+                    {
+                      result
+                        .attackerStats.spe
+                    }
+                  </dd>
                 </div>
               </dl>
             </section>
 
             <section>
-              <h3>Defender stats</h3>
+              <h3>
+                Defender stats
+              </h3>
 
               <dl>
                 <div>
                   <dt>HP</dt>
-                  <dd>{result.defenderStats.hp}</dd>
+                  <dd>
+                    {
+                      result
+                        .defenderStats.hp
+                    }
+                  </dd>
                 </div>
 
                 <div>
                   <dt>Attack</dt>
-                  <dd>{result.defenderStats.atk}</dd>
+                  <dd>
+                    {
+                      result
+                        .defenderStats.atk
+                    }
+                  </dd>
                 </div>
 
                 <div>
                   <dt>Defense</dt>
-                  <dd>{result.defenderStats.def}</dd>
+                  <dd>
+                    {
+                      result
+                        .defenderStats.def
+                    }
+                  </dd>
                 </div>
 
                 <div>
-                  <dt>Special Attack</dt>
-                  <dd>{result.defenderStats.spa}</dd>
+                  <dt>
+                    Special Attack
+                  </dt>
+
+                  <dd>
+                    {
+                      result
+                        .defenderStats.spa
+                    }
+                  </dd>
                 </div>
 
                 <div>
-                  <dt>Special Defense</dt>
-                  <dd>{result.defenderStats.spd}</dd>
+                  <dt>
+                    Special Defense
+                  </dt>
+
+                  <dd>
+                    {
+                      result
+                        .defenderStats.spd
+                    }
+                  </dd>
                 </div>
 
                 <div>
                   <dt>Speed</dt>
-                  <dd>{result.defenderStats.spe}</dd>
+                  <dd>
+                    {
+                      result
+                        .defenderStats.spe
+                    }
+                  </dd>
                 </div>
               </dl>
             </section>
           </div>
 
           <details className="calculation-description">
-            <summary>Calculator details</summary>
-            <p>{result.description}</p>
+            <summary>
+              Calculator details
+            </summary>
+
+            <p>
+              {result.description}
+            </p>
           </details>
         </section>
       )}
