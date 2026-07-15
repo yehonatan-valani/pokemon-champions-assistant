@@ -6,6 +6,16 @@ export interface OpponentSetCandidate {
   id: string;
   label: string;
   sourceLabel: string;
+
+  /**
+   * Relative frequency from the candidate
+   * data source.
+   *
+   * Candidates without a weight use 1,
+   * which gives them equal prior weight.
+   */
+  priorWeight?: number;
+
   build: ChampionsPokemonBuild;
 }
 

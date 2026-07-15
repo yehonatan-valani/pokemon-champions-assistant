@@ -7,6 +7,10 @@ import type {
 } from '../domain/opponentCandidate';
 
 import {
+  rankResolvedOpponentSlots,
+} from '../mechanics/rankOpponentCandidates';
+
+import {
   resolveOpponentCandidateSets,
 } from '../mechanics/resolveOpponentCandidateSets';
 
@@ -41,21 +45,28 @@ function OpponentCandidatePanel({
       candidates,
     );
 
+  const rankedSlots =
+    rankResolvedOpponentSlots(
+      resolved.slots,
+    );
+
   return (
     <section className="opponent-candidate-panel">
       <h2>Opponent candidate sets</h2>
 
       <p>
         Candidates are removed when they
-        contradict revealed information,
-        comparisons with your Pokémon, or
-        comparisons with another opponent
-        Pokémon.
+        contradict revealed information or
+        observed Speed order. Compatible
+        candidates are ranked using their
+        source weights.
       </p>
 
       <p className="candidate-warning">
         The current catalog contains development
-        fixtures, not current metagame usage data.
+        fixtures rather than current metagame
+        usage data. Unweighted fixtures receive
+        equal confidence.
       </p>
 
       {resolved.jointSpeedEvidenceCount >
@@ -71,18 +82,8 @@ function OpponentCandidatePanel({
       )}
 
       <div className="candidate-species-grid">
-        {resolved.slots.map((slot) => {
-          const compatible =
-            slot.evaluations.filter(
-              (evaluation) =>
-                evaluation.compatible,
-            );
-
-          const rejected =
-            slot.evaluations.filter(
-              (evaluation) =>
-                !evaluation.compatible,
-            );
+        {rankedSlots.map((ranking) => {
+          const { slot } = ranking;
 
           return (
             <article
@@ -105,7 +106,7 @@ function OpponentCandidatePanel({
                 <>
                   <p>
                     <strong>
-                      {compatible.length}
+                      {ranking.compatibleCount}
                     </strong>{' '}
                     of{' '}
                     <strong>
@@ -114,112 +115,162 @@ function OpponentCandidatePanel({
                     candidates remain.
                   </p>
 
+                  <p
+                    className={[
+                      'candidate-confidence-message',
+                      `candidate-confidence-${ranking.confidence}`,
+                    ].join(' ')}
+                  >
+                    {
+                      ranking.confidenceMessage
+                    }
+                  </p>
+
                   <div className="candidate-compatible-list">
-                    {compatible.map(
+                    {ranking.rankedCandidates.map(
                       ({
-                        candidate,
-                        usablePlayerSpeedEvidence,
-                        ignoredPlayerSpeedEvidence,
-                      }) => (
-                        <section
-                          className="candidate-compatible-card"
-                          key={candidate.id}
-                        >
-                          <h4>
-                            {candidate.label}
-                          </h4>
+                        evaluation,
+                        rank,
+                        confidencePercent,
+                      }) => {
+                        const {
+                          candidate,
+                          usablePlayerSpeedEvidence,
+                          ignoredPlayerSpeedEvidence,
+                        } = evaluation;
 
-                          <p>
-                            <strong>
-                              Nature:
-                            </strong>{' '}
-                            {
-                              candidate.build
-                                .nature
-                            }
-                          </p>
+                        return (
+                          <section
+                            className="candidate-compatible-card"
+                            key={candidate.id}
+                          >
+                            <h4>
+                              #{rank}{' '}
+                              {candidate.label}
+                            </h4>
 
-                          <p>
-                            <strong>
-                              Ability:
-                            </strong>{' '}
-                            {
-                              candidate.build
-                                .ability
-                            }
-                          </p>
-
-                          <p>
-                            <strong>
-                              Item:
-                            </strong>{' '}
-                            {
-                              candidate.build
-                                .item
-                            }
-                          </p>
-
-                          <p>
-                            <strong>
-                              Moves:
-                            </strong>{' '}
-                            {candidate.build.moves.join(
-                              ', ',
-                            )}
-                          </p>
-
-                          <p>
-                            <strong>
-                              Stat Points:
-                            </strong>{' '}
-                            {formatStatPoints(
-                              candidate,
-                            )}
-                          </p>
-
-                          {usablePlayerSpeedEvidence >
-                            0 && (
                             <p>
                               <strong>
-                                Known-player Speed
-                                checks passed:
+                                Relative catalog
+                                confidence:
                               </strong>{' '}
-                              {
-                                usablePlayerSpeedEvidence
-                              }
+                              {confidencePercent.toFixed(
+                                1,
+                              )}
+                              %
                             </p>
-                          )}
 
-                          {ignoredPlayerSpeedEvidence >
-                            0 && (
+                            <div
+                              className="candidate-confidence-bar"
+                              role="progressbar"
+                              aria-label={`${candidate.label} relative confidence`}
+                              aria-valuemin={0}
+                              aria-valuemax={100}
+                              aria-valuenow={
+                                confidencePercent
+                              }
+                            >
+                              <div
+                                className="candidate-confidence-fill"
+                                style={{
+                                  width:
+                                    `${confidencePercent}%`,
+                                }}
+                              />
+                            </div>
+
                             <p>
                               <strong>
-                                Speed checks ignored:
+                                Nature:
                               </strong>{' '}
                               {
-                                ignoredPlayerSpeedEvidence
+                                candidate.build
+                                  .nature
                               }
                             </p>
-                          )}
 
-                          <small>
-                            {
-                              candidate.sourceLabel
-                            }
-                          </small>
-                        </section>
-                      ),
+                            <p>
+                              <strong>
+                                Ability:
+                              </strong>{' '}
+                              {
+                                candidate.build
+                                  .ability
+                              }
+                            </p>
+
+                            <p>
+                              <strong>
+                                Item:
+                              </strong>{' '}
+                              {
+                                candidate.build
+                                  .item
+                              }
+                            </p>
+
+                            <p>
+                              <strong>
+                                Moves:
+                              </strong>{' '}
+                              {candidate.build.moves.join(
+                                ', ',
+                              )}
+                            </p>
+
+                            <p>
+                              <strong>
+                                Stat Points:
+                              </strong>{' '}
+                              {formatStatPoints(
+                                candidate,
+                              )}
+                            </p>
+
+                            {usablePlayerSpeedEvidence >
+                              0 && (
+                              <p>
+                                <strong>
+                                  Known-player Speed
+                                  checks passed:
+                                </strong>{' '}
+                                {
+                                  usablePlayerSpeedEvidence
+                                }
+                              </p>
+                            )}
+
+                            {ignoredPlayerSpeedEvidence >
+                              0 && (
+                              <p>
+                                <strong>
+                                  Speed checks ignored:
+                                </strong>{' '}
+                                {
+                                  ignoredPlayerSpeedEvidence
+                                }
+                              </p>
+                            )}
+
+                            <small>
+                              {
+                                candidate.sourceLabel
+                              }
+                            </small>
+                          </section>
+                        );
+                      },
                     )}
                   </div>
 
-                  {rejected.length > 0 && (
+                  {ranking.rejectedCount > 0 && (
                     <details className="candidate-rejected-details">
                       <summary>
                         Show rejected candidates (
-                        {rejected.length})
+                        {ranking.rejectedCount})
                       </summary>
 
-                      {rejected.map(
+                      {ranking.rejectedEvaluations.map(
                         ({
                           candidate,
                           rejections,
