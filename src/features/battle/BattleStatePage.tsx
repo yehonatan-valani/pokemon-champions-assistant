@@ -60,6 +60,9 @@ import {
   DEVELOPMENT_OPPONENT_CANDIDATES,
 } from '../../data/developmentOpponentCandidates';
 
+import CandidateKoPanel
+  from '../../components/CandidateKoPanel';
+
 function parseSelectedIndex(
   value: string,
 ): number | null {
@@ -401,6 +404,13 @@ function handleRecordEvent() {
                 candidates={
                     DEVELOPMENT_OPPONENT_CANDIDATES
                 }
+            />
+
+            <CandidateKoPanel
+              battle={battle}
+              candidates={
+                DEVELOPMENT_OPPONENT_CANDIDATES
+              }
             />
 
           <div className="battle-sides-grid">
