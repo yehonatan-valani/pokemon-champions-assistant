@@ -1,10 +1,10 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "regulationId": "champions-reg-mb",
   "formatName": "[Gen 9 Champions] VGC 2026 Reg M-B",
   "activeFrom": "2026-06-17T01:59:00Z",
   "activeUntil": "2026-09-02T01:59:00Z",
-  "generatedAt": "2026-07-15T17:15:39.797Z",
+  "generatedAt": "2026-07-16T10:57:13.595Z",
   "source": {
     "simulator": "@pkmn/sim@0.10.11",
     "mods": "@pkmn/mods@0.10.11",
@@ -18165,6 +18165,4968 @@
         "Uproar",
         "Will-O-Wisp"
       ]
+    }
+  ],
+  "moves": [
+    {
+      "name": "Accelerock",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Acid Armor",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Defense by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Acid Spray",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's Sp. Def by 2.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Acrobatics",
+      "category": "Physical",
+      "target": "any",
+      "description": "Power doubles if the user has no held item.",
+      "basePower": 55,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Acupressure",
+      "category": "Status",
+      "target": "adjacentAllyOrSelf",
+      "description": "Raises a random stat of the user or an ally by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aerial Ace",
+      "category": "Physical",
+      "target": "any",
+      "description": "This move does not check accuracy.",
+      "basePower": 60,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "After You",
+      "category": "Status",
+      "target": "normal",
+      "description": "The target makes its move right after the user.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Agility",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Speed by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Air Cutter",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "High critical hit ratio. Hits adjacent foes.",
+      "basePower": 60,
+      "accuracyPercent": 95,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Air Slash",
+      "category": "Special",
+      "target": "any",
+      "description": "30% chance to make the target flinch.",
+      "basePower": 75,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Alluring Voice",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% confuse target that had a stat rise this turn.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ally Switch",
+      "category": "Status",
+      "target": "self",
+      "description": "User and ally swap positions; using again can fail.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Amnesia",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Sp. Def by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ancient Power",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to raise all stats by 1 (not acc/eva).",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Apple Acid",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's Sp. Def by 1.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aqua Cutter",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aqua Jet",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aqua Ring",
+      "category": "Status",
+      "target": "self",
+      "description": "User recovers 1/16 max HP per turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aqua Step",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to raise the user's Speed by 1.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aqua Tail",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 90,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Armor Cannon",
+      "category": "Special",
+      "target": "normal",
+      "description": "Lowers the user's Defense and Sp. Def by 1.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aromatic Mist",
+      "category": "Status",
+      "target": "adjacentAlly",
+      "description": "Raises an ally's Sp. Def by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Assurance",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Power doubles if target was damaged this turn.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Attract",
+      "category": "Status",
+      "target": "normal",
+      "description": "A target of the opposite gender gets infatuated.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aura Sphere",
+      "category": "Special",
+      "target": "any",
+      "description": "This move does not check accuracy.",
+      "basePower": 80,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aura Wheel",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Morpeko: Electric; Hangry: Dark; 100% +1 Spe.",
+      "basePower": 110,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Aurora Veil",
+      "category": "Status",
+      "target": "allySide",
+      "description": "For 5 turns, damage to allies halved. Snow only.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Avalanche",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Power doubles if user is damaged by the target.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Axe Kick",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% confusion. User loses 50% max HP if miss.",
+      "basePower": 120,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Baby-Doll Eyes",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Attack by 1.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Baneful Bunker",
+      "category": "Status",
+      "target": "self",
+      "description": "Protects from moves. Contact: poison.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Barb Barrage",
+      "category": "Physical",
+      "target": "normal",
+      "description": "50% psn. 2x power if target already poisoned.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Baton Pass",
+      "category": "Status",
+      "target": "self",
+      "description": "User switches, passing stat changes and more.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Beak Blast",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Burns on contact with the user before it moves.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Beat Up",
+      "category": "Physical",
+      "target": "normal",
+      "description": "All healthy allies aid in damaging the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Belch",
+      "category": "Special",
+      "target": "normal",
+      "description": "Fails unless the user has eaten a Berry.",
+      "basePower": 120,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Belly Drum",
+      "category": "Status",
+      "target": "self",
+      "description": "User loses 50% max HP. Maximizes Attack.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bind",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Traps and damages the target for 4-5 turns.",
+      "basePower": 15,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bite",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to make the target flinch.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bitter Blade",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User recovers 50% of the damage dealt.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bitter Malice",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's Attack by 1.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Blast Burn",
+      "category": "Special",
+      "target": "normal",
+      "description": "User cannot move next turn.",
+      "basePower": 150,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Blaze Kick",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio. 10% chance to burn.",
+      "basePower": 85,
+      "accuracyPercent": 90,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Blizzard",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "10% chance to freeze foe(s). Can't miss in Snow.",
+      "basePower": 110,
+      "accuracyPercent": 70,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Block",
+      "category": "Status",
+      "target": "normal",
+      "description": "Prevents the target from switching out.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Body Press",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Uses user's Def stat as Atk in damage calculation.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Body Slam",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to paralyze the target.",
+      "basePower": 85,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bone Rush",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2-5 times in one turn.",
+      "basePower": 30,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Boomburst",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "No additional effect. Hits adjacent Pokemon.",
+      "basePower": 140,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bounce",
+      "category": "Physical",
+      "target": "any",
+      "description": "Bounces turn 1. Hits turn 2. 30% paralyze.",
+      "basePower": 85,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Brave Bird",
+      "category": "Physical",
+      "target": "any",
+      "description": "Has 33% recoil.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Breaking Swipe",
+      "category": "Physical",
+      "target": "allAdjacentFoes",
+      "description": "100% chance to lower the foe(s) Attack by 1.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Brick Break",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Destroys screens, unless the target is immune.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Brutal Swing",
+      "category": "Physical",
+      "target": "allAdjacent",
+      "description": "No additional effect. Hits adjacent Pokemon.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bug Bite",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User steals and eats the target's Berry.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bug Buzz",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to lower the target's Sp. Def by 1.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bulk Up",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Attack and Defense by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bulldoze",
+      "category": "Physical",
+      "target": "allAdjacent",
+      "description": "100% chance lower adjacent Pkmn Speed by 1.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bullet Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Bullet Seed",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2-5 times in one turn.",
+      "basePower": 25,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Burn Up",
+      "category": "Special",
+      "target": "normal",
+      "description": "User's Fire type becomes typeless; must be Fire.",
+      "basePower": 130,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Burning Jealousy",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "100% burns a target that had a stat rise this turn.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Calm Mind",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Sp. Atk and Sp. Def by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ceaseless Edge",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Sets a layer of Spikes on the opposing side.",
+      "basePower": 65,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Charge",
+      "category": "Status",
+      "target": "self",
+      "description": "+1 SpD, user's next Electric move 2x power.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Charge Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "70% chance to raise the user's Sp. Atk by 1.",
+      "basePower": 50,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Charm",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Attack by 2.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Chilling Water",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's Attack by 1.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Chilly Reception",
+      "category": "Status",
+      "target": "all",
+      "description": "Starts Snow. User switches out.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Circle Throw",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Forces the target to switch to a random ally.",
+      "basePower": 60,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Clanging Scales",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "Lowers the user's Defense by 1.",
+      "basePower": 110,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Clangorous Soul",
+      "category": "Status",
+      "target": "self",
+      "description": "User loses 33% of its max HP. +1 to all stats.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Clear Smog",
+      "category": "Special",
+      "target": "normal",
+      "description": "Resets all of the target's stat stages to 0.",
+      "basePower": 50,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Close Combat",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Lowers the user's Defense and Sp. Def by 1.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Coaching",
+      "category": "Status",
+      "target": "adjacentAlly",
+      "description": "Raises an ally's Attack and Defense by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Coil",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises user's Attack, Defense, accuracy by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Comeuppance",
+      "category": "Physical",
+      "target": "scripted",
+      "description": "If hit by an attack, returns 1.5x damage.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Confuse Ray",
+      "category": "Status",
+      "target": "normal",
+      "description": "Confuses the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Copycat",
+      "category": "Status",
+      "target": "self",
+      "description": "Uses the last move used in the battle.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Corrosive Gas",
+      "category": "Status",
+      "target": "allAdjacent",
+      "description": "Removes adjacent Pokemon's held items.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Cosmic Power",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Defense and Sp. Def by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Cotton Guard",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Defense by 3.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Cotton Spore",
+      "category": "Status",
+      "target": "allAdjacentFoes",
+      "description": "Lowers the target's Speed by 2.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Counter",
+      "category": "Physical",
+      "target": "scripted",
+      "description": "If hit by physical attack, returns double damage.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Covet",
+      "category": "Physical",
+      "target": "normal",
+      "description": "If the user has no item, it steals the target's.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Crabhammer",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 100,
+      "accuracyPercent": 95,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Cross Chop",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 100,
+      "accuracyPercent": 80,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Cross Poison",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio. 10% chance to poison.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Crunch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "20% chance to lower the target's Defense by 1.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Crush Claw",
+      "category": "Physical",
+      "target": "normal",
+      "description": "50% chance to lower the target's Defense by 1.",
+      "basePower": 75,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Curse",
+      "category": "Status",
+      "target": "normal",
+      "description": "Curses if Ghost, else -1 Spe, +1 Atk, +1 Def.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dark Pulse",
+      "category": "Special",
+      "target": "any",
+      "description": "20% chance to make the target flinch.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Darkest Lariat",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Ignores the target's stat stage changes.",
+      "basePower": 85,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dazzling Gleam",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "No additional effect. Hits adjacent foes.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Decorate",
+      "category": "Status",
+      "target": "normal",
+      "description": "Raises the target's Attack and Sp. Atk by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Defog",
+      "category": "Status",
+      "target": "normal",
+      "description": "-1 evasion; ends user and target hazards/terrain.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Destiny Bond",
+      "category": "Status",
+      "target": "self",
+      "description": "If an opponent knocks out the user, it also faints.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Detect",
+      "category": "Status",
+      "target": "self",
+      "description": "Prevents moves from affecting the user this turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dig",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Digs underground turn 1, strikes turn 2.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dire Claw",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to sleep, poison, or paralyze target.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Disable",
+      "category": "Status",
+      "target": "normal",
+      "description": "For 4 turns, disables the target's last move used.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Discharge",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "30% chance to paralyze adjacent Pokemon.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dive",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Dives underwater turn 1, strikes turn 2.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Double Hit",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2 times in one turn.",
+      "basePower": 35,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Double Team",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's evasiveness by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Double-Edge",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Has 33% recoil.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Draco Meteor",
+      "category": "Special",
+      "target": "normal",
+      "description": "Lowers the user's Sp. Atk by 2.",
+      "basePower": 130,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dragon Cheer",
+      "category": "Status",
+      "target": "adjacentAlly",
+      "description": "Ally: Crit ratio +1, or +2 if ally is Dragon type.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dragon Claw",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dragon Dance",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Attack and Speed by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dragon Darts",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits twice. Doubles: Tries to hit each foe once.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dragon Pulse",
+      "category": "Special",
+      "target": "any",
+      "description": "No additional effect.",
+      "basePower": 85,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dragon Rush",
+      "category": "Physical",
+      "target": "normal",
+      "description": "20% chance to make the target flinch.",
+      "basePower": 100,
+      "accuracyPercent": 75,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dragon Tail",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Forces the target to switch to a random ally.",
+      "basePower": 60,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Drain Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User recovers 50% of the damage dealt.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Draining Kiss",
+      "category": "Special",
+      "target": "normal",
+      "description": "User recovers 75% of the damage dealt.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Drill Peck",
+      "category": "Physical",
+      "target": "any",
+      "description": "No additional effect.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Drill Run",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 80,
+      "accuracyPercent": 95,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dual Wingbeat",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2 times in one turn.",
+      "basePower": 40,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Dynamic Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to confuse the target.",
+      "basePower": 100,
+      "accuracyPercent": 50,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Earth Power",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to lower the target's Sp. Def by 1.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Earthquake",
+      "category": "Physical",
+      "target": "allAdjacent",
+      "description": "Hits adjacent Pokemon. Double damage on Dig.",
+      "basePower": 100,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Eerie Impulse",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Sp. Atk by 2.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Eerie Spell",
+      "category": "Special",
+      "target": "normal",
+      "description": "Removes 3 PP from the target's last move.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Electric Terrain",
+      "category": "Status",
+      "target": "all",
+      "description": "5 turns. Grounded: +Electric power, can't sleep.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Electrify",
+      "category": "Status",
+      "target": "normal",
+      "description": "Changes the target's move to Electric this turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Electro Ball",
+      "category": "Special",
+      "target": "normal",
+      "description": "More power the faster the user is than the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Electro Shot",
+      "category": "Special",
+      "target": "normal",
+      "description": "Raises Sp. Atk by 1, hits turn 2. Rain: no charge.",
+      "basePower": 130,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Electroweb",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "100% chance to lower the foe(s) Speed by 1.",
+      "basePower": 55,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Encore",
+      "category": "Status",
+      "target": "normal",
+      "description": "Target repeats its last move for its next 3 turns.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Endeavor",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Lowers the target's HP to the user's HP.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Endure",
+      "category": "Status",
+      "target": "self",
+      "description": "User survives attacks this turn with at least 1 HP.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Energy Ball",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to lower the target's Sp. Def by 1.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Entrainment",
+      "category": "Status",
+      "target": "normal",
+      "description": "The target's Ability changes to match the user's.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Eruption",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "Less power as user's HP decreases. Hits foe(s).",
+      "basePower": 150,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Expanding Force",
+      "category": "Special",
+      "target": "normal",
+      "description": "User on Psychic Terrain: 1.5x power, hits foes.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Explosion",
+      "category": "Physical",
+      "target": "allAdjacent",
+      "description": "Hits adjacent Pokemon. The user faints.",
+      "basePower": 250,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Extrasensory",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to make the target flinch.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Extreme Speed",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Nearly always goes first.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Facade",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Power doubles if user is burn/poison/paralyzed.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fairy Lock",
+      "category": "Status",
+      "target": "all",
+      "description": "Prevents all Pokemon from switching next turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fake Out",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits first. First turn out only. 100% flinch chance.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fake Tears",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Sp. Def by 2.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Feather Dance",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Attack by 2.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Feint",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Nullifies Detect, Protect, and Quick/Wide Guard.",
+      "basePower": 30,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fell Stinger",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Raises user's Attack by 3 if this KOes the target.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fickle Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "Has a 30% chance this move's power is doubled.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fiery Dance",
+      "category": "Special",
+      "target": "normal",
+      "description": "50% chance to raise the user's Sp. Atk by 1.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Final Gambit",
+      "category": "Special",
+      "target": "normal",
+      "description": "Does damage equal to the user's HP. User faints.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fire Blast",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to burn the target.",
+      "basePower": 110,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fire Fang",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to burn. 10% chance to flinch.",
+      "basePower": 65,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fire Lash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower the target's Defense by 1.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fire Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to burn the target.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fire Spin",
+      "category": "Special",
+      "target": "normal",
+      "description": "Traps and damages the target for 4-5 turns.",
+      "basePower": 35,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "First Impression",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Nearly always goes first. First turn out only.",
+      "basePower": 100,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fissure",
+      "category": "Physical",
+      "target": "normal",
+      "description": "OHKOs the target. Fails if user is a lower level.",
+      "basePower": 0,
+      "accuracyPercent": 30,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flail",
+      "category": "Physical",
+      "target": "normal",
+      "description": "More power the less HP the user has left.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flame Charge",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to raise the user's Speed by 1.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flamethrower",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to burn the target.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flare Blitz",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Has 33% recoil. 10% chance to burn. Thaws user.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flash Cannon",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to lower the target's Sp. Def by 1.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flatter",
+      "category": "Status",
+      "target": "normal",
+      "description": "Raises the target's Sp. Atk by 1 and confuses it.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Fling",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Flings the user's item at the target. Power varies.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flip Turn",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User switches out after damaging the target.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flower Trick",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Always results in a critical hit; no accuracy check.",
+      "basePower": 70,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": true
+    },
+    {
+      "name": "Fly",
+      "category": "Physical",
+      "target": "any",
+      "description": "Flies up on first turn, then strikes the next turn.",
+      "basePower": 90,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Flying Press",
+      "category": "Physical",
+      "target": "any",
+      "description": "Combines Flying in its type effectiveness.",
+      "basePower": 100,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Focus Blast",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to lower the target's Sp. Def by 1.",
+      "basePower": 120,
+      "accuracyPercent": 70,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Focus Energy",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's critical hit ratio by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Focus Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Fails if the user takes damage before it hits.",
+      "basePower": 150,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Follow Me",
+      "category": "Status",
+      "target": "self",
+      "description": "The foes' moves target the user on the turn used.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Forest's Curse",
+      "category": "Status",
+      "target": "normal",
+      "description": "Adds Grass to the target's type(s).",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Foul Play",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Uses target's Attack stat in damage calculation.",
+      "basePower": 95,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Freeze-Dry",
+      "category": "Special",
+      "target": "normal",
+      "description": "Super effective on Water.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Frenzy Plant",
+      "category": "Special",
+      "target": "normal",
+      "description": "User cannot move next turn.",
+      "basePower": 150,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Frost Breath",
+      "category": "Special",
+      "target": "normal",
+      "description": "Always results in a critical hit.",
+      "basePower": 60,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": true
+    },
+    {
+      "name": "Future Sight",
+      "category": "Special",
+      "target": "normal",
+      "description": "Hits two turns after being used.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Gastro Acid",
+      "category": "Status",
+      "target": "normal",
+      "description": "Nullifies the target's Ability.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Giga Drain",
+      "category": "Special",
+      "target": "normal",
+      "description": "User recovers 50% of the damage dealt.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Giga Impact",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User cannot move next turn.",
+      "basePower": 150,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Gigaton Hammer",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Cannot be selected the turn after it's used.",
+      "basePower": 160,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Glare",
+      "category": "Status",
+      "target": "normal",
+      "description": "Paralyzes the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Grass Knot",
+      "category": "Special",
+      "target": "normal",
+      "description": "More power the heavier the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Grassy Glide",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User on Grassy Terrain: +1 priority.",
+      "basePower": 55,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Grassy Terrain",
+      "category": "Status",
+      "target": "all",
+      "description": "5 turns. Grounded: +Grass power, +1/16 max HP.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Grav Apple",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Target: 100% -1 Def. During Gravity: 1.5x power.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Gravity",
+      "category": "Status",
+      "target": "all",
+      "description": "5 turns: no Ground immunities, 1.67x accuracy.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Growth",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Guard Split",
+      "category": "Status",
+      "target": "normal",
+      "description": "Averages Defense and Sp. Def stats with target.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Guard Swap",
+      "category": "Status",
+      "target": "normal",
+      "description": "Swaps Defense and Sp. Def changes with target.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Guillotine",
+      "category": "Physical",
+      "target": "normal",
+      "description": "OHKOs the target. Fails if user is a lower level.",
+      "basePower": 0,
+      "accuracyPercent": 30,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Gunk Shot",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to poison the target.",
+      "basePower": 120,
+      "accuracyPercent": 80,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Gyro Ball",
+      "category": "Physical",
+      "target": "normal",
+      "description": "More power the slower the user than the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hammer Arm",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Lowers the user's Speed by 1.",
+      "basePower": 100,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hard Press",
+      "category": "Physical",
+      "target": "normal",
+      "description": "More power the more HP the target has left.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Haze",
+      "category": "Status",
+      "target": "all",
+      "description": "Eliminates all stat changes.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Head Smash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Has 1/2 recoil.",
+      "basePower": 150,
+      "accuracyPercent": 80,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Headlong Rush",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Lowers the user's Defense and Sp. Def by 1.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Heal Bell",
+      "category": "Status",
+      "target": "allyTeam",
+      "description": "Cures the user's party of all status conditions.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Heal Pulse",
+      "category": "Status",
+      "target": "any",
+      "description": "Heals the target by 50% of its max HP.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Healing Wish",
+      "category": "Status",
+      "target": "self",
+      "description": "User faints. Next hurt Pokemon is fully healed.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Heat Crash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "More power the heavier the user than the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Heat Wave",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "10% chance to burn the foe(s).",
+      "basePower": 95,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Heavy Slam",
+      "category": "Physical",
+      "target": "normal",
+      "description": "More power the heavier the user than the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Helping Hand",
+      "category": "Status",
+      "target": "adjacentAlly",
+      "description": "One adjacent ally's move power is 1.5x this turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hex",
+      "category": "Special",
+      "target": "normal",
+      "description": "Power doubles if the target has a status ailment.",
+      "basePower": 65,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "High Horsepower",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 95,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "High Jump Kick",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User is hurt by 50% of its max HP if it misses.",
+      "basePower": 130,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Horn Drill",
+      "category": "Physical",
+      "target": "normal",
+      "description": "OHKOs the target. Fails if user is a lower level.",
+      "basePower": 0,
+      "accuracyPercent": 30,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Horn Leech",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User recovers 50% of the damage dealt.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Howl",
+      "category": "Status",
+      "target": "allies",
+      "description": "Raises the user's and ally's Attack by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hurricane",
+      "category": "Special",
+      "target": "any",
+      "description": "30% chance to confuse target. Can't miss in rain.",
+      "basePower": 110,
+      "accuracyPercent": 70,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hydro Cannon",
+      "category": "Special",
+      "target": "normal",
+      "description": "User cannot move next turn.",
+      "basePower": 150,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hydro Pump",
+      "category": "Special",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 110,
+      "accuracyPercent": 80,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hyper Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "User cannot move next turn.",
+      "basePower": 150,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hyper Voice",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "No additional effect. Hits adjacent foes.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Hypnosis",
+      "category": "Status",
+      "target": "normal",
+      "description": "Causes the target to fall asleep.",
+      "basePower": 0,
+      "accuracyPercent": 60,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ice Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to freeze the target.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ice Fang",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to freeze. 10% chance to flinch.",
+      "basePower": 65,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ice Hammer",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Lowers the user's Speed by 1.",
+      "basePower": 100,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ice Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to freeze the target.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ice Shard",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ice Spinner",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Ends the effects of terrain.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Icicle Crash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to make the target flinch.",
+      "basePower": 85,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Icicle Spear",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2-5 times in one turn.",
+      "basePower": 25,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Icy Wind",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "100% chance to lower the foe(s) Speed by 1.",
+      "basePower": 55,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Imprison",
+      "category": "Status",
+      "target": "self",
+      "description": "No foe can use any move known by the user.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Infernal Parade",
+      "category": "Special",
+      "target": "normal",
+      "description": "30% burn. 2x power if target is already statused.",
+      "basePower": 65,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Inferno",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to burn the target.",
+      "basePower": 100,
+      "accuracyPercent": 50,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Infestation",
+      "category": "Special",
+      "target": "normal",
+      "description": "Traps and damages the target for 4-5 turns.",
+      "basePower": 20,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Ingrain",
+      "category": "Status",
+      "target": "self",
+      "description": "Traps/grounds user; heals 1/16 max HP per turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Instruct",
+      "category": "Status",
+      "target": "normal",
+      "description": "The target immediately uses its last used move.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Iron Defense",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Defense by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Iron Head",
+      "category": "Physical",
+      "target": "normal",
+      "description": "20% chance to make the target flinch.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Iron Tail",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to lower the target's Defense by 1.",
+      "basePower": 100,
+      "accuracyPercent": 75,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Jet Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "King's Shield",
+      "category": "Status",
+      "target": "self",
+      "description": "Protects from damaging attacks. Contact: -1 Atk.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Knock Off",
+      "category": "Physical",
+      "target": "normal",
+      "description": "1.5x damage if foe holds an item. Removes item.",
+      "basePower": 65,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Kowtow Cleave",
+      "category": "Physical",
+      "target": "normal",
+      "description": "This move does not check accuracy.",
+      "basePower": 85,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Lash Out",
+      "category": "Physical",
+      "target": "normal",
+      "description": "2x power if the user had a stat lowered this turn.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Last Resort",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Fails unless each known move has been used.",
+      "basePower": 140,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Last Respects",
+      "category": "Physical",
+      "target": "normal",
+      "description": "+50 power for each time a party member fainted.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Lava Plume",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "30% chance to burn adjacent Pokemon.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Leaf Blade",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Leaf Storm",
+      "category": "Special",
+      "target": "normal",
+      "description": "Lowers the user's Sp. Atk by 2.",
+      "basePower": 130,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Leech Life",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User recovers 50% of the damage dealt.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Leech Seed",
+      "category": "Status",
+      "target": "normal",
+      "description": "1/8 of target's HP is restored to user every turn.",
+      "basePower": 0,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Life Dew",
+      "category": "Status",
+      "target": "allies",
+      "description": "Heals the user and its allies by 1/4 their max HP.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Light of Ruin",
+      "category": "Special",
+      "target": "normal",
+      "description": "Has 1/2 recoil.",
+      "basePower": 140,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Light Screen",
+      "category": "Status",
+      "target": "allySide",
+      "description": "For 5 turns, special damage to allies is halved.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Liquidation",
+      "category": "Physical",
+      "target": "normal",
+      "description": "20% chance to lower the target's Defense by 1.",
+      "basePower": 85,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Lock-On",
+      "category": "Status",
+      "target": "normal",
+      "description": "User's next move will not miss the target.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Low Kick",
+      "category": "Physical",
+      "target": "normal",
+      "description": "More power the heavier the target.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Low Sweep",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower the target's Speed by 1.",
+      "basePower": 65,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Lumina Crash",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's Sp. Def by 2.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Lunge",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower the target's Attack by 1.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mach Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Magic Powder",
+      "category": "Status",
+      "target": "normal",
+      "description": "Changes the target's type to Psychic.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Magic Room",
+      "category": "Status",
+      "target": "all",
+      "description": "For 5 turns, all held items have no effect.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Magnet Rise",
+      "category": "Status",
+      "target": "self",
+      "description": "For 5 turns, the user has immunity to Ground.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Magnetic Flux",
+      "category": "Status",
+      "target": "allySide",
+      "description": "Raises Def, Sp. Def of allies with Plus/Minus by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Make It Rain",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "Lowers the user's Sp. Atk by 2. Hits foe(s).",
+      "basePower": 120,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Matcha Gotcha",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "20% burn. Recovers 50% dmg dealt. Thaws foe(s).",
+      "basePower": 80,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mean Look",
+      "category": "Status",
+      "target": "normal",
+      "description": "Prevents the target from switching out.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mega Kick",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 120,
+      "accuracyPercent": 75,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Megahorn",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 120,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Memento",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers target's Attack, Sp. Atk by 2. User faints.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Metal Burst",
+      "category": "Physical",
+      "target": "scripted",
+      "description": "If hit by an attack, returns 1.5x damage.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Metal Sound",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Sp. Def by 2.",
+      "basePower": 0,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Meteor Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2.",
+      "basePower": 120,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Meteor Mash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "20% chance to raise the user's Attack by 1.",
+      "basePower": 90,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Minimize",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's evasiveness by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mirror Coat",
+      "category": "Special",
+      "target": "scripted",
+      "description": "If hit by special attack, returns double damage.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Misty Explosion",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "User faints. User on Misty Terrain: 1.5x power.",
+      "basePower": 100,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Misty Terrain",
+      "category": "Status",
+      "target": "all",
+      "description": "5 turns. Can't status,-Dragon power vs grounded.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Moonblast",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to lower the target's Sp. Atk by 1.",
+      "basePower": 95,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Moonlight",
+      "category": "Status",
+      "target": "self",
+      "description": "Heals the user by a weather-dependent amount.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Morning Sun",
+      "category": "Status",
+      "target": "self",
+      "description": "Heals the user by a weather-dependent amount.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mortal Spin",
+      "category": "Physical",
+      "target": "allAdjacentFoes",
+      "description": "Poisons foes, frees user from hazards/bind/leech.",
+      "basePower": 30,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mountain Gale",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to make the target flinch.",
+      "basePower": 120,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mud Shot",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's Speed by 1.",
+      "basePower": 55,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mud-Slap",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's accuracy by 1.",
+      "basePower": 20,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Muddy Water",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "30% chance to lower the foe(s) accuracy by 1.",
+      "basePower": 90,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Mystical Fire",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to lower the target's Sp. Atk by 1.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Nasty Plot",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Sp. Atk by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Night Daze",
+      "category": "Special",
+      "target": "normal",
+      "description": "40% chance to lower the target's accuracy by 1.",
+      "basePower": 90,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Night Shade",
+      "category": "Special",
+      "target": "normal",
+      "description": "Does damage equal to the user's level.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Night Slash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "No Retreat",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises all stats by 1 (not acc/eva). Traps user.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Noble Roar",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Attack and Sp. Atk by 1.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Nuzzle",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to paralyze the target.",
+      "basePower": 20,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Outrage",
+      "category": "Physical",
+      "target": "randomNormal",
+      "description": "Lasts 2-3 turns. Confuses the user afterwards.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Overheat",
+      "category": "Special",
+      "target": "normal",
+      "description": "Lowers the user's Sp. Atk by 2.",
+      "basePower": 130,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Pain Split",
+      "category": "Status",
+      "target": "normal",
+      "description": "Shares HP of user and target equally.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Parabolic Charge",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "User recovers 50% of the damage dealt.",
+      "basePower": 65,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Parting Shot",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers target's Atk, Sp. Atk by 1. User switches.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Payback",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Power doubles if the user moves after the target.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Perish Song",
+      "category": "Status",
+      "target": "all",
+      "description": "All active Pokemon will faint in 3 turns.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Petal Blizzard",
+      "category": "Physical",
+      "target": "allAdjacent",
+      "description": "No additional effect. Hits adjacent Pokemon.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Petal Dance",
+      "category": "Special",
+      "target": "randomNormal",
+      "description": "Lasts 2-3 turns. Confuses the user afterwards.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Phantom Force",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Disappears turn 1. Hits turn 2. Breaks protection.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Pin Missile",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2-5 times in one turn.",
+      "basePower": 25,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Play Rough",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to lower the target's Attack by 1.",
+      "basePower": 90,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Pluck",
+      "category": "Physical",
+      "target": "any",
+      "description": "User steals and eats the target's Berry.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Poison Fang",
+      "category": "Physical",
+      "target": "normal",
+      "description": "50% chance to badly poison the target.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Poison Jab",
+      "category": "Physical",
+      "target": "normal",
+      "description": "30% chance to poison the target.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Poison Powder",
+      "category": "Status",
+      "target": "normal",
+      "description": "Poisons the target.",
+      "basePower": 0,
+      "accuracyPercent": 75,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Pollen Puff",
+      "category": "Special",
+      "target": "normal",
+      "description": "If the target is an ally, heals 50% of its max HP.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Poltergeist",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Fails if the target has no held item.",
+      "basePower": 110,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Population Bomb",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 10 times. Each hit can miss.",
+      "basePower": 20,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Pounce",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower the target's Speed by 1.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Pound",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Power Gem",
+      "category": "Special",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Power Split",
+      "category": "Status",
+      "target": "normal",
+      "description": "Averages Attack and Sp. Atk stats with target.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Power Swap",
+      "category": "Status",
+      "target": "normal",
+      "description": "Swaps Attack and Sp. Atk stat stages with target.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Power Trick",
+      "category": "Status",
+      "target": "self",
+      "description": "Switches user's Attack and Defense stats.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Power Trip",
+      "category": "Physical",
+      "target": "normal",
+      "description": " + 20 power for each of the user's stat boosts.",
+      "basePower": 20,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Power Whip",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 120,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Protect",
+      "category": "Status",
+      "target": "self",
+      "description": "Prevents moves from affecting the user this turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psych Up",
+      "category": "Status",
+      "target": "normal",
+      "description": "Copies the target's current stat stages.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psychic",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to lower the target's Sp. Def by 1.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psychic Fangs",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Destroys screens, unless the target is immune.",
+      "basePower": 85,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psychic Noise",
+      "category": "Special",
+      "target": "normal",
+      "description": "For 2 turns, the target is prevented from healing.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psychic Terrain",
+      "category": "Status",
+      "target": "all",
+      "description": "5 turns. Grounded: +Psychic power, priority-safe.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psycho Cut",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psyshield Bash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to raise the user's Defense by 1.",
+      "basePower": 90,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Psyshock",
+      "category": "Special",
+      "target": "normal",
+      "description": "Damages target based on Defense, not Sp. Def.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Quash",
+      "category": "Status",
+      "target": "normal",
+      "description": "Forces the target to move last this turn.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Quick Attack",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Quick Guard",
+      "category": "Status",
+      "target": "allySide",
+      "description": "Protects allies from priority attacks this turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Quiver Dance",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Sp. Atk, Sp. Def, Speed by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rage Fist",
+      "category": "Physical",
+      "target": "normal",
+      "description": "+50 BP/hit on user. Max 6 hits. Resets on switch-out.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rage Powder",
+      "category": "Status",
+      "target": "self",
+      "description": "The foes' moves target the user on the turn used.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Raging Bull",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Destroys screens. Type depends on user's form.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Raging Fury",
+      "category": "Physical",
+      "target": "randomNormal",
+      "description": "Lasts 2-3 turns. Confuses the user afterwards.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rain Dance",
+      "category": "Status",
+      "target": "all",
+      "description": "For 5 turns, heavy rain powers Water moves.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rapid Spin",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Free user from hazards/bind/Leech Seed; +1 Spe.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Razor Shell",
+      "category": "Physical",
+      "target": "normal",
+      "description": "50% chance to lower the target's Defense by 1.",
+      "basePower": 75,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Recover",
+      "category": "Status",
+      "target": "self",
+      "description": "Heals the user by 50% of its max HP.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Recycle",
+      "category": "Status",
+      "target": "self",
+      "description": "Restores the item the user last used.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Reflect",
+      "category": "Status",
+      "target": "allySide",
+      "description": "For 5 turns, physical damage to allies is halved.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Reflect Type",
+      "category": "Status",
+      "target": "normal",
+      "description": "User becomes the same type as the target.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rest",
+      "category": "Status",
+      "target": "self",
+      "description": "User sleeps 2 turns and restores HP and status.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Reversal",
+      "category": "Physical",
+      "target": "normal",
+      "description": "More power the less HP the user has left.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rising Voltage",
+      "category": "Special",
+      "target": "normal",
+      "description": "2x power if target is grounded in Electric Terrain.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Roar",
+      "category": "Status",
+      "target": "normal",
+      "description": "Forces the target to switch to a random ally.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rock Blast",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2-5 times in one turn.",
+      "basePower": 25,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rock Polish",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Speed by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rock Slide",
+      "category": "Physical",
+      "target": "allAdjacentFoes",
+      "description": "30% chance to make the foe(s) flinch.",
+      "basePower": 75,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rock Tomb",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower the target's Speed by 1.",
+      "basePower": 60,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Rock Wrecker",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User cannot move next turn.",
+      "basePower": 150,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Role Play",
+      "category": "Status",
+      "target": "normal",
+      "description": "User replaces its Ability with the target's.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Roost",
+      "category": "Status",
+      "target": "self",
+      "description": "Heals 50% HP. Flying-type removed 'til turn ends.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Round",
+      "category": "Special",
+      "target": "normal",
+      "description": "Power doubles if others used Round this turn.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sacred Sword",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Ignores the target's stat stage changes.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Safeguard",
+      "category": "Status",
+      "target": "allySide",
+      "description": "For 5 turns, protects user's party from status.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Salt Cure",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Deals 1/16 max HP each turn; 1/8 on Steel, Water.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sand Tomb",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Traps and damages the target for 4-5 turns.",
+      "basePower": 35,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sandstorm",
+      "category": "Status",
+      "target": "all",
+      "description": "For 5 turns, a sandstorm rages. Rock: 1.5x SpD.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Scald",
+      "category": "Special",
+      "target": "normal",
+      "description": "30% chance to burn the target. Thaws target.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Scale Shot",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2-5 times. User: -1 Def, +1 Spe after last hit.",
+      "basePower": 25,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Scary Face",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Speed by 2.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Scorching Sands",
+      "category": "Special",
+      "target": "normal",
+      "description": "30% chance to burn the target. Thaws target.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Screech",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Defense by 2.",
+      "basePower": 0,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Seed Bomb",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Seismic Toss",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Does damage equal to the user's level.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Self-Destruct",
+      "category": "Physical",
+      "target": "allAdjacent",
+      "description": "Hits adjacent Pokemon. The user faints.",
+      "basePower": 200,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shadow Ball",
+      "category": "Special",
+      "target": "normal",
+      "description": "20% chance to lower the target's Sp. Def by 1.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shadow Claw",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shadow Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "This move does not check accuracy.",
+      "basePower": 60,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shadow Sneak",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shed Tail",
+      "category": "Status",
+      "target": "self",
+      "description": "User takes 1/2 its max HP to pass a substitute.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sheer Cold",
+      "category": "Special",
+      "target": "normal",
+      "description": "OHKOs non-Ice targets. Fails if user's lower level.",
+      "basePower": 0,
+      "accuracyPercent": 30,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shell Side Arm",
+      "category": "Special",
+      "target": "normal",
+      "description": "20% psn. Physical+contact if it would be stronger.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shell Smash",
+      "category": "Status",
+      "target": "self",
+      "description": "Lowers Def, SpD by 1; raises Atk, SpA, Spe by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Shelter",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Defense by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Simple Beam",
+      "category": "Status",
+      "target": "normal",
+      "description": "The target's Ability becomes Simple.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sing",
+      "category": "Status",
+      "target": "normal",
+      "description": "Causes the target to fall asleep.",
+      "basePower": 0,
+      "accuracyPercent": 55,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Skill Swap",
+      "category": "Status",
+      "target": "normal",
+      "description": "The user and the target trade Abilities.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Skitter Smack",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower target's Sp. Atk by 1.",
+      "basePower": 70,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sky Attack",
+      "category": "Physical",
+      "target": "any",
+      "description": "Charges, then hits turn 2. 30% flinch. High crit.",
+      "basePower": 140,
+      "accuracyPercent": 90,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Slack Off",
+      "category": "Status",
+      "target": "self",
+      "description": "Heals the user by 50% of its max HP.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sleep Powder",
+      "category": "Status",
+      "target": "normal",
+      "description": "Causes the target to fall asleep.",
+      "basePower": 0,
+      "accuracyPercent": 75,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sleep Talk",
+      "category": "Status",
+      "target": "self",
+      "description": "User must be asleep. Uses another known move.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sludge Bomb",
+      "category": "Special",
+      "target": "normal",
+      "description": "30% chance to poison the target.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sludge Wave",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "10% chance to poison adjacent Pokemon.",
+      "basePower": 95,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Smack Down",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Removes the target's Ground immunity.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Smart Strike",
+      "category": "Physical",
+      "target": "normal",
+      "description": "This move does not check accuracy.",
+      "basePower": 70,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Snap Trap",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Traps and damages the target for 4-5 turns.",
+      "basePower": 35,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Snarl",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "100% chance to lower the foe(s) Sp. Atk by 1.",
+      "basePower": 55,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Snore",
+      "category": "Special",
+      "target": "normal",
+      "description": "User must be asleep. 30% chance to flinch target.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Snowscape",
+      "category": "Status",
+      "target": "all",
+      "description": "For 5 turns, snow falls. Ice: 1.5x Def.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Soak",
+      "category": "Status",
+      "target": "normal",
+      "description": "Changes the target's type to Water.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Solar Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "Charges turn 1. Hits turn 2. No charge in sunlight.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Solar Blade",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Charges turn 1. Hits turn 2. No charge in sunlight.",
+      "basePower": 125,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sparkling Aria",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "The target is cured of its burn.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Speed Swap",
+      "category": "Status",
+      "target": "normal",
+      "description": "Swaps Speed stat with target.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Spicy Extract",
+      "category": "Status",
+      "target": "normal",
+      "description": "Raises target's Atk by 2 and lowers its Def by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Spikes",
+      "category": "Status",
+      "target": "foeSide",
+      "description": "Hurts grounded foes on switch-in. Max 3 layers.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Spiky Shield",
+      "category": "Status",
+      "target": "self",
+      "description": "Protects from moves. Contact: loses 1/8 max HP.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Spirit Break",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower the target's Sp. Atk by 1.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Spirit Shackle",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Prevents the target from switching out.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Spit Up",
+      "category": "Special",
+      "target": "normal",
+      "description": "More power with more uses of Stockpile.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Spite",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the PP of the target's last move by 4.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stealth Rock",
+      "category": "Status",
+      "target": "foeSide",
+      "description": "Hurts foes on switch-in. Factors Rock weakness.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Steel Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "User loses 50% max HP.",
+      "basePower": 140,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Steel Roller",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Fails if there is no terrain active. Ends the terrain.",
+      "basePower": 130,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Steel Wing",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to raise the user's Defense by 1.",
+      "basePower": 70,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sticky Web",
+      "category": "Status",
+      "target": "foeSide",
+      "description": "Lowers Speed of grounded foes by 1 on switch-in.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stockpile",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises user's Defense, Sp. Def by 1. Max 3 uses.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stomping Tantrum",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Power doubles if the user's last move failed.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stone Axe",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Sets Stealth Rock on the target's side.",
+      "basePower": 65,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stone Edge",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High critical hit ratio.",
+      "basePower": 100,
+      "accuracyPercent": 80,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stored Power",
+      "category": "Special",
+      "target": "normal",
+      "description": " + 20 power for each of the user's stat boosts.",
+      "basePower": 20,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Storm Throw",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Always results in a critical hit.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": true
+    },
+    {
+      "name": "Strength Sap",
+      "category": "Status",
+      "target": "normal",
+      "description": "User heals HP=target's Atk stat. Lowers Atk by 1.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "String Shot",
+      "category": "Status",
+      "target": "allAdjacentFoes",
+      "description": "Lowers the foe(s) Speed by 2.",
+      "basePower": 0,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Struggle Bug",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "100% chance to lower the foe(s) Sp. Atk by 1.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stuff Cheeks",
+      "category": "Status",
+      "target": "self",
+      "description": "Fails unless the user has a berry. User eats Berry, Def +2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Stun Spore",
+      "category": "Status",
+      "target": "normal",
+      "description": "Paralyzes the target.",
+      "basePower": 0,
+      "accuracyPercent": 75,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Substitute",
+      "category": "Status",
+      "target": "self",
+      "description": "User takes 1/4 its max HP to put in a substitute.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sucker Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Usually goes first. Fails if target is not attacking.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sunny Day",
+      "category": "Status",
+      "target": "all",
+      "description": "For 5 turns, intense sunlight powers Fire moves.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Super Fang",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Does damage equal to 1/2 target's current HP.",
+      "basePower": 0,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Supercell Slam",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User is hurt by 50% of its max HP if it misses.",
+      "basePower": 100,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Superpower",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Lowers the user's Attack and Defense by 1.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Surf",
+      "category": "Special",
+      "target": "allAdjacent",
+      "description": "Hits adjacent Pokemon. Double damage on Dive.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Swagger",
+      "category": "Status",
+      "target": "normal",
+      "description": "Raises the target's Attack by 2 and confuses it.",
+      "basePower": 0,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Swallow",
+      "category": "Status",
+      "target": "self",
+      "description": "Heals the user based on uses of Stockpile.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sweet Kiss",
+      "category": "Status",
+      "target": "normal",
+      "description": "Causes the target to become confused.",
+      "basePower": 0,
+      "accuracyPercent": 75,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Sweet Scent",
+      "category": "Status",
+      "target": "allAdjacentFoes",
+      "description": "Lowers the foe(s) evasiveness by 2.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Switcheroo",
+      "category": "Status",
+      "target": "normal",
+      "description": "User switches its held item with the target's.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Swords Dance",
+      "category": "Status",
+      "target": "self",
+      "description": "Raises the user's Attack by 2.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Synthesis",
+      "category": "Status",
+      "target": "self",
+      "description": "Heals the user by a weather-dependent amount.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Syrup Bomb",
+      "category": "Special",
+      "target": "normal",
+      "description": "Target's Speed is lowered by 1 stage for 3 turns.",
+      "basePower": 60,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Tail Slap",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 2-5 times in one turn.",
+      "basePower": 25,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Tailwind",
+      "category": "Status",
+      "target": "allySide",
+      "description": "For 4 turns, allies' Speed is doubled.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Taunt",
+      "category": "Status",
+      "target": "normal",
+      "description": "Target can't use status moves its next 3 turns.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Tearful Look",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Attack and Sp. Atk by 1.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Teatime",
+      "category": "Status",
+      "target": "all",
+      "description": "All active Pokemon consume held Berries.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Teeter Dance",
+      "category": "Status",
+      "target": "allAdjacent",
+      "description": "Confuses adjacent Pokemon.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Temper Flare",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Power doubles if the user's last move failed.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Terrain Pulse",
+      "category": "Special",
+      "target": "normal",
+      "description": "User on terrain: power doubles, type varies.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Thief",
+      "category": "Physical",
+      "target": "normal",
+      "description": "If the user has no item, it steals the target's.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Thrash",
+      "category": "Physical",
+      "target": "randomNormal",
+      "description": "Lasts 2-3 turns. Confuses the user afterwards.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Throat Chop",
+      "category": "Physical",
+      "target": "normal",
+      "description": "For 2 turns, the target cannot use sound moves.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Thunder",
+      "category": "Special",
+      "target": "normal",
+      "description": "30% chance to paralyze. Can't miss in rain.",
+      "basePower": 110,
+      "accuracyPercent": 70,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Thunder Fang",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to paralyze. 10% chance to flinch.",
+      "basePower": 65,
+      "accuracyPercent": 95,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Thunder Punch",
+      "category": "Physical",
+      "target": "normal",
+      "description": "10% chance to paralyze the target.",
+      "basePower": 75,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Thunder Wave",
+      "category": "Status",
+      "target": "normal",
+      "description": "Paralyzes the target.",
+      "basePower": 0,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Thunderbolt",
+      "category": "Special",
+      "target": "normal",
+      "description": "10% chance to paralyze the target.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Tickle",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Attack and Defense by 1.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Tidy Up",
+      "category": "Status",
+      "target": "self",
+      "description": "User +1 Atk, Spe. Clears all substitutes/hazards.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Topsy-Turvy",
+      "category": "Status",
+      "target": "normal",
+      "description": "Inverts the target's stat stages.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Torch Song",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to raise the user's Sp. Atk by 1.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Torment",
+      "category": "Status",
+      "target": "normal",
+      "description": "Target can't select the same move twice in a row.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Toxic",
+      "category": "Status",
+      "target": "normal",
+      "description": "Badly poisons the target. Poison types can't miss.",
+      "basePower": 0,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Toxic Spikes",
+      "category": "Status",
+      "target": "foeSide",
+      "description": "Poisons grounded foes on switch-in. Max 2 layers.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Toxic Thread",
+      "category": "Status",
+      "target": "normal",
+      "description": "Lowers the target's Speed by 2 and poisons it.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Trailblaze",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to raise the user's Speed by 1.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Transform",
+      "category": "Status",
+      "target": "normal",
+      "description": "Copies target's stats, moves, types, and Ability.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Tri Attack",
+      "category": "Special",
+      "target": "normal",
+      "description": "20% chance to paralyze or burn or freeze target.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Trick",
+      "category": "Status",
+      "target": "normal",
+      "description": "User switches its held item with the target's.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Trick Room",
+      "category": "Status",
+      "target": "all",
+      "description": "Goes last. For 5 turns, turn order is reversed.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Trick-or-Treat",
+      "category": "Status",
+      "target": "normal",
+      "description": "Adds Ghost to the target's type(s).",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Triple Arrows",
+      "category": "Physical",
+      "target": "normal",
+      "description": "High crit. Target: 50% -1 Defense, 30% flinch.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 2,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Triple Axel",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Hits 3 times. Each hit can miss, but power rises.",
+      "basePower": 20,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Trop Kick",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% chance to lower the target's Attack by 1.",
+      "basePower": 85,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Twin Beam",
+      "category": "Special",
+      "target": "normal",
+      "description": "Hits 2 times in one turn.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "U-turn",
+      "category": "Physical",
+      "target": "normal",
+      "description": "User switches out after damaging the target.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Upper Hand",
+      "category": "Physical",
+      "target": "normal",
+      "description": "100% flinch. Fails unless target using priority.",
+      "basePower": 65,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Uproar",
+      "category": "Special",
+      "target": "randomNormal",
+      "description": "Lasts 3 turns. Active Pokemon cannot fall asleep.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Vacuum Wave",
+      "category": "Special",
+      "target": "normal",
+      "description": "Usually goes first.",
+      "basePower": 40,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Venoshock",
+      "category": "Special",
+      "target": "normal",
+      "description": "Power doubles if the target is poisoned.",
+      "basePower": 65,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Volt Switch",
+      "category": "Special",
+      "target": "normal",
+      "description": "User switches out after damaging the target.",
+      "basePower": 70,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Volt Tackle",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Has 33% recoil. 10% chance to paralyze target.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Water Pulse",
+      "category": "Special",
+      "target": "any",
+      "description": "20% chance to confuse the target.",
+      "basePower": 60,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Water Shuriken",
+      "category": "Special",
+      "target": "normal",
+      "description": "Usually goes first. Hits 2-5 times in one turn.",
+      "basePower": 15,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Water Spout",
+      "category": "Special",
+      "target": "allAdjacentFoes",
+      "description": "Less power as user's HP decreases. Hits foe(s).",
+      "basePower": 150,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Waterfall",
+      "category": "Physical",
+      "target": "normal",
+      "description": "20% chance to make the target flinch.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Wave Crash",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Has 33% recoil.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Weather Ball",
+      "category": "Special",
+      "target": "normal",
+      "description": "Power doubles and type varies in each weather.",
+      "basePower": 50,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Whirlpool",
+      "category": "Special",
+      "target": "normal",
+      "description": "Traps and damages the target for 4-5 turns.",
+      "basePower": 35,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Whirlwind",
+      "category": "Status",
+      "target": "normal",
+      "description": "Forces the target to switch to a random ally.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Wide Guard",
+      "category": "Status",
+      "target": "allySide",
+      "description": "Protects allies from multi-target moves this turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Wild Charge",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Has 1/4 recoil.",
+      "basePower": 90,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Will-O-Wisp",
+      "category": "Status",
+      "target": "normal",
+      "description": "Burns the target.",
+      "basePower": 0,
+      "accuracyPercent": 85,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Wish",
+      "category": "Status",
+      "target": "self",
+      "description": "Next turn, 50% of the user's max HP is restored.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Wonder Room",
+      "category": "Status",
+      "target": "all",
+      "description": "For 5 turns, all Defense and Sp. Def stats switch.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Wood Hammer",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Has 33% recoil.",
+      "basePower": 120,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Worry Seed",
+      "category": "Status",
+      "target": "normal",
+      "description": "The target's Ability becomes Insomnia.",
+      "basePower": 0,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Wrap",
+      "category": "Physical",
+      "target": "normal",
+      "description": "Traps and damages the target for 4-5 turns.",
+      "basePower": 15,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "X-Scissor",
+      "category": "Physical",
+      "target": "normal",
+      "description": "No additional effect.",
+      "basePower": 80,
+      "accuracyPercent": 100,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Yawn",
+      "category": "Status",
+      "target": "normal",
+      "description": "Puts the target to sleep after 1 turn.",
+      "basePower": 0,
+      "accuracyPercent": null,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Zap Cannon",
+      "category": "Special",
+      "target": "normal",
+      "description": "100% chance to paralyze the target.",
+      "basePower": 120,
+      "accuracyPercent": 50,
+      "critRatio": 1,
+      "alwaysCritical": false
+    },
+    {
+      "name": "Zen Headbutt",
+      "category": "Physical",
+      "target": "normal",
+      "description": "20% chance to make the target flinch.",
+      "basePower": 80,
+      "accuracyPercent": 90,
+      "critRatio": 1,
+      "alwaysCritical": false
     }
   ],
   "items": [

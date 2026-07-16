@@ -17,7 +17,8 @@ import {
   TeamValidator,
 } from '@pkmn/sim';
 
-import * as Champions from '@pkmn/mods/champions';
+import * as Champions
+  from '@pkmn/mods/champions';
 
 const FORMAT_NAME =
   '[Gen 9 Champions] VGC 2026 Reg M-B';
@@ -31,19 +32,24 @@ const ACTIVE_FROM =
 const ACTIVE_UNTIL =
   '2026-09-02T01:59:00Z';
 
-const scriptDirectory = dirname(
-  fileURLToPath(import.meta.url),
-);
+const scriptDirectory =
+  dirname(
+    fileURLToPath(
+      import.meta.url,
+    ),
+  );
 
-const projectRoot = resolve(
-  scriptDirectory,
-  '..',
-);
+const projectRoot =
+  resolve(
+    scriptDirectory,
+    '..',
+  );
 
-const outputPath = resolve(
-  projectRoot,
-  'src/data/generated/champions-reg-mb.json',
-);
+const outputPath =
+  resolve(
+    projectRoot,
+    'src/data/generated/champions-reg-mb.json',
+  );
 
 const dex = Dex.mod(
   'champions',
@@ -51,7 +57,9 @@ const dex = Dex.mod(
 );
 
 const format =
-  dex.formats.get(FORMAT_NAME);
+  dex.formats.get(
+    FORMAT_NAME,
+  );
 
 if (!format.exists) {
   throw new Error(
@@ -59,18 +67,20 @@ if (!format.exists) {
   );
 }
 
-const validator = new TeamValidator(
-  format,
-  dex,
-);
-
-const allMoves = dex.moves
-  .all()
-  .filter(
-    (move) =>
-      move.exists &&
-      !move.isNonstandard,
+const validator =
+  new TeamValidator(
+    format,
+    dex,
   );
+
+const allMoves =
+  dex.moves
+    .all()
+    .filter(
+      (move) =>
+        move.exists &&
+        !move.isNonstandard,
+    );
 
 function createValidationSet(
   species,
@@ -122,10 +132,8 @@ function isSelectableSpecies(
   }
 
   /*
-   * Battle-only forms, such as Mega forms,
-   * are not selected as the starting species.
-   * Their base species and required item are
-   * selected instead.
+   * Battle-only forms are not selected as
+   * the starting species in team preview.
    */
   if (
     species.battleOnly ||
@@ -140,16 +148,19 @@ function isSelectableSpecies(
       species.abilities,
     )[0] ?? '';
 
-  const set = createValidationSet(
-    species,
-    ability,
-  );
+  const set =
+    createValidationSet(
+      species,
+      ability,
+    );
 
   const {
     tierSpecies,
-  } = validator.getValidationSpecies(
-    set,
-  );
+  } =
+    validator
+      .getValidationSpecies(
+        set,
+      );
 
   return !validator.checkSpecies(
     set,
@@ -162,13 +173,14 @@ function isSelectableSpecies(
 function getLegalMoves(
   species,
 ) {
-  const set = createValidationSet(
-    species,
+  const set =
+    createValidationSet(
+      species,
 
-    Object.values(
-      species.abilities,
-    )[0] ?? '',
-  );
+      Object.values(
+        species.abilities,
+      )[0] ?? '',
+    );
 
   return allMoves
     .filter((move) => {
@@ -191,9 +203,14 @@ function getLegalMoves(
 
       return !learnsetProblem;
     })
-    .map((move) => move.name)
-    .sort((first, second) =>
-      first.localeCompare(second),
+    .map(
+      (move) => move.name,
+    )
+    .sort(
+      (first, second) =>
+        first.localeCompare(
+          second,
+        ),
     );
 }
 
@@ -208,75 +225,144 @@ function getLegalAbilities(
         .filter(Boolean)
         .map(String),
     ),
-  ].sort((first, second) =>
-    first.localeCompare(second),
+  ].sort(
+    (first, second) =>
+      first.localeCompare(
+        second,
+      ),
   );
 }
 
-const speciesEntries = dex.species
-  .all()
-  .filter(isSelectableSpecies)
-  .map((species) => ({
-    species: species.name,
+const speciesEntries =
+  dex.species
+    .all()
+    .filter(
+      isSelectableSpecies,
+    )
+    .map((species) => ({
+      species: species.name,
 
-    abilities:
-      getLegalAbilities(species),
+      abilities:
+        getLegalAbilities(
+          species,
+        ),
 
-    moves:
-      getLegalMoves(species),
-  }))
-  .sort((first, second) =>
-    first.species.localeCompare(
-      second.species,
+      moves:
+        getLegalMoves(
+          species,
+        ),
+    }))
+    .sort(
+      (first, second) =>
+        first.species.localeCompare(
+          second.species,
+        ),
+    );
+
+const legalMoveNames =
+  new Set(
+    speciesEntries.flatMap(
+      (entry) => entry.moves,
     ),
   );
 
-const legalItems = dex.items
-  .all()
-  .filter(
-    (item) =>
-      item.exists &&
-      !item.isNonstandard,
-  )
-  .filter((item) => {
-    /*
-     * checkItem checks regulation-wide
-     * item restrictions. Species-specific
-     * compatibility will be validated
-     * separately.
-     */
-    const pikachu =
-      dex.species.get('Pikachu');
+const moveEntries =
+  allMoves
+    .filter(
+      (move) =>
+        legalMoveNames.has(
+          move.name,
+        ),
+    )
+    .map((move) => ({
+      name: move.name,
 
-    const set =
-      createValidationSet(
-        pikachu,
-        'Static',
-        ['Thunderbolt'],
-        item.name,
-      );
+      category:
+        move.category,
 
-    return !validator.checkItem(
-      set,
-      item,
-      {},
+      target:
+        move.target,
+
+      description:
+        move.shortDesc ||
+        move.desc ||
+        '',
+
+      basePower:
+        move.basePower,
+
+      accuracyPercent:
+        move.accuracy === true
+          ? null
+          : move.accuracy,
+
+      critRatio:
+        move.critRatio ?? 1,
+
+      alwaysCritical:
+        Boolean(
+          move.willCrit,
+        ),
+    }))
+    .sort(
+      (first, second) =>
+        first.name.localeCompare(
+          second.name,
+        ),
     );
-  })
-  .map((item) => item.name)
-  .sort((first, second) =>
-    first.localeCompare(second),
-  );
+
+const legalItems =
+  dex.items
+    .all()
+    .filter(
+      (item) =>
+        item.exists &&
+        !item.isNonstandard,
+    )
+    .filter((item) => {
+      const pikachu =
+        dex.species.get(
+          'Pikachu',
+        );
+
+      const set =
+        createValidationSet(
+          pikachu,
+          'Static',
+          ['Thunderbolt'],
+          item.name,
+        );
+
+      return !validator.checkItem(
+        set,
+        item,
+        {},
+      );
+    })
+    .map(
+      (item) => item.name,
+    )
+    .sort(
+      (first, second) =>
+        first.localeCompare(
+          second,
+        ),
+    );
 
 const snapshot = {
-  schemaVersion: 1,
+  schemaVersion: 2,
 
   regulationId:
     REGULATION_ID,
 
-  formatName: FORMAT_NAME,
+  formatName:
+    FORMAT_NAME,
 
-  activeFrom: ACTIVE_FROM,
-  activeUntil: ACTIVE_UNTIL,
+  activeFrom:
+    ACTIVE_FROM,
+
+  activeUntil:
+    ACTIVE_UNTIL,
 
   generatedAt:
     new Date().toISOString(),
@@ -288,11 +374,18 @@ const snapshot = {
     mods:
       '@pkmn/mods@0.10.11',
 
-    mod: 'champions',
+    mod:
+      'champions',
   },
 
-  species: speciesEntries,
-  items: legalItems,
+  species:
+    speciesEntries,
+
+  moves:
+    moveEntries,
+
+  items:
+    legalItems,
 };
 
 await mkdir(
@@ -317,7 +410,9 @@ await writeFile(
 console.log(
   [
     `Generated ${speciesEntries.length}`,
-    'legal Regulation M-B species at',
+    'legal species and',
+    `${moveEntries.length}`,
+    'legal moves at',
     outputPath,
   ].join(' '),
 );

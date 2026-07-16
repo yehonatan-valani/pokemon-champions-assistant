@@ -7,6 +7,10 @@ import {
   toID,
 } from '@smogon/calc';
 
+import {
+  getRegulationMoveEntry,
+} from '../data/currentRegulation';
+
 import type {
   ChampionsPokemonBuild,
 } from '../domain/pokemonBuild';
@@ -43,6 +47,25 @@ export interface ChampionsDamageOptions {
    * as being at full HP.
    */
   defenderCurrentHp?: number;
+
+  /**
+   * Whether this specific observed or
+   * hypothetical hit was a critical hit.
+   */
+  criticalHit?: boolean;
+
+  /**
+   * Used only for moves whose target is
+   * allAdjacent or allAdjacentFoes.
+   *
+   * True means at least two valid targets
+   * were present when the move executed.
+   *
+   * False means only one valid target was
+   * present, so the spread modifier should
+   * not apply.
+   */
+  spreadDamageApplies?: boolean;
 }
 
 export interface ChampionsDamageResult {
@@ -65,17 +88,25 @@ export interface ChampionsDamageResult {
   oneHitKoChance: number;
 
   /**
-   * The move's base accuracy percentage.
-   * Accuracy stages and other accuracy
-   * modifiers are not included yet.
+   * Base move accuracy from the generated
+   * regulation move metadata.
    */
   baseAccuracyPercent: number;
 
   /**
    * One-hit faint chance multiplied by
    * the move's base accuracy.
+   *
+   * Accuracy stages and other accuracy
+   * modifiers are not included yet.
    */
   accuracyAdjustedKoChance: number;
+
+  criticalHit: boolean;
+
+  isSpreadMove: boolean;
+
+  spreadDamageApplied: boolean;
 }
 
 function copyCalculatedStats(
@@ -106,7 +137,9 @@ function normalizeCurrentHp(
   }
 
   const roundedCurrentHp =
-    Math.round(requestedCurrentHp);
+    Math.round(
+      requestedCurrentHp,
+    );
 
   if (roundedCurrentHp < 1) {
     throw new Error(
@@ -147,7 +180,8 @@ export function createChampionsPokemon(
   }
 
   const pokemonOptions = {
-    nature: build.nature.trim(),
+    nature:
+      build.nature.trim(),
 
     ability:
       build.ability.trim() ||
@@ -173,7 +207,9 @@ export function createChampionsPokemon(
       spe: build.statPoints.spe,
     },
 
-    moves: [...build.moves],
+    moves: [
+      ...build.moves,
+    ],
   };
 
   const fullHpPokemon =
@@ -184,7 +220,8 @@ export function createChampionsPokemon(
     );
 
   if (
-    options.currentHp === undefined
+    options.currentHp ===
+    undefined
   ) {
     return fullHpPokemon;
   }
@@ -209,7 +246,9 @@ export function getChampionsStats(
   build: ChampionsPokemonBuild,
 ): CalculatedStats {
   const pokemon =
-    createChampionsPokemon(build);
+    createChampionsPokemon(
+      build,
+    );
 
   return copyCalculatedStats(
     pokemon,
@@ -253,6 +292,11 @@ export function calculateChampionsDamage(
     );
   }
 
+  const moveMetadata =
+    getRegulationMoveEntry(
+      cleanedMoveName,
+    );
+
   const attacker =
     createChampionsPokemon(
       attackerBuild,
@@ -267,10 +311,52 @@ export function calculateChampionsDamage(
       },
     );
 
+  const criticalHit =
+    options.criticalHit ??
+    false;
+
   const move = new Move(
     CHAMPIONS_GENERATION,
     cleanedMoveName,
+    {
+      isCrit: criticalHit,
+    },
   );
+
+  const isSpreadMove =
+    move.target ===
+      'allAdjacent' ||
+    move.target ===
+      'allAdjacentFoes';
+
+  /*
+   * Spread moves normally use doubles
+   * damage. The targeting resolver passes
+   * false when only one valid target was
+   * present.
+   */
+  const spreadDamageApplied =
+    isSpreadMove &&
+    (
+      options
+        .spreadDamageApplies ??
+      true
+    );
+
+  /*
+   * The calculator applies the spread
+   * modifier to spread-target moves in
+   * Doubles mode.
+   *
+   * Singles mode is used only to suppress
+   * that modifier when a spread move had
+   * one valid target.
+   */
+  const calculationGameType =
+    isSpreadMove &&
+    !spreadDamageApplied
+      ? 'Singles'
+      : 'Doubles';
 
   const weather =
     fieldConditions.weather ||
@@ -281,7 +367,9 @@ export function calculateChampionsDamage(
     undefined;
 
   const field = new Field({
-    gameType: 'Doubles',
+    gameType:
+      calculationGameType,
+
     weather,
     terrain,
 
@@ -327,10 +415,9 @@ export function calculateChampionsDamage(
     result.kochance(false);
 
   /*
-   * kochance() may report a 2HKO or a
-   * later KO when an immediate faint is
-   * impossible. For this result we only
-   * want the chance from the current hit.
+   * kochance() can report a two-hit or
+   * later knockout. We only want the
+   * chance of fainting from this hit.
    */
   const oneHitKoChance =
     koResult.n === 1 &&
@@ -340,14 +427,14 @@ export function calculateChampionsDamage(
       : 0;
 
   /*
- * @smogon/calc's move-data interface does not
- * expose move accuracy.
- *
- * This temporarily assumes the move hit.
- * Real move accuracy will be added to our
- * generated regulation snapshot next.
- */
-const baseAccuracyPercent = 100;
+   * Null represents moves that do not
+   * perform an ordinary accuracy check.
+   * They are treated as 100% here.
+   */
+  const baseAccuracyPercent =
+    moveMetadata
+      ?.accuracyPercent ??
+    100;
 
   const accuracyAdjustedKoChance =
     oneHitKoChance *
@@ -382,5 +469,9 @@ const baseAccuracyPercent = 100;
     oneHitKoChance,
     baseAccuracyPercent,
     accuracyAdjustedKoChance,
+
+    criticalHit,
+    isSpreadMove,
+    spreadDamageApplied,
   };
 }

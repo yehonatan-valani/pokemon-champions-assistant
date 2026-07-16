@@ -2,31 +2,53 @@ import {
   toID,
 } from '@smogon/calc';
 
-import snapshotJson from './generated/champions-reg-mb.json';
+import snapshotJson
+  from './generated/champions-reg-mb.json';
 
 import type {
   ChampionsRegulationSnapshot,
+  RegulationMoveEntry,
   RegulationSpeciesEntry,
 } from '../domain/regulation';
 
 export const CURRENT_REGULATION =
-  snapshotJson as ChampionsRegulationSnapshot;
+  snapshotJson as
+    ChampionsRegulationSnapshot;
 
-const speciesById = new Map<
-  string,
-  RegulationSpeciesEntry
->(
-  CURRENT_REGULATION.species.map(
-    (entry) => [
-      toID(entry.species),
-      entry,
-    ],
-  ),
-);
+const speciesById =
+  new Map<
+    string,
+    RegulationSpeciesEntry
+  >(
+    CURRENT_REGULATION.species.map(
+      (entry) => [
+        toID(entry.species),
+        entry,
+      ],
+    ),
+  );
+
+const movesById =
+  new Map<
+    string,
+    RegulationMoveEntry
+  >(
+    CURRENT_REGULATION.moves.map(
+      (entry) => [
+        toID(entry.name),
+        entry,
+      ],
+    ),
+  );
 
 export const REGULATION_POKEMON_NAMES =
   CURRENT_REGULATION.species.map(
     (entry) => entry.species,
+  );
+
+export const REGULATION_MOVE_NAMES =
+  CURRENT_REGULATION.moves.map(
+    (entry) => entry.name,
   );
 
 export const REGULATION_ITEM_NAMES = [
@@ -39,6 +61,16 @@ export function getRegulationSpeciesEntry(
   return (
     speciesById.get(
       toID(speciesName),
+    ) ?? null
+  );
+}
+
+export function getRegulationMoveEntry(
+  moveName: string,
+): RegulationMoveEntry | null {
+  return (
+    movesById.get(
+      toID(moveName),
     ) ?? null
   );
 }
@@ -90,11 +122,13 @@ export function isMoveLegalForSpecies(
     return false;
   }
 
-  const moveId = toID(moveName);
+  const moveId =
+    toID(moveName);
 
   return entry.moves.some(
     (legalMove) =>
-      toID(legalMove) === moveId,
+      toID(legalMove) ===
+      moveId,
   );
 }
 
@@ -124,10 +158,12 @@ export function isAbilityLegalForSpecies(
 export function isItemLegalInCurrentRegulation(
   itemName: string,
 ): boolean {
-  const itemId = toID(itemName);
+  const itemId =
+    toID(itemName);
 
   return CURRENT_REGULATION.items.some(
     (legalItem) =>
-      toID(legalItem) === itemId,
+      toID(legalItem) ===
+      itemId,
   );
 }
