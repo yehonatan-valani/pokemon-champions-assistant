@@ -4,6 +4,10 @@ import {
   it,
 } from 'vitest';
 
+import {
+  createBaseBattleMegaEvolutionState,
+} from '../domain/megaEvolution';
+
 import type {
   OpponentBattlePokemonState,
 } from '../domain/battleState';
@@ -53,9 +57,16 @@ function createObservation(
   Partial<OpponentBattlePokemonState> = {},
 ): OpponentBattlePokemonState {
   return {
-    species: 'Rillaboom',
-    currentHpPercent: 100,
-    status: '',
+    ...createBaseBattleMegaEvolutionState(),
+
+    species:
+      'Rillaboom',
+
+    currentHpPercent:
+      100,
+
+    status:
+      '',
 
     statStages: {
       atk: 0,
@@ -67,10 +78,17 @@ function createObservation(
       evasion: 0,
     },
 
-    fainted: false,
-    revealedMoves: [],
-    revealedItem: '',
-    revealedAbility: '',
+    fainted:
+      false,
+
+    revealedMoves:
+      [],
+
+    revealedItem:
+      '',
+
+    revealedAbility:
+      '',
 
     ...overrides,
   };

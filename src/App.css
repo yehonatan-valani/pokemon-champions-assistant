@@ -1139,3 +1139,20 @@ button:hover {
   margin:
     0 0 0.5rem;
 }
+
+.battle-mega-controls {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid
+    rgba(127, 127, 127, 0.35);
+  border-radius: 0.75rem;
+}
+
+.battle-mega-controls h4 {
+  margin-top: 0;
+}
+
+.battle-mega-controls
+.primary-button {
+  margin-top: 0.75rem;
+}

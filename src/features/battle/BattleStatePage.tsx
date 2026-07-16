@@ -21,6 +21,8 @@ import {
   setBattleFieldTurns,
   setBattleTerrain,
   setBattleWeather,
+  megaEvolveOpponentPokemon,
+  megaEvolvePlayerPokemon,
   type BattleState,
 } from '../../domain/battleState';
 
@@ -66,6 +68,18 @@ import CandidateKoPanel
 import OpponentMetaDataPanel
   from '../../components/OpponentMetaDataPanel';
 
+import type {
+  ChampionsMegaCapability,
+} from '../../domain/megaEvolution';
+
+import {
+  getChampionsMegaCapability,
+  getChampionsMegaCapabilitiesForSpecies,
+} from '../../mechanics/resolveChampionsCalculationBuild';
+
+import BattleMegaControls
+  from '../../components/BattleMegaControls';
+
 function parseSelectedIndex(
   value: string,
 ): number | null {
@@ -74,6 +88,37 @@ function parseSelectedIndex(
   }
 
   return Number(value);
+}
+
+function getOpponentMegaOptions(
+  species: string,
+
+  revealedItem: string,
+
+  revealedAbility: string,
+): ChampionsMegaCapability[] {
+  const capabilities =
+    getChampionsMegaCapabilitiesForSpecies(
+      species,
+      revealedAbility,
+    );
+
+  const cleanedRevealedItem =
+    revealedItem
+      .trim()
+      .toLowerCase();
+
+  if (!cleanedRevealedItem) {
+    return capabilities;
+  }
+
+  return capabilities.filter(
+    (capability) =>
+      capability.stone
+        .trim()
+        .toLowerCase() ===
+      cleanedRevealedItem,
+  );
 }
 
 function BattleStatePage() {
@@ -258,6 +303,60 @@ function handleRecordEvent() {
     }
   }
 
+  function handlePlayerMegaEvolution(
+  pokemonIndex: number,
+) {
+  if (!battle) {
+    return;
+  }
+
+  try {
+    setBattle(
+      megaEvolvePlayerPokemon(
+        battle,
+        pokemonIndex,
+      ),
+    );
+
+    setError('');
+  } catch (megaError) {
+    setError(
+      megaError instanceof Error
+        ? megaError.message
+        : 'Player Mega Evolution could not be recorded.',
+    );
+  }
+}
+
+function handleOpponentMegaEvolution(
+  pokemonIndex: number,
+
+  capability:
+    ChampionsMegaCapability,
+) {
+  if (!battle) {
+    return;
+  }
+
+  try {
+    setBattle(
+      megaEvolveOpponentPokemon(
+        battle,
+        pokemonIndex,
+        capability,
+      ),
+    );
+
+    setError('');
+  } catch (megaError) {
+    setError(
+      megaError instanceof Error
+        ? megaError.message
+        : 'Opponent Mega Evolution could not be recorded.',
+    );
+  }
+}
+
   return (
     <main className="battle-state-page">
       <header className="page-header">
@@ -349,6 +448,31 @@ function handleRecordEvent() {
                 {battle.opponentName}
               </strong>
             </div>
+
+            <div>
+              <span>
+                My Mega Evolution
+              </span>
+
+              <strong>
+                {battle.playerMegaUsed
+                  ? 'Used'
+                  : 'Available'}
+              </strong>
+            </div>
+
+            <div>
+            <span>
+              Opponent Mega Evolution
+            </span>
+
+            <strong>
+              {battle.opponentMegaUsed
+                ? 'Used'
+                : 'Available'}
+            </strong>
+          </div>
+
           </section>
 
           <BattleFieldControls
@@ -454,7 +578,11 @@ function handleRecordEvent() {
                         }
                       >
                         Slot {index + 1}:{' '}
-                        {pokemon.build.species}
+                        {pokemon.megaState ===
+                          'mega' &&
+                        pokemon.megaSpecies
+                          ? pokemon.megaSpecies
+                          : pokemon.build.species}
                       </option>
                     ),
                   )}
@@ -491,7 +619,11 @@ function handleRecordEvent() {
                         }
                       >
                         Slot {index + 1}:{' '}
-                        {pokemon.build.species}
+                        {pokemon.megaState ===
+                          'mega' &&
+                        pokemon.megaSpecies
+                          ? pokemon.megaSpecies
+                          : pokemon.build.species}
                       </option>
                     ),
                   )}
@@ -532,7 +664,11 @@ function handleRecordEvent() {
                         }
                       >
                         Slot {index + 1}:{' '}
-                        {pokemon.species}
+                        {pokemon.megaState ===
+                          'mega' &&
+                        pokemon.megaSpecies
+                          ? pokemon.megaSpecies
+                          : pokemon.species}
                       </option>
                     ),
                   )}
@@ -569,7 +705,11 @@ function handleRecordEvent() {
                         }
                       >
                         Slot {index + 1}:{' '}
-                        {pokemon.species}
+                        {pokemon.megaState ===
+                          'mega' &&
+                        pokemon.megaSpecies
+                          ? pokemon.megaSpecies
+                          : pokemon.species}
                       </option>
                     ),
                   )}
@@ -602,61 +742,120 @@ function handleRecordEvent() {
                 }
 
                 const pokemon =
-                    battle.playerPokemon[pokemonIndex];
+                  battle.playerPokemon[
+                    pokemonIndex
+                  ];
+
+                const megaCapability =
+                  getChampionsMegaCapability(
+                    pokemon.build,
+                  );
+
+                const megaCapabilities =
+                  megaCapability
+                    ? [
+                        megaCapability,
+                      ]
+                    : [];
+
+                const displaySpecies =
+                  pokemon.megaState ===
+                    'mega' &&
+                  pokemon.megaSpecies
+                    ? pokemon.megaSpecies
+                    : pokemon.build.species;
 
                 return (
-                    <PokemonRuntimeControls
+                  <section
+                    className="opponent-runtime-wrapper"
                     key={position}
-                    title={`${
+                  >
+                    <PokemonRuntimeControls
+                      title={`${
                         position === 0
-                        ? 'Left'
-                        : 'Right'
-                    }: ${pokemon.build.species}`}
-                    value={pokemon}
-                    hpValue={pokemon.currentHp}
-                    hpMaximum={pokemon.maxHp}
-                    hpLabel="Current HP"
-                    onHpChange={(nextHp) =>
-                        updateBattle((current) =>
-                        setPlayerPokemonHp(
-                            current,
-                            pokemonIndex,
-                            nextHp,
-                        ),
+                          ? 'Left'
+                          : 'Right'
+                      }: ${displaySpecies}`}
+                      value={pokemon}
+                      hpValue={
+                        pokemon.currentHp
+                      }
+                      hpMaximum={
+                        pokemon.maxHp
+                      }
+                      hpLabel="Current HP"
+                      onHpChange={(nextHp) =>
+                        updateBattle(
+                          (current) =>
+                            setPlayerPokemonHp(
+                              current,
+                              pokemonIndex,
+                              nextHp,
+                            ),
                         )
-                    }
-                    onStatusChange={(nextStatus) =>
-                        updateBattle((current) =>
-                        setPlayerPokemonStatus(
-                            current,
-                            pokemonIndex,
-                            nextStatus,
-                        ),
+                      }
+                      onStatusChange={(
+                        nextStatus,
+                      ) =>
+                        updateBattle(
+                          (current) =>
+                            setPlayerPokemonStatus(
+                              current,
+                              pokemonIndex,
+                              nextStatus,
+                            ),
                         )
-                    }
-                    onFaintedChange={(fainted) =>
-                        updateBattle((current) =>
-                        setPlayerPokemonFainted(
-                            current,
-                            pokemonIndex,
-                            fainted,
-                        ),
+                      }
+                      onFaintedChange={(
+                        fainted,
+                      ) =>
+                        updateBattle(
+                          (current) =>
+                            setPlayerPokemonFainted(
+                              current,
+                              pokemonIndex,
+                              fainted,
+                            ),
                         )
-                    }
-                    onStatStageChange={(
+                      }
+                      onStatStageChange={(
                         statKey,
                         nextStage,
-                    ) =>
-                        updateBattle((current) =>
-                        setPlayerPokemonStatStage(
-                            current,
-                            pokemonIndex,
-                            statKey,
-                            nextStage,
-                        ),
+                      ) =>
+                        updateBattle(
+                          (current) =>
+                            setPlayerPokemonStatStage(
+                              current,
+                              pokemonIndex,
+                              statKey,
+                              nextStage,
+                            ),
                         )
-                    }
+                      }
                     />
+
+                    <BattleMegaControls
+                      idPrefix={
+                        `player-${pokemonIndex}`
+                      }
+                      sideLabel="Your side"
+                      baseSpecies={
+                        pokemon.build.species
+                      }
+                      state={pokemon}
+                      sideMegaUsed={
+                        battle.playerMegaUsed
+                      }
+                      capabilities={
+                        megaCapabilities
+                      }
+                      onMegaEvolve={() => {
+                        handlePlayerMegaEvolution(
+                          pokemonIndex,
+                        );
+                      }}
+                    />
+                  </section>
                 );
                 })}
             </section>
@@ -684,128 +883,184 @@ function handleRecordEvent() {
                 }
 
                 const pokemon =
-                    battle.opponentPokemon[
+                  battle.opponentPokemon[
                     pokemonIndex
-                    ];
+                  ];
+
+                const megaCapabilities =
+                  getOpponentMegaOptions(
+                    pokemon.species,
+                    pokemon.revealedItem,
+                    pokemon.revealedAbility,
+                  );
+
+                const displaySpecies =
+                  pokemon.megaState ===
+                    'mega' &&
+                  pokemon.megaSpecies
+                    ? pokemon.megaSpecies
+                    : pokemon.species;
 
                 return (
-                    <section
+                  <section
                     className="opponent-runtime-wrapper"
                     key={position}
-                    >
+                  >
                     <PokemonRuntimeControls
-                        title={`${
+                      title={`${
                         position === 0
-                            ? 'Left'
-                            : 'Right'
-                        }: ${pokemon.species}`}
-                        value={pokemon}
-                        hpValue={pokemon.currentHpPercent}
-                        hpMaximum={100}
-                        hpLabel="Current HP percentage"
-                        onHpChange={(nextHp) =>
-                        updateBattle((current) =>
+                          ? 'Left'
+                          : 'Right'
+                      }: ${displaySpecies}`}
+                      value={pokemon}
+                      hpValue={
+                        pokemon.currentHpPercent
+                      }
+                      hpMaximum={100}
+                      hpLabel="Current HP percentage"
+                      onHpChange={(nextHp) =>
+                        updateBattle(
+                          (current) =>
                             setOpponentPokemonHp(
-                            current,
-                            pokemonIndex,
-                            nextHp,
+                              current,
+                              pokemonIndex,
+                              nextHp,
                             ),
                         )
-                        }
-                        onStatusChange={(nextStatus) =>
-                        updateBattle((current) =>
+                      }
+                      onStatusChange={(
+                        nextStatus,
+                      ) =>
+                        updateBattle(
+                          (current) =>
                             setOpponentPokemonStatus(
-                            current,
-                            pokemonIndex,
-                            nextStatus,
+                              current,
+                              pokemonIndex,
+                              nextStatus,
                             ),
                         )
-                        }
-                        onFaintedChange={(fainted) =>
-                        updateBattle((current) =>
+                      }
+                      onFaintedChange={(
+                        fainted,
+                      ) =>
+                        updateBattle(
+                          (current) =>
                             setOpponentPokemonFainted(
-                            current,
-                            pokemonIndex,
-                            fainted,
+                              current,
+                              pokemonIndex,
+                              fainted,
                             ),
                         )
-                        }
-                        onStatStageChange={(
+                      }
+                      onStatStageChange={(
                         statKey,
                         nextStage,
-                        ) =>
-                        updateBattle((current) =>
+                      ) =>
+                        updateBattle(
+                          (current) =>
                             setOpponentPokemonStatStage(
-                            current,
-                            pokemonIndex,
-                            statKey,
-                            nextStage,
+                              current,
+                              pokemonIndex,
+                              statKey,
+                              nextStage,
                             ),
                         )
-                        }
+                      }
+                    />
+
+                    <BattleMegaControls
+                      idPrefix={
+                        `opponent-${pokemonIndex}`
+                      }
+                      sideLabel="The opponent’s side"
+                      baseSpecies={
+                        pokemon.species
+                      }
+                      state={pokemon}
+                      sideMegaUsed={
+                        battle.opponentMegaUsed
+                      }
+                      capabilities={
+                        megaCapabilities
+                      }
+                      onMegaEvolve={(
+                        capability,
+                      ) => {
+                        handleOpponentMegaEvolution(
+                          pokemonIndex,
+                          capability,
+                        );
+                      }}
                     />
 
                     <OpponentRevealControls
-                        idPrefix={`opponent-${pokemonIndex}`}
-                        revealedMoves={
+                      idPrefix={
+                        `opponent-${pokemonIndex}`
+                      }
+                      revealedMoves={
                         pokemon.revealedMoves
-                        }
-                        revealedItem={
+                      }
+                      revealedItem={
                         pokemon.revealedItem
-                        }
-                        revealedAbility={
+                      }
+                      revealedAbility={
                         pokemon.revealedAbility
-                        }
-                        onRevealMove={(moveName) => {
+                      }
+                      onRevealMove={(moveName) => {
                         try {
-                            updateBattle((current) =>
-                            revealOpponentMove(
+                          updateBattle(
+                            (current) =>
+                              revealOpponentMove(
                                 current,
                                 pokemonIndex,
                                 moveName,
-                            ),
-                            );
+                              ),
+                          );
                         } catch (revealError) {
-                            if (
-                            revealError instanceof Error
-                            ) {
+                          if (
+                            revealError instanceof
+                              Error
+                          ) {
                             setError(
-                                revealError.message,
+                              revealError.message,
                             );
-                            }
+                          }
                         }
-                        }}
-                        onRemoveMove={(moveName) =>
-                        updateBattle((current) =>
+                      }}
+                      onRemoveMove={(moveName) =>
+                        updateBattle(
+                          (current) =>
                             removeOpponentRevealedMove(
-                            current,
-                            pokemonIndex,
-                            moveName,
+                              current,
+                              pokemonIndex,
+                              moveName,
                             ),
                         )
-                        }
-                        onItemChange={(itemName) =>
-                        updateBattle((current) =>
+                      }
+                      onItemChange={(itemName) =>
+                        updateBattle(
+                          (current) =>
                             setOpponentRevealedItem(
-                            current,
-                            pokemonIndex,
-                            itemName,
+                              current,
+                              pokemonIndex,
+                              itemName,
                             ),
                         )
-                        }
-                        onAbilityChange={(
+                      }
+                      onAbilityChange={(
                         abilityName,
-                        ) =>
-                        updateBattle((current) =>
+                      ) =>
+                        updateBattle(
+                          (current) =>
                             setOpponentRevealedAbility(
-                            current,
-                            pokemonIndex,
-                            abilityName,
+                              current,
+                              pokemonIndex,
+                              abilityName,
                             ),
                         )
-                        }
+                      }
                     />
-                    </section>
+                  </section>
                 );
                 })}
             </section>

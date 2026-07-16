@@ -615,22 +615,30 @@ export function calculateChampionsDamage(
     );
 
   const [
-    minDamage,
-    maxDamage,
-  ] =
-    result.range();
+  minDamage,
+  maxDamage,
+] = result.range();
 
-  const koResult =
-    result.kochance(
-      false,
-    );
+const zeroDamage =
+  maxDamage === 0;
 
-  const oneHitKoChance =
-    koResult.n === 1 &&
-    typeof koResult.chance ===
-      'number'
-      ? koResult.chance
-      : 0;
+const koResult =
+  zeroDamage
+    ? null
+    : result.kochance(false);
+
+const oneHitKoChance =
+  koResult?.n === 1 &&
+  typeof koResult.chance ===
+    'number'
+    ? koResult.chance
+    : 0;
+
+const description =
+  zeroDamage
+    ? `${result.attacker.name} using ${cleanedMoveName} ` +
+      `does no damage to ${result.defender.name}.`
+    : result.desc();
 
   const baseAccuracyPercent =
     moveMetadata
@@ -649,8 +657,7 @@ export function calculateChampionsDamage(
 
     maxDamage,
 
-    description:
-      result.desc(),
+    description,
 
     attackerStats:
       copyCalculatedStats(

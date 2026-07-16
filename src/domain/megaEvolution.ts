@@ -26,3 +26,41 @@ export interface ResolvedChampionsCalculationBuild {
 
   effectiveAbility: string;
 }
+
+/**
+ * The actual form currently being used
+ * by one Pokémon during a live battle.
+ */
+export interface BattleMegaEvolutionState {
+  megaState:
+    ChampionsCalculationForm;
+
+  megaSpecies: string;
+
+  megaAbility: string;
+
+  megaStone: string;
+
+  megaEvolvedTurn:
+    number | null;
+}
+
+export function createBaseBattleMegaEvolutionState():
+BattleMegaEvolutionState {
+  return {
+    megaState:
+      'base',
+
+    megaSpecies:
+      '',
+
+    megaAbility:
+      '',
+
+    megaStone:
+      '',
+
+    megaEvolvedTurn:
+      null,
+  };
+}

@@ -28,6 +28,17 @@ import type {
   DamageObservation,
 } from './damageObservation';
 
+import {
+  createBaseBattleMegaEvolutionState,
+  type BattleMegaEvolutionState,
+  type ChampionsMegaCapability,
+} from './megaEvolution';
+
+import {
+  getChampionsMegaCapability,
+  getChampionsMegaCapabilitiesForSpecies,
+} from '../mechanics/resolveChampionsCalculationBuild';
+
 export type MajorStatus =
   | ''
   | 'Burn'
@@ -50,9 +61,13 @@ export interface BattleStatStages {
 export type BattleStatStageKey =
   keyof BattleStatStages;
 
-export interface RuntimePokemonState {
+export interface RuntimePokemonState
+extends BattleMegaEvolutionState {
   status: MajorStatus;
-  statStages: BattleStatStages;
+
+  statStages:
+    BattleStatStages;
+
   fainted: boolean;
 }
 
@@ -111,7 +126,12 @@ export interface BattleState {
   turnNumber: number;
 
   playerTeamName: string;
+
   opponentName: string;
+
+  playerMegaUsed: boolean;
+
+  opponentMegaUsed: boolean;
 
   playerPokemon: PlayerBattlePokemonState[];
   opponentPokemon: OpponentBattlePokemonState[];
@@ -166,10 +186,14 @@ BattleFieldState = {
 function createRuntimeState():
 RuntimePokemonState {
   return {
+    ...createBaseBattleMegaEvolutionState(),
+
     status: '',
+
     statStages: {
       ...EMPTY_BATTLE_STAT_STAGES,
     },
+
     fainted: false,
   };
 }
@@ -179,10 +203,19 @@ export function createInitialBattleState(
   opponentPreview: OpponentTeamPreview,
 ): BattleState {
   return {
-    turnNumber: 1,
+  turnNumber: 1,
 
-    playerTeamName: team.name,
-    opponentName: opponentPreview.name,
+  playerTeamName:
+    team.name,
+
+  opponentName:
+    opponentPreview.name,
+
+  playerMegaUsed:
+    false,
+
+  opponentMegaUsed:
+    false,
 
     playerPokemon: team.members.map(
         (build) => {
@@ -711,6 +744,246 @@ export function setOpponentRevealedAbility(
         abilityName.trim(),
     }),
   );
+}
+
+function getValidatedOpponentMegaCapability(
+  species: string,
+
+  requestedCapability:
+    ChampionsMegaCapability,
+): ChampionsMegaCapability {
+  const capabilities =
+    getChampionsMegaCapabilitiesForSpecies(
+      species,
+    );
+
+  const matchingCapability =
+    capabilities.find(
+      (capability) =>
+        capability.stone ===
+          requestedCapability
+            .stone &&
+        capability.megaSpecies ===
+          requestedCapability
+            .megaSpecies &&
+        capability.megaAbility ===
+          requestedCapability
+            .megaAbility,
+    );
+
+  if (!matchingCapability) {
+    throw new Error(
+      `${requestedCapability.megaSpecies} is not a valid Mega form for ${species}.`,
+    );
+  }
+
+  return matchingCapability;
+}
+
+export function megaEvolvePlayerPokemon(
+  battle:
+    BattleState,
+
+  pokemonIndex:
+    number,
+): BattleState {
+  validatePokemonIndex(
+    pokemonIndex,
+    battle.playerPokemon.length,
+  );
+
+  const pokemon =
+    battle.playerPokemon[
+      pokemonIndex
+    ];
+
+  if (
+    pokemon.megaState ===
+    'mega'
+  ) {
+    throw new Error(
+      `${pokemon.megaSpecies || pokemon.build.species} is already Mega Evolved and cannot return to base form.`,
+    );
+  }
+
+  if (battle.playerMegaUsed) {
+    throw new Error(
+      'Your side has already used Mega Evolution in this battle.',
+    );
+  }
+
+  const capability =
+    getChampionsMegaCapability(
+      pokemon.build,
+    );
+
+  if (!capability) {
+    const heldItem =
+      pokemon.build.item.trim() ||
+      'its current item';
+
+    throw new Error(
+      `${pokemon.build.species} cannot Mega Evolve with ${heldItem}.`,
+    );
+  }
+
+  const megaMaxHp =
+    getChampionsStats(
+      pokemon.build,
+      'mega',
+    ).hp;
+
+  const nextBattle =
+    updatePlayerPokemon(
+      battle,
+      pokemonIndex,
+      (
+        currentPokemon,
+      ) => ({
+        ...currentPokemon,
+
+        megaState:
+          'mega',
+
+        megaSpecies:
+          capability
+            .megaSpecies,
+
+        megaAbility:
+          capability
+            .megaAbility,
+
+        megaStone:
+          capability.stone,
+
+        megaEvolvedTurn:
+          battle.turnNumber,
+
+        maxHp:
+          megaMaxHp,
+
+        currentHp:
+          Math.min(
+            currentPokemon
+              .currentHp,
+            megaMaxHp,
+          ),
+      }),
+    );
+
+  return {
+    ...nextBattle,
+
+    playerMegaUsed:
+      true,
+
+    eventHistory: [
+      ...nextBattle
+        .eventHistory,
+
+      `Turn ${battle.turnNumber}: ` +
+        `${pokemon.build.species} Mega Evolved into ` +
+        `${capability.megaSpecies}.`,
+    ],
+  };
+}
+
+export function megaEvolveOpponentPokemon(
+  battle:
+    BattleState,
+
+  pokemonIndex:
+    number,
+
+  requestedCapability:
+    ChampionsMegaCapability,
+): BattleState {
+  validatePokemonIndex(
+    pokemonIndex,
+    battle.opponentPokemon.length,
+  );
+
+  const pokemon =
+    battle.opponentPokemon[
+      pokemonIndex
+    ];
+
+  if (
+    pokemon.megaState ===
+    'mega'
+  ) {
+    throw new Error(
+      `${pokemon.megaSpecies || pokemon.species} is already Mega Evolved and cannot return to base form.`,
+    );
+  }
+
+  if (
+    battle.opponentMegaUsed
+  ) {
+    throw new Error(
+      'The opponent has already used Mega Evolution in this battle.',
+    );
+  }
+
+  const capability =
+    getValidatedOpponentMegaCapability(
+      pokemon.species,
+      requestedCapability,
+    );
+
+  const nextBattle =
+    updateOpponentPokemon(
+      battle,
+      pokemonIndex,
+      (
+        currentPokemon,
+      ) => ({
+        ...currentPokemon,
+
+        megaState:
+          'mega',
+
+        megaSpecies:
+          capability
+            .megaSpecies,
+
+        megaAbility:
+          capability
+            .megaAbility,
+
+        megaStone:
+          capability.stone,
+
+        megaEvolvedTurn:
+          battle.turnNumber,
+
+        /*
+         * Once the form is seen, the
+         * corresponding stone is known.
+         */
+        revealedItem:
+        capability.stone,
+
+      revealedAbility:
+        capability.megaAbility,
+      }),
+    );
+
+  return {
+    ...nextBattle,
+
+    opponentMegaUsed:
+      true,
+
+    eventHistory: [
+      ...nextBattle
+        .eventHistory,
+
+      `Turn ${battle.turnNumber}: ` +
+        `Opponent ${pokemon.species} Mega Evolved into ` +
+        `${capability.megaSpecies}.`,
+    ],
+  };
 }
 
 function clampFieldTurns(

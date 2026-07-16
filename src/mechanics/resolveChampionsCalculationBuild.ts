@@ -4,6 +4,10 @@ import {
 } from '@smogon/calc';
 
 import {
+  ITEM_NAMES,
+} from '../data/championsData';
+
+import {
   clonePokemonBuild,
   type ChampionsPokemonBuild,
 } from '../domain/pokemonBuild';
@@ -26,26 +30,19 @@ extends ResolvedChampionsCalculationBuild {
     ChampionsMegaCapability | null;
 }
 
-export function getChampionsMegaCapability(
-  build:
-    ChampionsPokemonBuild,
-): ChampionsMegaCapability | null {
-  const baseSpecies =
-    build.species.trim();
-
-  const stone =
-    build.item.trim();
-
-  if (
-    !baseSpecies ||
-    !stone
-  ) {
-    return null;
-  }
-
+function getMegaStoneMap(
+  itemName: string,
+):
+  | Readonly<
+      Record<
+        string,
+        string
+      >
+    >
+  | null {
   const itemData =
     GENERATION_9_DATA.items.get(
-      toID(stone),
+      toID(itemName),
     );
 
   const megaStoneMap =
@@ -58,32 +55,18 @@ export function getChampionsMegaCapability(
         >
       | undefined;
 
-  if (!megaStoneMap) {
-    return null;
-  }
+  return (
+    megaStoneMap ??
+    null
+  );
+}
 
-  const megaEntry =
-    Object.entries(
-      megaStoneMap,
-    ).find(
-      (
-        [
-          mappedBaseSpecies,
-        ],
-      ) =>
-        toID(
-          mappedBaseSpecies,
-        ) ===
-        toID(baseSpecies),
-    );
-
-  if (!megaEntry) {
-    return null;
-  }
-
-  const megaSpecies =
-    megaEntry[1];
-
+function createMegaCapability(
+  baseSpecies: string,
+  baseAbility: string,
+  stone: string,
+  megaSpecies: string,
+): ChampionsMegaCapability | null {
   const megaSpeciesData =
     GENERATION_9_DATA.species.get(
       toID(megaSpecies),
@@ -105,8 +88,7 @@ export function getChampionsMegaCapability(
   return {
     baseSpecies,
 
-    baseAbility:
-      build.ability.trim(),
+    baseAbility,
 
     stone,
 
@@ -114,6 +96,156 @@ export function getChampionsMegaCapability(
 
     megaAbility,
   };
+}
+
+/**
+ * Returns every legal Mega option for a
+ * species.
+ *
+ * This is used for opponents because
+ * their exact held stone may not have
+ * been recorded before the animation.
+ */
+export function getChampionsMegaCapabilitiesForSpecies(
+  species: string,
+
+  baseAbility:
+    string = '',
+): ChampionsMegaCapability[] {
+  const cleanedSpecies =
+    species.trim();
+
+  if (!cleanedSpecies) {
+    return [];
+  }
+
+  const capabilities:
+  ChampionsMegaCapability[] = [];
+
+  const seenCapabilities =
+    new Set<string>();
+
+  ITEM_NAMES.forEach(
+    (itemName) => {
+      const megaStoneMap =
+        getMegaStoneMap(
+          itemName,
+        );
+
+      if (!megaStoneMap) {
+        return;
+      }
+
+      const matchingEntry =
+        Object.entries(
+          megaStoneMap,
+        ).find(
+          (
+            [
+              mappedBaseSpecies,
+            ],
+          ) =>
+            toID(
+              mappedBaseSpecies,
+            ) ===
+            toID(
+              cleanedSpecies,
+            ),
+        );
+
+      if (!matchingEntry) {
+        return;
+      }
+
+      const capability =
+        createMegaCapability(
+          cleanedSpecies,
+          baseAbility.trim(),
+          itemName,
+          matchingEntry[1],
+        );
+
+      if (!capability) {
+        return;
+      }
+
+      const capabilityKey =
+        [
+          toID(
+            capability.stone,
+          ),
+
+          toID(
+            capability.megaSpecies,
+          ),
+        ].join(':');
+
+      if (
+        seenCapabilities.has(
+          capabilityKey,
+        )
+      ) {
+        return;
+      }
+
+      seenCapabilities.add(
+        capabilityKey,
+      );
+
+      capabilities.push(
+        capability,
+      );
+    },
+  );
+
+  return capabilities.sort(
+    (
+      first,
+      second,
+    ) =>
+      first.megaSpecies
+        .localeCompare(
+          second.megaSpecies,
+        ) ||
+      first.stone.localeCompare(
+        second.stone,
+      ),
+  );
+}
+
+export function getChampionsMegaCapability(
+  build:
+    ChampionsPokemonBuild,
+): ChampionsMegaCapability | null {
+  const baseSpecies =
+    build.species.trim();
+
+  const stone =
+    build.item.trim();
+
+  if (
+    !baseSpecies ||
+    !stone
+  ) {
+    return null;
+  }
+
+  const capabilities =
+    getChampionsMegaCapabilitiesForSpecies(
+      baseSpecies,
+      build.ability,
+    );
+
+  return (
+    capabilities.find(
+      (capability) =>
+        toID(
+          capability.stone,
+        ) ===
+        toID(stone),
+    ) ??
+    null
+  );
 }
 
 export function resolveChampionsCalculationBuild(
@@ -174,12 +306,10 @@ export function resolveChampionsCalculationBuild(
       ...build,
 
       species:
-        capability
-          .megaSpecies,
+        capability.megaSpecies,
 
       ability:
-        capability
-          .megaAbility,
+        capability.megaAbility,
     },
 
     form:
@@ -191,12 +321,10 @@ export function resolveChampionsCalculationBuild(
     baseSpecies,
 
     effectiveSpecies:
-      capability
-        .megaSpecies,
+      capability.megaSpecies,
 
     effectiveAbility:
-      capability
-        .megaAbility,
+      capability.megaAbility,
 
     capability,
   };
