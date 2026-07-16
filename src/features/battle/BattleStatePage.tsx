@@ -51,6 +51,7 @@ import OpponentRevealControls from '../../components/OpponentRevealControls';
 import PokemonRuntimeControls from '../../components/PokemonRuntimeControls';
 import BattleFieldControls from '../../components/BattleFieldControls';
 import BattleActionRecorder from '../../components/BattleActionRecorder';
+import BattleDamageRecorder from '../../components/BattleDamageRecorder';
 import SpeedEvidencePanel from '../../components/SpeedEvidencePanel';
 
 import OpponentCandidatePanel from '../../components/OpponentCandidatePanel';
@@ -373,16 +374,29 @@ function handleRecordEvent() {
             }
             />
 
-            <BattleActionRecorder
-                battle={battle}
-                onBattleChange={(nextBattle) => {
-                    setBattle(nextBattle);
-                    setError('');
-                }}
-                onError={setError}
-            />
+        <BattleActionRecorder
+          battle={battle}
+          onBattleChange={(nextBattle) => {
+            setBattle(nextBattle);
+            setError('');
+          }}
+          onError={setError}
+        />
 
-            <SpeedEvidencePanel
+        <BattleDamageRecorder
+          battle={battle}
+          onBattleChange={(nextBattle) => {
+            setBattle(nextBattle);
+            setError('');
+          }}
+          onError={setError}
+        />
+
+        <SpeedEvidencePanel
+          actionHistory={battle.actionHistory}
+        />
+
+      <SpeedEvidencePanel
               actionHistory={battle.actionHistory}
             />
 

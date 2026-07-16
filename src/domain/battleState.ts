@@ -24,6 +24,10 @@ import type {
   BattleActionRecord,
 } from './battleAction';
 
+import type {
+  DamageObservation,
+} from './damageObservation';
+
 export type MajorStatus =
   | ''
   | 'Burn'
@@ -116,9 +120,16 @@ export interface BattleState {
   opponentActive: ActiveSlots;
 
   field: BattleFieldState;
-  eventHistory: string[];
+    eventHistory: string[];
 
   actionHistory: BattleActionRecord[];
+
+  /**
+   * Optional temporarily so older test
+   * fixtures remain compatible.
+   */
+  damageObservations?:
+    DamageObservation[];
 }
 
 export const EMPTY_BATTLE_STAT_STAGES:
@@ -209,11 +220,13 @@ export function createInitialBattleState(
         ...DEFAULT_BATTLE_FIELD_STATE,
         },
 
-        actionHistory: [],
+            actionHistory: [],
 
-        eventHistory: [
-        'Battle state created.',
-        ],
+    damageObservations: [],
+
+    eventHistory: [
+      'Battle state created.',
+    ],
     };
 }
 
