@@ -28,13 +28,29 @@ import {
   getCandidatesForSpecies,
 } from './filterOpponentCandidates';
 
+import {
+  evaluateCandidateDamageEvidence,
+} from './evaluateCandidateDamageEvidence';
+
 export interface ResolvedCandidateEvaluation {
   candidate: OpponentSetCandidate;
-  compatible: boolean;
-  rejections: CandidateRejection[];
 
-  usablePlayerSpeedEvidence: number;
-  ignoredPlayerSpeedEvidence: number;
+  compatible: boolean;
+
+  rejections:
+    CandidateRejection[];
+
+  usablePlayerSpeedEvidence:
+    number;
+
+  ignoredPlayerSpeedEvidence:
+    number;
+
+  usableExactDamageEvidence:
+    number;
+
+  ignoredDamageEvidence:
+    number;
 }
 
 export interface ResolvedOpponentSlotCandidates {
@@ -176,33 +192,58 @@ export function resolveOpponentCandidateSets(
                   observation,
                 );
 
-              const playerSpeedEvaluation =
-                evaluateCandidateSpeedEvidence(
-                  battle,
-                  candidate,
-                  pokemonIndex,
-                  speedEvidence,
-                );
+        const playerSpeedEvaluation =
+            evaluateCandidateSpeedEvidence(
+              battle,
+              candidate,
+              pokemonIndex,
+              speedEvidence,
+            );
 
-              return {
+          const damageEvaluation =
+            evaluateCandidateDamageEvidence(
+              battle,
+              candidate,
+              pokemonIndex,
+              battle.damageObservations ??
+                [],
+            );
+
+          return {
                 candidate,
 
-                compatible:
-                  revealEvaluation.compatible &&
-                  playerSpeedEvaluation.compatible,
+                        compatible:
+          revealEvaluation.compatible &&
+          playerSpeedEvaluation
+            .compatible &&
+          damageEvaluation.compatible,
 
-                rejections: [
-                  ...revealEvaluation.rejections,
-                  ...playerSpeedEvaluation.rejections,
-                ],
+        rejections: [
+          ...revealEvaluation
+            .rejections,
 
-                usablePlayerSpeedEvidence:
-                  playerSpeedEvaluation
-                    .usableEvidenceCount,
+          ...playerSpeedEvaluation
+            .rejections,
 
-                ignoredPlayerSpeedEvidence:
-                  playerSpeedEvaluation
-                    .ignoredEvidenceCount,
+          ...damageEvaluation
+            .rejections,
+        ],
+
+        usablePlayerSpeedEvidence:
+          playerSpeedEvaluation
+            .usableEvidenceCount,
+
+        ignoredPlayerSpeedEvidence:
+          playerSpeedEvaluation
+            .ignoredEvidenceCount,
+
+        usableExactDamageEvidence:
+          damageEvaluation
+            .usableEvidenceCount,
+
+        ignoredDamageEvidence:
+          damageEvaluation
+            .ignoredEvidenceCount,
               };
             },
           );

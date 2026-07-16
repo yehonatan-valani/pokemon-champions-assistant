@@ -35,11 +35,55 @@ const CHAMPIONS_GENERATION = {
 export type CalculatedStats =
   Record<StatKey, number>;
 
+export type ChampionsCalculatorStatus =
+  | ''
+  | 'slp'
+  | 'psn'
+  | 'brn'
+  | 'frz'
+  | 'par'
+  | 'tox';
+
+export interface ChampionsCalculatorBoosts {
+  atk: number;
+  def: number;
+  spa: number;
+  spd: number;
+  spe: number;
+}
+
 export interface CreateChampionsPokemonOptions {
   currentHp?: number;
+
+  boosts?: Partial<
+    ChampionsCalculatorBoosts
+  >;
+
+  status?:
+    ChampionsCalculatorStatus;
 }
 
 export interface ChampionsDamageOptions {
+  
+    /**
+   * Exact attacker HP when known.
+   */
+  attackerCurrentHp?: number;
+
+  attackerBoosts?: Partial<
+    ChampionsCalculatorBoosts
+  >;
+
+  defenderBoosts?: Partial<
+    ChampionsCalculatorBoosts
+  >;
+
+  attackerStatus?:
+    ChampionsCalculatorStatus;
+
+  defenderStatus?:
+    ChampionsCalculatorStatus;
+  
   /**
    * Exact current HP of the defender.
    *
@@ -187,9 +231,15 @@ export function createChampionsPokemon(
       build.ability.trim() ||
       undefined,
 
-    item:
+        item:
       build.item.trim() ||
       undefined,
+
+    boosts:
+      options.boosts,
+
+    status:
+      options.status,
 
     /*
      * @smogon/calc keeps the historical
@@ -297,9 +347,19 @@ export function calculateChampionsDamage(
       cleanedMoveName,
     );
 
-  const attacker =
+    const attacker =
     createChampionsPokemon(
       attackerBuild,
+      {
+        currentHp:
+          options.attackerCurrentHp,
+
+        boosts:
+          options.attackerBoosts,
+
+        status:
+          options.attackerStatus,
+      },
     );
 
   const defender =
@@ -308,6 +368,12 @@ export function calculateChampionsDamage(
       {
         currentHp:
           options.defenderCurrentHp,
+
+        boosts:
+          options.defenderBoosts,
+
+        status:
+          options.defenderStatus,
       },
     );
 

@@ -71,8 +71,10 @@ function createEvaluation(
           },
         ],
 
-    usablePlayerSpeedEvidence: 0,
-    ignoredPlayerSpeedEvidence: 0,
+        usablePlayerSpeedEvidence: 0,
+        ignoredPlayerSpeedEvidence: 0,
+        usableExactDamageEvidence: 0,
+        ignoredDamageEvidence: 0,                                 
   };
 }
 

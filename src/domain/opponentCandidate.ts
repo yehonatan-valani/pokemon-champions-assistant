@@ -24,7 +24,8 @@ export type CandidateRejectionCode =
   | 'move'
   | 'item'
   | 'ability'
-  | 'speed';
+  | 'speed'
+  | 'damage';
 
 export interface CandidateRejection {
   code: CandidateRejectionCode;

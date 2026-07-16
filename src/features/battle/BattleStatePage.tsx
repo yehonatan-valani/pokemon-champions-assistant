@@ -392,10 +392,6 @@ function handleRecordEvent() {
           onError={setError}
         />
 
-        <SpeedEvidencePanel
-          actionHistory={battle.actionHistory}
-        />
-
       <SpeedEvidencePanel
               actionHistory={battle.actionHistory}
             />
