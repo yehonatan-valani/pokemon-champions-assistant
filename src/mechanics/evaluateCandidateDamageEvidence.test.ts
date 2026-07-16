@@ -617,37 +617,43 @@ describe(
     );
 
     it(
-      'keeps percentage observations without using them for rejection yet',
-      () => {
-        const battle =
-          createDamageBattle();
+        'processes percentage observations as candidate evidence',
+        () => {
+            const battle =
+            createDamageBattle();
 
-        const evaluation =
-          evaluateCandidateDamageEvidence(
-            battle,
-            STRONG_GHOLDENGO,
-            0,
-            [
-              createPercentObservation(
+            const evaluation =
+            evaluateCandidateDamageEvidence(
                 battle,
-              ),
-            ],
-          );
+                STRONG_GHOLDENGO,
+                0,
+                [
+                createPercentObservation(
+                    battle,
+                ),
+                ],
+            );
 
-        expect(
-          evaluation.compatible,
-        ).toBe(true);
+            expect(
+            evaluation
+                .usableEvidenceCount,
+            ).toBe(1);
 
-        expect(
-          evaluation
-            .usableEvidenceCount,
-        ).toBe(0);
+            expect(
+            evaluation
+                .usableExactEvidenceCount,
+            ).toBe(0);
 
-        expect(
-          evaluation
-            .ignoredEvidenceCount,
-        ).toBe(1);
-      },
-    );
-  },
+            expect(
+            evaluation
+                .usablePercentEvidenceCount,
+            ).toBe(1);
+
+            expect(
+            evaluation
+                .ignoredEvidenceCount,
+            ).toBe(0);
+        },
+      );
+    },
 );

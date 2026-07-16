@@ -57,10 +57,10 @@ function OpponentCandidatePanel({
       <p>
         Candidates are removed when they
         contradict revealed information,
-        observed Speed order, or exact damage
-        dealt to your Pokémon. Compatible
-        candidates are ranked using their
-        source weights.
+        observed Speed order, exact damage to
+        your Pokémon, or opponent HP percentage
+        changes. Compatible candidates are
+        ranked using their source weights.
       </p>
 
       <p className="candidate-warning">
@@ -139,6 +139,7 @@ function OpponentCandidatePanel({
                         usablePlayerSpeedEvidence,
                         ignoredPlayerSpeedEvidence,
                         usableExactDamageEvidence,
+                        usablePercentDamageEvidence,
                         ignoredDamageEvidence,
                       } = evaluation;
 
@@ -259,6 +260,13 @@ function OpponentCandidatePanel({
                               <p>
                                 Exact damage checks passed:{' '}
                                 {usableExactDamageEvidence}
+                              </p>
+                            )}
+
+                            {usablePercentDamageEvidence > 0 && (
+                              <p>
+                                Opponent percentage checks passed:{' '}
+                                {usablePercentDamageEvidence}
                               </p>
                             )}
 

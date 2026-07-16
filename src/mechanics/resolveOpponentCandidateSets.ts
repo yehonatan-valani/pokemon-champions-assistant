@@ -49,6 +49,9 @@ export interface ResolvedCandidateEvaluation {
   usableExactDamageEvidence:
     number;
 
+  usablePercentDamageEvidence:
+    number;
+
   ignoredDamageEvidence:
     number;
 }
@@ -237,13 +240,17 @@ export function resolveOpponentCandidateSets(
           playerSpeedEvaluation
             .ignoredEvidenceCount,
 
-        usableExactDamageEvidence:
-          damageEvaluation
-            .usableEvidenceCount,
+                usableExactDamageEvidence:
+                  damageEvaluation
+                    .usableExactEvidenceCount,
 
-        ignoredDamageEvidence:
-          damageEvaluation
-            .ignoredEvidenceCount,
+                usablePercentDamageEvidence:
+                  damageEvaluation
+                    .usablePercentEvidenceCount,
+
+                ignoredDamageEvidence:
+                  damageEvaluation
+                    .ignoredEvidenceCount,
               };
             },
           );

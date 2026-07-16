@@ -3,6 +3,12 @@ import {
 } from '@smogon/calc';
 
 import type {
+  BattleState,
+  BattleStatStages,
+  MajorStatus,
+} from '../domain/battleState';
+
+import type {
   DamageObservation,
 } from '../domain/damageObservation';
 
@@ -16,32 +22,39 @@ import type {
 } from '../domain/opponentCandidate';
 
 import type {
-  BattleState,
-  BattleStatStages,
-  MajorStatus,
-} from '../domain/battleState';
+  ChampionsPokemonBuild,
+} from '../domain/pokemonBuild';
 
 import {
   calculateChampionsDamage,
+  getChampionsStats,
   type ChampionsCalculatorBoosts,
   type ChampionsCalculatorStatus,
 } from './championsCalculator';
+
+import {
+  describePossibleHpValues,
+  getPossibleHpValuesForDisplayedPercent,
+} from './displayedHpPercent';
 
 /*
  * These moves depend on the attacker's
  * exact current HP.
  *
- * Opposing Pokémon currently expose only
- * a displayed percentage, so we cannot
- * calculate them exactly yet.
+ * Damage observations do not yet preserve
+ * the attacker's historical exact HP, so
+ * these moves remain non-rejecting until
+ * that snapshot is added.
  */
 const ATTACKER_HP_DEPENDENT_MOVE_IDS =
   new Set([
-    'eruption',
-    'waterspout',
     'dragonenergy',
+    'endeavor',
+    'eruption',
+    'finalgambit',
     'flail',
     'reversal',
+    'waterspout',
   ]);
 
 export interface CandidateDamageEvidenceEvaluation {
@@ -52,15 +65,36 @@ export interface CandidateDamageEvidenceEvaluation {
 
   usableEvidenceCount: number;
 
+  usableExactEvidenceCount:
+    number;
+
+  usablePercentEvidenceCount:
+    number;
+
   ignoredEvidenceCount: number;
 }
 
 interface CalculatedDamageRange {
   criticalHit: boolean;
 
+  defenderCurrentHp: number;
+
   minDamage: number;
 
   maxDamage: number;
+}
+
+interface DamageCompatibilityResult {
+  compatible: boolean;
+
+  calculatedRanges:
+    CalculatedDamageRange[];
+
+  possibleBeforeHp:
+    number[];
+
+  possibleAfterHp:
+    number[];
 }
 
 function toCalculatorStatus(
@@ -103,7 +137,8 @@ function toCalculatorBoosts(
 }
 
 function getDamageFieldConditions(
-  observation: DamageObservation,
+  observation:
+    DamageObservation,
 ): DamageFieldConditions {
   const targetIsPlayer =
     observation.target.side ===
@@ -128,13 +163,17 @@ function getDamageFieldConditions(
 
     defenderReflect:
       targetIsPlayer
-        ? field.playerReflectTurns > 0
-        : field.opponentReflectTurns >
+        ? field
+            .playerReflectTurns >
+          0
+        : field
+            .opponentReflectTurns >
           0,
 
     defenderLightScreen:
       targetIsPlayer
-        ? field.playerLightScreenTurns >
+        ? field
+            .playerLightScreenTurns >
           0
         : field
             .opponentLightScreenTurns >
@@ -142,7 +181,8 @@ function getDamageFieldConditions(
 
     defenderAuroraVeil:
       targetIsPlayer
-        ? field.playerAuroraVeilTurns >
+        ? field
+            .playerAuroraVeilTurns >
           0
         : field
             .opponentAuroraVeilTurns >
@@ -152,7 +192,101 @@ function getDamageFieldConditions(
   };
 }
 
-function observedLossMatchesRange(
+function getCriticalModes(
+  observation:
+    DamageObservation,
+): boolean[] {
+  if (
+    observation.criticalHit ===
+    'yes'
+  ) {
+    return [true];
+  }
+
+  if (
+    observation.criticalHit ===
+    'no'
+  ) {
+    return [false];
+  }
+
+  return [
+    false,
+    true,
+  ];
+}
+
+function calculateObservationRange(
+  attackerBuild:
+    ChampionsPokemonBuild,
+
+  defenderBuild:
+    ChampionsPokemonBuild,
+
+  observation:
+    DamageObservation,
+
+  defenderCurrentHp: number,
+
+  criticalHit: boolean,
+): CalculatedDamageRange {
+  const result =
+    calculateChampionsDamage(
+      attackerBuild,
+      defenderBuild,
+      observation.moveName,
+      getDamageFieldConditions(
+        observation,
+      ),
+      {
+        defenderCurrentHp,
+
+        attackerBoosts:
+          toCalculatorBoosts(
+            observation.context
+              .attackerStatStages,
+          ),
+
+        defenderBoosts:
+          toCalculatorBoosts(
+            observation.context
+              .targetStatStages,
+          ),
+
+        attackerStatus:
+          toCalculatorStatus(
+            observation.context
+              .attackerStatus,
+          ),
+
+        defenderStatus:
+          toCalculatorStatus(
+            observation.context
+              .targetStatus,
+          ),
+
+        criticalHit,
+
+        spreadDamageApplies:
+          observation.targeting
+            .spreadDamageApplied,
+      },
+    );
+
+  return {
+    criticalHit,
+
+    defenderCurrentHp,
+
+    minDamage:
+      result.minDamage,
+
+    maxDamage:
+      result.maxDamage,
+  };
+}
+
+function exactLossMatchesRange(
   observation:
     DamageObservation,
 
@@ -160,15 +294,15 @@ function observedLossMatchesRange(
     CalculatedDamageRange,
 ): boolean {
   /*
-   * When the target fainted, the game only
-   * shows the HP that remained before the
-   * attack.
+   * When the target fainted, damage beyond
+   * the remaining HP is hidden.
    *
-   * For example, 200 calculated damage into
-   * a Pokémon with 40 HP remaining appears
-   * as an observed loss of exactly 40 HP.
+   * A calculated hit only needs to be able
+   * to reach the HP that remained.
    */
-  if (observation.hpAfter === 0) {
+  if (
+    observation.hpAfter === 0
+  ) {
     return (
       range.maxDamage >=
       observation.hpBefore
@@ -183,26 +317,264 @@ function observedLossMatchesRange(
   );
 }
 
-function describeRange(
-  range: CalculatedDamageRange,
-): string {
-  const hitType =
-    range.criticalHit
-      ? 'critical'
-      : 'normal';
+function percentageTransitionMatchesRange(
+  beforeHp: number,
 
-  return (
-    `${hitType} ` +
-    `${range.minDamage}–` +
-    `${range.maxDamage} HP`
-  );
+  possibleAfterHp:
+    number[],
+
+  range:
+    CalculatedDamageRange,
+): boolean {
+  for (
+    const afterHp
+    of possibleAfterHp
+  ) {
+    if (afterHp > beforeHp) {
+      continue;
+    }
+
+    if (afterHp === 0) {
+      if (
+        range.maxDamage >=
+        beforeHp
+      ) {
+        return true;
+      }
+
+      continue;
+    }
+
+    const requiredDamage =
+      beforeHp - afterHp;
+
+    if (
+      requiredDamage >=
+        range.minDamage &&
+      requiredDamage <=
+        range.maxDamage
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function evaluateExactObservation(
+  attackerBuild:
+    ChampionsPokemonBuild,
+
+  defenderBuild:
+    ChampionsPokemonBuild,
+
+  observation:
+    DamageObservation,
+): DamageCompatibilityResult {
+  const calculatedRanges =
+    getCriticalModes(
+      observation,
+    ).map(
+      (criticalHit) =>
+        calculateObservationRange(
+          attackerBuild,
+          defenderBuild,
+          observation,
+          observation.hpBefore,
+          criticalHit,
+        ),
+    );
+
+  return {
+    compatible:
+      calculatedRanges.some(
+        (range) =>
+          exactLossMatchesRange(
+            observation,
+            range,
+          ),
+      ),
+
+    calculatedRanges,
+
+    possibleBeforeHp: [
+      observation.hpBefore,
+    ],
+
+    possibleAfterHp: [
+      observation.hpAfter,
+    ],
+  };
+}
+
+function evaluatePercentageObservation(
+  attackerBuild:
+    ChampionsPokemonBuild,
+
+  candidate:
+    OpponentSetCandidate,
+
+  observation:
+    DamageObservation,
+): DamageCompatibilityResult {
+  const maximumHp =
+    getChampionsStats(
+      candidate.build,
+    ).hp;
+
+  const possibleBeforeHp =
+    getPossibleHpValuesForDisplayedPercent(
+      observation.hpBefore,
+      maximumHp,
+    );
+
+  const possibleAfterHp =
+    getPossibleHpValuesForDisplayedPercent(
+      observation.hpAfter,
+      maximumHp,
+    );
+
+  const calculatedRanges:
+  CalculatedDamageRange[] = [];
+
+  for (
+    const criticalHit
+    of getCriticalModes(
+      observation,
+    )
+  ) {
+    for (
+      const beforeHp
+      of possibleBeforeHp
+    ) {
+      /*
+       * An already-fainted target cannot be
+       * hit. Treat malformed 0%-before
+       * evidence as unsupported rather than
+       * eliminating candidates.
+       */
+      if (beforeHp < 1) {
+        continue;
+      }
+
+      const range =
+        calculateObservationRange(
+          attackerBuild,
+          candidate.build,
+          observation,
+          beforeHp,
+          criticalHit,
+        );
+
+      calculatedRanges.push(
+        range,
+      );
+
+      if (
+        percentageTransitionMatchesRange(
+          beforeHp,
+          possibleAfterHp,
+          range,
+        )
+      ) {
+        return {
+          compatible: true,
+
+          calculatedRanges,
+
+          possibleBeforeHp,
+
+          possibleAfterHp,
+        };
+      }
+    }
+  }
+
+  return {
+    compatible: false,
+
+    calculatedRanges,
+
+    possibleBeforeHp,
+
+    possibleAfterHp,
+  };
+}
+
+function describeCalculatedRanges(
+  ranges:
+    CalculatedDamageRange[],
+): string {
+  if (ranges.length === 0) {
+    return (
+      'no supported damage range'
+    );
+  }
+
+  const modes =
+    new Map<
+      string,
+      {
+        minimum: number;
+        maximum: number;
+      }
+    >();
+
+  for (const range of ranges) {
+    const key =
+      range.criticalHit
+        ? 'critical'
+        : 'normal';
+
+    const existing =
+      modes.get(key);
+
+    if (!existing) {
+      modes.set(key, {
+        minimum:
+          range.minDamage,
+
+        maximum:
+          range.maxDamage,
+      });
+
+      continue;
+    }
+
+    existing.minimum =
+      Math.min(
+        existing.minimum,
+        range.minDamage,
+      );
+
+    existing.maximum =
+      Math.max(
+        existing.maximum,
+        range.maxDamage,
+      );
+  }
+
+  return [
+    ...modes.entries(),
+  ]
+    .map(
+      ([
+        hitType,
+        range,
+      ]) =>
+        `${hitType} ` +
+        `${range.minimum}–` +
+        `${range.maximum} HP`,
+    )
+    .join(' or ');
 }
 
 function observationUsesCandidate(
   observation:
     DamageObservation,
 
-  opponentPokemonIndex: number,
+  opponentPokemonIndex:
+    number,
 ): {
   asAttacker: boolean;
   asTarget: boolean;
@@ -224,13 +596,91 @@ function observationUsesCandidate(
   };
 }
 
+function createExactRejection(
+  observation:
+    DamageObservation,
+
+  candidate:
+    OpponentSetCandidate,
+
+  evaluation:
+    DamageCompatibilityResult,
+): CandidateRejection {
+  return {
+    code: 'damage',
+
+    message: [
+      `Turn ${observation.turnNumber}:`,
+      `${observation.attackerName}`,
+      `dealt ${observation.observedDamage}`,
+      `HP with ${observation.moveName},`,
+      `but ${candidate.label} predicts`,
+      describeCalculatedRanges(
+        evaluation
+          .calculatedRanges,
+      ),
+      'under the recorded conditions.',
+    ].join(' '),
+  };
+}
+
+function createPercentageRejection(
+  observation:
+    DamageObservation,
+
+  candidate:
+    OpponentSetCandidate,
+
+  evaluation:
+    DamageCompatibilityResult,
+): CandidateRejection {
+  const maximumHp =
+    getChampionsStats(
+      candidate.build,
+    ).hp;
+
+  return {
+    code: 'damage',
+
+    message: [
+      `Turn ${observation.turnNumber}:`,
+      `${observation.targetName}`,
+      `changed from`,
+      `${observation.hpBefore}%`,
+      'to',
+      `${observation.hpAfter}%`,
+      `after ${observation.moveName}.`,
+      `${candidate.label} has`,
+      `${maximumHp} maximum HP,`,
+      `so those displays mean`,
+      `${describePossibleHpValues(
+        evaluation
+          .possibleBeforeHp,
+      )}`,
+      'before and',
+      `${describePossibleHpValues(
+        evaluation
+          .possibleAfterHp,
+      )}`,
+      'after.',
+      'The predicted',
+      describeCalculatedRanges(
+        evaluation
+          .calculatedRanges,
+      ),
+      'cannot produce that transition.',
+    ].join(' '),
+  };
+}
+
 export function evaluateCandidateDamageEvidence(
   battle: BattleState,
 
   candidate:
     OpponentSetCandidate,
 
-  opponentPokemonIndex: number,
+  opponentPokemonIndex:
+    number,
 
   observations:
     DamageObservation[],
@@ -239,6 +689,13 @@ export function evaluateCandidateDamageEvidence(
   CandidateRejection[] = [];
 
   let usableEvidenceCount = 0;
+
+  let usableExactEvidenceCount =
+    0;
+
+  let usablePercentEvidenceCount =
+    0;
+
   let ignoredEvidenceCount = 0;
 
   for (
@@ -258,26 +715,6 @@ export function evaluateCandidateDamageEvidence(
       continue;
     }
 
-    /*
-     * This milestone evaluates exact damage
-     * caused by an opponent to the player's
-     * Pokémon.
-     *
-     * Percentage observations where the
-     * candidate was the defender are kept
-     * but not used for rejection yet.
-     */
-    if (
-      !candidateUsage.asAttacker ||
-      observation.target.side !==
-        'player' ||
-      observation.hpUnit !==
-        'exact'
-    ) {
-      ignoredEvidenceCount += 1;
-      continue;
-    }
-
     if (
       ATTACKER_HP_DEPENDENT_MOVE_IDS.has(
         toID(
@@ -289,128 +726,119 @@ export function evaluateCandidateDamageEvidence(
       continue;
     }
 
-    const defender =
-      battle.playerPokemon[
-        observation.target
-          .pokemonIndex
-      ];
-
-    if (!defender) {
-      ignoredEvidenceCount += 1;
-      continue;
-    }
-
-    const criticalModes:
-    boolean[] =
-      observation.criticalHit ===
-      'yes'
-        ? [true]
-        : observation.criticalHit ===
-            'no'
-          ? [false]
-          : [false, true];
-
-    const calculatedRanges:
-    CalculatedDamageRange[] = [];
-
     try {
-      for (
-        const criticalHit
-        of criticalModes
+      /*
+       * Exact HP evidence:
+       * opponent candidate attacked one of
+       * the player's known builds.
+       */
+      if (
+        candidateUsage.asAttacker &&
+        observation.target.side ===
+          'player' &&
+        observation.hpUnit ===
+          'exact'
       ) {
-        const result =
-          calculateChampionsDamage(
+        const defender =
+          battle.playerPokemon[
+            observation.target
+              .pokemonIndex
+          ];
+
+        if (!defender) {
+          ignoredEvidenceCount +=
+            1;
+
+          continue;
+        }
+
+        const evaluation =
+          evaluateExactObservation(
             candidate.build,
             defender.build,
-            observation.moveName,
-            getDamageFieldConditions(
-              observation,
-            ),
-            {
-              defenderCurrentHp:
-                observation.hpBefore,
-
-              attackerBoosts:
-                toCalculatorBoosts(
-                  observation.context
-                    .attackerStatStages,
-                ),
-
-              defenderBoosts:
-                toCalculatorBoosts(
-                  observation.context
-                    .targetStatStages,
-                ),
-
-              attackerStatus:
-                toCalculatorStatus(
-                  observation.context
-                    .attackerStatus,
-                ),
-
-              defenderStatus:
-                toCalculatorStatus(
-                  observation.context
-                    .targetStatus,
-                ),
-
-              criticalHit,
-
-              spreadDamageApplies:
-                observation.targeting
-                  .spreadDamageApplied,
-            },
+            observation,
           );
 
-        calculatedRanges.push({
-          criticalHit,
+        usableEvidenceCount += 1;
 
-          minDamage:
-            result.minDamage,
+        usableExactEvidenceCount +=
+          1;
 
-          maxDamage:
-            result.maxDamage,
-        });
+        if (
+          !evaluation.compatible
+        ) {
+          rejections.push(
+            createExactRejection(
+              observation,
+              candidate,
+              evaluation,
+            ),
+          );
+        }
+
+        continue;
       }
+
+      /*
+       * Percentage evidence:
+       * one of the player's exact builds
+       * attacked the opponent candidate.
+       */
+      if (
+        candidateUsage.asTarget &&
+        observation.attacker.side ===
+          'player' &&
+        observation.hpUnit ===
+          'percent'
+      ) {
+        const attacker =
+          battle.playerPokemon[
+            observation.attacker
+              .pokemonIndex
+          ];
+
+        if (!attacker) {
+          ignoredEvidenceCount +=
+            1;
+
+          continue;
+        }
+
+        const evaluation =
+          evaluatePercentageObservation(
+            attacker.build,
+            candidate,
+            observation,
+          );
+
+        usableEvidenceCount += 1;
+
+        usablePercentEvidenceCount +=
+          1;
+
+        if (
+          !evaluation.compatible
+        ) {
+          rejections.push(
+            createPercentageRejection(
+              observation,
+              candidate,
+              evaluation,
+            ),
+          );
+        }
+
+        continue;
+      }
+
+      ignoredEvidenceCount += 1;
     } catch {
       /*
        * Unsupported calculator mechanics
        * must not eliminate a candidate.
        */
       ignoredEvidenceCount += 1;
-      continue;
     }
-
-    usableEvidenceCount += 1;
-
-    const compatible =
-      calculatedRanges.some(
-        (range) =>
-          observedLossMatchesRange(
-            observation,
-            range,
-          ),
-      );
-
-    if (compatible) {
-      continue;
-    }
-
-    rejections.push({
-      code: 'damage',
-
-      message: [
-        `Turn ${observation.turnNumber}:`,
-        `${observation.attackerName}`,
-        `dealt ${observation.observedDamage}`,
-        `HP with ${observation.moveName},`,
-        `but ${candidate.label} predicts`,
-        calculatedRanges
-          .map(describeRange)
-          .join(' or '),
-        'under the recorded conditions.',
-      ].join(' '),
-    });
   }
 
   return {
@@ -420,6 +848,10 @@ export function evaluateCandidateDamageEvidence(
     rejections,
 
     usableEvidenceCount,
+
+    usableExactEvidenceCount,
+
+    usablePercentEvidenceCount,
 
     ignoredEvidenceCount,
   };
