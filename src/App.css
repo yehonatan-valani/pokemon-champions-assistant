@@ -1049,3 +1049,93 @@ button:hover {
   border: 1px solid #fecaca;
   background: #fef2f2;
 }
+
+.team-import-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 24rem;
+  resize: vertical;
+  font-family:
+    Consolas,
+    "Courier New",
+    monospace;
+  line-height: 1.45;
+}
+
+.import-compare-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(18rem, 1fr)
+    );
+  gap: 1rem;
+  align-items: start;
+}
+
+.import-team-member-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(14rem, 1fr)
+    );
+  gap: 0.75rem;
+}
+
+.import-team-member {
+  padding: 0.9rem;
+  border: 1px solid
+    rgba(127, 127, 127, 0.35);
+  border-radius: 0.75rem;
+}
+
+.import-team-member h4 {
+  margin-top: 0;
+}
+
+.import-team-member p {
+  margin:
+    0.35rem 0;
+}
+
+.team-library-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(18rem, 1fr)
+    );
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.team-library-card {
+  padding: 1rem;
+  border: 1px solid
+    rgba(127, 127, 127, 0.35);
+  border-radius: 0.75rem;
+}
+
+.team-library-card h4 {
+  margin-top: 0;
+}
+
+.team-library-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin:
+    0.75rem 0;
+}
+
+.team-library-member-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.team-library-member-list h5 {
+  margin:
+    0 0 0.5rem;
+}

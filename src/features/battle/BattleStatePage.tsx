@@ -63,6 +63,9 @@ import {
 import CandidateKoPanel
   from '../../components/CandidateKoPanel';
 
+import OpponentMetaDataPanel
+  from '../../components/OpponentMetaDataPanel';
+
 function parseSelectedIndex(
   value: string,
 ): number | null {
@@ -397,6 +400,10 @@ function handleRecordEvent() {
 
       <SpeedEvidencePanel
               actionHistory={battle.actionHistory}
+            />
+
+           <OpponentMetaDataPanel
+              battle={battle}
             />
 
            <OpponentCandidatePanel

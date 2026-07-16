@@ -6,9 +6,12 @@ import BattleSetupPage from './features/battle/BattleSetupPage';
 import DamageCalculatorPage from './features/calculator/DamageCalculatorPage';
 import TeamPage from './features/team/TeamPage';
 import BattleStatePage from './features/battle/BattleStatePage';
+import ImportComparePage
+  from './features/compare/ImportComparePage';
 
 type AppPage =
   | 'calculator'
+  | 'import-compare'
   | 'team'
   | 'battle'
   | 'live-battle';
@@ -32,6 +35,17 @@ function App() {
           }
         >
           Calculator
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setCurrentPage(
+              'import-compare',
+            );
+          }}
+        >
+          Import &amp; Compare
         </button>
 
         <button
@@ -78,6 +92,11 @@ function App() {
 
       {currentPage === 'calculator' && (
         <DamageCalculatorPage />
+      )}
+
+      {currentPage ===
+        'import-compare' && (
+        <ImportComparePage />
       )}
 
       {currentPage === 'team' && (
