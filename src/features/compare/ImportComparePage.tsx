@@ -14,6 +14,9 @@ import SpeedControls
 import TeamLibraryPanel
   from '../../components/TeamLibraryPanel';
 
+import MegaFormControls
+  from '../../components/MegaFormControls';  
+
 import {
   DEFAULT_DAMAGE_FIELD_CONDITIONS,
   type DamageFieldConditions,
@@ -38,6 +41,10 @@ import type {
   StoredChampionsTeam,
 } from '../../domain/teamLibrary';
 
+import type {
+  ChampionsCalculationForm,
+} from '../../domain/megaEvolution';
+
 import {
   calculateChampionsDamage,
   type ChampionsDamageResult,
@@ -54,6 +61,7 @@ import {
 import {
   loadTeam,
 } from '../../storage/teamStorage';
+
 
 interface SelectableMember {
   index: number;
@@ -315,6 +323,22 @@ function ImportComparePage() {
   ] = useState('');
 
   const [
+    attackerForm,
+    setAttackerForm,
+    ] =
+    useState<ChampionsCalculationForm>(
+        'base',
+    );
+
+    const [
+    defenderForm,
+    setDefenderForm,
+    ] =
+    useState<ChampionsCalculationForm>(
+        'base',
+    );
+
+  const [
     attackerCurrentHpInput,
     setAttackerCurrentHpInput,
   ] = useState('');
@@ -497,12 +521,16 @@ function ImportComparePage() {
     );
 
     setMoveName(
-      firstMember
-        ?.build.moves[0] ??
-        '',
-    );
+        firstMember
+            ?.build.moves[0] ??
+            '',
+        );
 
-    clearResults();
+        setAttackerForm(
+        'base',
+        );
+
+        clearResults();
   }
 
   function selectDefenderSource(
@@ -524,14 +552,18 @@ function ImportComparePage() {
     );
 
     setDefenderIndexValue(
-      firstMember
-        ? String(
-            firstMember.index,
-          )
-        : '',
-    );
+        firstMember
+            ? String(
+                firstMember.index,
+            )
+            : '',
+        );
 
-    clearResults();
+        setDefenderForm(
+        'base',
+        );
+
+        clearResults();
   }
 
   function handleLibraryChange(
@@ -561,6 +593,7 @@ function ImportComparePage() {
       setAttackerSource('');
       setAttackerIndexValue('');
       setMoveName('');
+      setAttackerForm('base');
     }
 
     if (
@@ -573,6 +606,7 @@ function ImportComparePage() {
     ) {
       setDefenderSource('');
       setDefenderIndexValue('');
+      setDefenderForm('base');
     }
 
     clearResults();
@@ -594,6 +628,7 @@ function ImportComparePage() {
         setAttackerSource('');
         setAttackerIndexValue('');
         setMoveName('');
+        setAttackerForm('base');
       }
 
       if (
@@ -602,6 +637,7 @@ function ImportComparePage() {
       ) {
         setDefenderSource('');
         setDefenderIndexValue('');
+        setDefenderForm('base');
       }
     }
 
@@ -658,11 +694,11 @@ function ImportComparePage() {
 
       const nextDamageResult =
         calculateChampionsDamage(
-          attacker,
-          defender,
-          moveName,
-          fieldConditions,
-          {
+            attacker,
+            defender,
+            moveName,
+            fieldConditions,
+            {
             attackerCurrentHp,
 
             defenderCurrentHp,
@@ -670,26 +706,32 @@ function ImportComparePage() {
             criticalHit,
 
             spreadDamageApplies,
-          },
+
+            attackerForm,
+
+            defenderForm,
+            },
         );
 
       const nextSpeedResult =
         compareSpeed(
-          attacker,
-          {
+            attacker,
+            {
             ...attackerSpeedConditions,
 
             movePriority:
-              attackerPriority,
-          },
-          defender,
-          {
+                attackerPriority,
+            },
+            defender,
+            {
             ...defenderSpeedConditions,
 
             movePriority:
-              defenderPriority,
-          },
-          trickRoom,
+                defenderPriority,
+            },
+            trickRoom,
+            attackerForm,
+            defenderForm,
         );
 
       setDamageResult(
@@ -843,12 +885,16 @@ function ImportComparePage() {
                             ] ?? null;
 
                     setMoveName(
-                      nextBuild
-                        ?.moves[0] ??
-                        '',
-                    );
+                        nextBuild
+                            ?.moves[0] ??
+                            '',
+                        );
 
-                    clearResults();
+                        setAttackerForm(
+                        'base',
+                        );
+
+                        clearResults();
                   }}
                 >
                   <option value="">
@@ -878,6 +924,19 @@ function ImportComparePage() {
                 </select>
               </label>
 
+              <MegaFormControls
+                id="comparison-attacker"
+                build={attacker}
+                value={attackerForm}
+                onChange={(nextForm) => {
+                    setAttackerForm(
+                    nextForm,
+                    );
+
+                    clearResults();
+                }}
+                />
+
               <AutocompleteInput
                 id="library-comparison-move"
                 label="Attacking move"
@@ -905,12 +964,16 @@ function ImportComparePage() {
                   }
                   placeholder="Blank means full HP"
                   onChange={(event) => {
-                    setAttackerCurrentHpInput(
-                      event.target.value,
+                    setDefenderIndexValue(
+                        event.target.value,
+                    );
+
+                    setDefenderForm(
+                        'base',
                     );
 
                     clearResults();
-                  }}
+                    }}
                 />
               </label>
 
@@ -997,12 +1060,12 @@ function ImportComparePage() {
                     defenderIndexValue
                   }
                   onChange={(event) => {
-                    setDefenderIndexValue(
-                      event.target.value,
+                    setAttackerCurrentHpInput(
+                        event.target.value,
                     );
 
                     clearResults();
-                  }}
+                    }}
                 >
                   <option value="">
                     Select defender
@@ -1052,6 +1115,19 @@ function ImportComparePage() {
                   }}
                 />
               </label>
+
+              <MegaFormControls
+                id="comparison-defender"
+                build={defender}
+                value={defenderForm}
+                onChange={(nextForm) => {
+                    setDefenderForm(
+                    nextForm,
+                    );
+
+                    clearResults();
+                }}
+                />
 
               <SpeedControls
                 title="Defender"
@@ -1260,6 +1336,41 @@ function ImportComparePage() {
 
               <div className="damage-summary">
                 <div>
+                    <span className="result-label">
+                        Attacker calculation form
+                    </span>
+
+                    <strong className="result-value">
+                        {
+                        damageResult
+                            .attackerSpecies
+                        }
+                        {' — '}
+                        {
+                        damageResult
+                            .attackerAbility
+                        }
+                    </strong>
+                    </div>
+
+                    <div>
+                    <span className="result-label">
+                        Defender calculation form
+                    </span>
+
+                    <strong className="result-value">
+                        {
+                        damageResult
+                            .defenderSpecies
+                        }
+                        {' — '}
+                        {
+                        damageResult
+                            .defenderAbility
+                        }
+                    </strong>
+                    </div>
+                <div>
                   <span className="result-label">
                     Damage
                   </span>
@@ -1455,12 +1566,13 @@ function ImportComparePage() {
           )}
 
           <p className="field-help-text">
-            Mega preview comments remain
-            informational. Mega-active
-            calculations still use the
-            imported base species and
-            listed base ability.
-          </p>
+            Base form is the default for every
+            new selection. “Mega Evolve this
+            turn” uses the Mega form for both
+            damage and Speed on this action.
+            This comparison screen does not
+            permanently change the stored team.
+            </p>
         </section>
       )}
     </main>

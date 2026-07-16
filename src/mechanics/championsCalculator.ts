@@ -12,6 +12,18 @@ import {
 } from '../data/currentRegulation';
 
 import type {
+  DamageFieldConditions,
+} from '../domain/fieldConditions';
+
+import {
+  DEFAULT_DAMAGE_FIELD_CONDITIONS,
+} from '../domain/fieldConditions';
+
+import type {
+  ChampionsCalculationForm,
+} from '../domain/megaEvolution';
+
+import type {
   ChampionsPokemonBuild,
 } from '../domain/pokemonBuild';
 
@@ -20,16 +32,17 @@ import type {
 } from '../domain/statPoints';
 
 import {
-  DEFAULT_DAMAGE_FIELD_CONDITIONS,
-  type DamageFieldConditions,
-} from '../domain/fieldConditions';
+  resolveChampionsCalculationBuild,
+} from './resolveChampionsCalculationBuild';
 
 const GENERATION_9_DATA =
   Generations.get(9);
 
 const CHAMPIONS_GENERATION = {
   ...GENERATION_9_DATA,
-  num: 0 as const,
+
+  num:
+    0 as const,
 };
 
 export type CalculatedStats =
@@ -46,14 +59,20 @@ export type ChampionsCalculatorStatus =
 
 export interface ChampionsCalculatorBoosts {
   atk: number;
+
   def: number;
+
   spa: number;
+
   spd: number;
+
   spe: number;
 }
 
 export interface CreateChampionsPokemonOptions {
   currentHp?: number;
+
+  currentHpLabel?: string;
 
   boosts?: Partial<
     ChampionsCalculatorBoosts
@@ -61,11 +80,18 @@ export interface CreateChampionsPokemonOptions {
 
   status?:
     ChampionsCalculatorStatus;
+
+  /**
+   * Base is always the default.
+   *
+   * Mega must be requested explicitly.
+   */
+  form?:
+    ChampionsCalculationForm;
 }
 
 export interface ChampionsDamageOptions {
-  
-    /**
+  /**
    * Exact attacker HP when known.
    */
   attackerCurrentHp?: number;
@@ -83,92 +109,143 @@ export interface ChampionsDamageOptions {
 
   defenderStatus?:
     ChampionsCalculatorStatus;
-  
+
   /**
    * Exact current HP of the defender.
    *
-   * When omitted, the defender is treated
-   * as being at full HP.
+   * When omitted, the defender is
+   * treated as being at full HP.
    */
   defenderCurrentHp?: number;
 
   /**
    * Whether this specific observed or
-   * hypothetical hit was a critical hit.
+   * hypothetical hit was a critical
+   * hit.
    */
   criticalHit?: boolean;
 
   /**
    * Used only for moves whose target is
    * allAdjacent or allAdjacentFoes.
-   *
-   * True means at least two valid targets
-   * were present when the move executed.
-   *
-   * False means only one valid target was
-   * present, so the spread modifier should
-   * not apply.
    */
   spreadDamageApplies?: boolean;
+
+  /**
+   * Both forms default to base.
+   *
+   * Mega must be explicitly selected.
+   */
+  attackerForm?:
+    ChampionsCalculationForm;
+
+  defenderForm?:
+    ChampionsCalculationForm;
 }
 
 export interface ChampionsDamageResult {
   minDamage: number;
+
   maxDamage: number;
 
   description: string;
 
-  attackerStats: CalculatedStats;
-  defenderStats: CalculatedStats;
+  attackerStats:
+    CalculatedStats;
 
-  defenderCurrentHp: number;
-  defenderMaxHp: number;
+  defenderStats:
+    CalculatedStats;
+
+  defenderCurrentHp:
+    number;
+
+  defenderMaxHp:
+    number;
 
   /**
    * Chance from 0 to 1 that the damage
    * roll faints the defender, assuming
    * the move successfully hits.
    */
-  oneHitKoChance: number;
+  oneHitKoChance:
+    number;
 
   /**
-   * Base move accuracy from the generated
-   * regulation move metadata.
+   * Base move accuracy from regulation
+   * move metadata.
    */
-  baseAccuracyPercent: number;
+  baseAccuracyPercent:
+    number;
 
   /**
    * One-hit faint chance multiplied by
    * the move's base accuracy.
-   *
-   * Accuracy stages and other accuracy
-   * modifiers are not included yet.
    */
-  accuracyAdjustedKoChance: number;
+  accuracyAdjustedKoChance:
+    number;
 
-  criticalHit: boolean;
+  criticalHit:
+    boolean;
 
-  isSpreadMove: boolean;
+  isSpreadMove:
+    boolean;
 
-  spreadDamageApplied: boolean;
+  spreadDamageApplied:
+    boolean;
+
+  attackerForm:
+    ChampionsCalculationForm;
+
+  defenderForm:
+    ChampionsCalculationForm;
+
+  attackerSpecies:
+    string;
+
+  defenderSpecies:
+    string;
+
+  attackerAbility:
+    string;
+
+  defenderAbility:
+    string;
 }
 
 function copyCalculatedStats(
-  pokemon: Pokemon,
+  pokemon:
+    Pokemon,
 ): CalculatedStats {
   return {
-    hp: pokemon.stats.hp,
-    atk: pokemon.stats.atk,
-    def: pokemon.stats.def,
-    spa: pokemon.stats.spa,
-    spd: pokemon.stats.spd,
-    spe: pokemon.stats.spe,
+    hp:
+      pokemon.stats.hp,
+
+    atk:
+      pokemon.stats.atk,
+
+    def:
+      pokemon.stats.def,
+
+    spa:
+      pokemon.stats.spa,
+
+    spd:
+      pokemon.stats.spd,
+
+    spe:
+      pokemon.stats.spe,
   };
 }
 
 function normalizeCurrentHp(
-  requestedCurrentHp: number,
-  maximumHp: number,
+  requestedCurrentHp:
+    number,
+
+  maximumHp:
+    number,
+
+  label:
+    string = 'Current HP',
 ): number {
   if (
     !Number.isFinite(
@@ -176,7 +253,7 @@ function normalizeCurrentHp(
     )
   ) {
     throw new Error(
-      'Defender current HP must be a number.',
+      `${label} must be a number.`,
     );
   }
 
@@ -185,9 +262,11 @@ function normalizeCurrentHp(
       requestedCurrentHp,
     );
 
-  if (roundedCurrentHp < 1) {
+  if (
+    roundedCurrentHp < 1
+  ) {
     throw new Error(
-      'Defender current HP must be at least 1.',
+      `${label} must be at least 1.`,
     );
   }
 
@@ -198,10 +277,22 @@ function normalizeCurrentHp(
 }
 
 export function createChampionsPokemon(
-  build: ChampionsPokemonBuild,
+  originalBuild:
+    ChampionsPokemonBuild,
+
   options:
     CreateChampionsPokemonOptions = {},
 ): Pokemon {
+  const resolution =
+    resolveChampionsCalculationBuild(
+      originalBuild,
+      options.form ??
+        'base',
+    );
+
+  const build =
+    resolution.build;
+
   const speciesName =
     build.species.trim();
 
@@ -231,7 +322,7 @@ export function createChampionsPokemon(
       build.ability.trim() ||
       undefined,
 
-        item:
+    item:
       build.item.trim() ||
       undefined,
 
@@ -249,12 +340,23 @@ export function createChampionsPokemon(
      * values represent Stat Points.
      */
     evs: {
-      hp: build.statPoints.hp,
-      atk: build.statPoints.atk,
-      def: build.statPoints.def,
-      spa: build.statPoints.spa,
-      spd: build.statPoints.spd,
-      spe: build.statPoints.spe,
+      hp:
+        build.statPoints.hp,
+
+      atk:
+        build.statPoints.atk,
+
+      def:
+        build.statPoints.def,
+
+      spa:
+        build.statPoints.spa,
+
+      spd:
+        build.statPoints.spd,
+
+      spe:
+        build.statPoints.spe,
     },
 
     moves: [
@@ -280,6 +382,7 @@ export function createChampionsPokemon(
     normalizeCurrentHp(
       options.currentHp,
       fullHpPokemon.maxHP(),
+      options.currentHpLabel,
     );
 
   return new Pokemon(
@@ -287,17 +390,27 @@ export function createChampionsPokemon(
     speciesName,
     {
       ...pokemonOptions,
-      curHP: currentHp,
+
+      curHP:
+        currentHp,
     },
   );
 }
 
 export function getChampionsStats(
-  build: ChampionsPokemonBuild,
+  build:
+    ChampionsPokemonBuild,
+
+  form:
+    ChampionsCalculationForm =
+      'base',
 ): CalculatedStats {
   const pokemon =
     createChampionsPokemon(
       build,
+      {
+        form,
+      },
     );
 
   return copyCalculatedStats(
@@ -312,7 +425,8 @@ export function calculateChampionsDamage(
   defenderBuild:
     ChampionsPokemonBuild,
 
-  moveName: string,
+  moveName:
+    string,
 
   fieldConditions:
     DamageFieldConditions =
@@ -342,38 +456,76 @@ export function calculateChampionsDamage(
     );
   }
 
+  const attackerForm =
+    options.attackerForm ??
+    'base';
+
+  const defenderForm =
+    options.defenderForm ??
+    'base';
+
+  const attackerResolution =
+    resolveChampionsCalculationBuild(
+      attackerBuild,
+      attackerForm,
+    );
+
+  const defenderResolution =
+    resolveChampionsCalculationBuild(
+      defenderBuild,
+      defenderForm,
+    );
+
   const moveMetadata =
     getRegulationMoveEntry(
       cleanedMoveName,
     );
 
-    const attacker =
-    createChampionsPokemon(
-      attackerBuild,
-      {
-        currentHp:
-          options.attackerCurrentHp,
+  const attacker =
+  createChampionsPokemon(
+    attackerBuild,
+    {
+      currentHp:
+        options
+          .attackerCurrentHp,
 
-        boosts:
-          options.attackerBoosts,
+      currentHpLabel:
+        'Attacker current HP',
+
+      boosts:
+        options
+          .attackerBoosts,
 
         status:
-          options.attackerStatus,
+          options
+            .attackerStatus,
+
+        form:
+          attackerForm,
       },
     );
 
   const defender =
-    createChampionsPokemon(
-      defenderBuild,
-      {
-        currentHp:
-          options.defenderCurrentHp,
+  createChampionsPokemon(
+    defenderBuild,
+    {
+      currentHp:
+        options
+          .defenderCurrentHp,
 
-        boosts:
-          options.defenderBoosts,
+      currentHpLabel:
+        'Defender current HP',
+
+      boosts:
+        options
+          .defenderBoosts,
 
         status:
-          options.defenderStatus,
+          options
+            .defenderStatus,
+
+        form:
+          defenderForm,
       },
     );
 
@@ -381,13 +533,15 @@ export function calculateChampionsDamage(
     options.criticalHit ??
     false;
 
-  const move = new Move(
-    CHAMPIONS_GENERATION,
-    cleanedMoveName,
-    {
-      isCrit: criticalHit,
-    },
-  );
+  const move =
+    new Move(
+      CHAMPIONS_GENERATION,
+      cleanedMoveName,
+      {
+        isCrit:
+          criticalHit,
+      },
+    );
 
   const isSpreadMove =
     move.target ===
@@ -395,12 +549,6 @@ export function calculateChampionsDamage(
     move.target ===
       'allAdjacentFoes';
 
-  /*
-   * Spread moves normally use doubles
-   * damage. The targeting resolver passes
-   * false when only one valid target was
-   * present.
-   */
   const spreadDamageApplied =
     isSpreadMove &&
     (
@@ -409,15 +557,6 @@ export function calculateChampionsDamage(
       true
     );
 
-  /*
-   * The calculator applies the spread
-   * modifier to spread-target moves in
-   * Doubles mode.
-   *
-   * Singles mode is used only to suppress
-   * that modifier when a spread move had
-   * one valid target.
-   */
   const calculationGameType =
     isSpreadMove &&
     !spreadDamageApplied
@@ -432,59 +571,60 @@ export function calculateChampionsDamage(
     fieldConditions.terrain ||
     undefined;
 
-  const field = new Field({
-    gameType:
-      calculationGameType,
+  const field =
+    new Field({
+      gameType:
+        calculationGameType,
 
-    weather,
-    terrain,
+      weather,
 
-    attackerSide: {
-      isHelpingHand:
-        fieldConditions
-          .attackerHelpingHand,
-    },
+      terrain,
 
-    defenderSide: {
-      isReflect:
-        fieldConditions
-          .defenderReflect,
+      attackerSide: {
+        isHelpingHand:
+          fieldConditions
+            .attackerHelpingHand,
+      },
 
-      isLightScreen:
-        fieldConditions
-          .defenderLightScreen,
+      defenderSide: {
+        isReflect:
+          fieldConditions
+            .defenderReflect,
 
-      isAuroraVeil:
-        fieldConditions
-          .defenderAuroraVeil,
+        isLightScreen:
+          fieldConditions
+            .defenderLightScreen,
 
-      isFriendGuard:
-        fieldConditions
-          .defenderFriendGuard,
-    },
-  });
+        isAuroraVeil:
+          fieldConditions
+            .defenderAuroraVeil,
 
-  const result = calculate(
-    CHAMPIONS_GENERATION,
-    attacker,
-    defender,
-    move,
-    field,
-  );
+        isFriendGuard:
+          fieldConditions
+            .defenderFriendGuard,
+      },
+    });
+
+  const result =
+    calculate(
+      CHAMPIONS_GENERATION,
+      attacker,
+      defender,
+      move,
+      field,
+    );
 
   const [
     minDamage,
     maxDamage,
-  ] = result.range();
+  ] =
+    result.range();
 
   const koResult =
-    result.kochance(false);
+    result.kochance(
+      false,
+    );
 
-  /*
-   * kochance() can report a two-hit or
-   * later knockout. We only want the
-   * chance of fainting from this hit.
-   */
   const oneHitKoChance =
     koResult.n === 1 &&
     typeof koResult.chance ===
@@ -492,11 +632,6 @@ export function calculateChampionsDamage(
       ? koResult.chance
       : 0;
 
-  /*
-   * Null represents moves that do not
-   * perform an ordinary accuracy check.
-   * They are treated as 100% here.
-   */
   const baseAccuracyPercent =
     moveMetadata
       ?.accuracyPercent ??
@@ -511,6 +646,7 @@ export function calculateChampionsDamage(
 
   return {
     minDamage,
+
     maxDamage,
 
     description:
@@ -533,11 +669,35 @@ export function calculateChampionsDamage(
       defender.maxHP(),
 
     oneHitKoChance,
+
     baseAccuracyPercent,
+
     accuracyAdjustedKoChance,
 
     criticalHit,
+
     isSpreadMove,
+
     spreadDamageApplied,
+
+    attackerForm,
+
+    defenderForm,
+
+    attackerSpecies:
+      attackerResolution
+        .effectiveSpecies,
+
+    defenderSpecies:
+      defenderResolution
+        .effectiveSpecies,
+
+    attackerAbility:
+      attackerResolution
+        .effectiveAbility,
+
+    defenderAbility:
+      defenderResolution
+        .effectiveAbility,
   };
 }
