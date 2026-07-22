@@ -964,16 +964,12 @@ function ImportComparePage() {
                   }
                   placeholder="Blank means full HP"
                   onChange={(event) => {
-                    setDefenderIndexValue(
-                        event.target.value,
-                    );
-
-                    setDefenderForm(
-                        'base',
+                    setAttackerCurrentHpInput(
+                      event.target.value,
                     );
 
                     clearResults();
-                    }}
+                  }}
                 />
               </label>
 
@@ -1060,12 +1056,23 @@ function ImportComparePage() {
                     defenderIndexValue
                   }
                   onChange={(event) => {
-                    setAttackerCurrentHpInput(
-                        event.target.value,
+                    const nextValue =
+                      event.target.value;
+
+                    setDefenderIndexValue(
+                      nextValue,
+                    );
+
+                    setDefenderForm(
+                      'base',
+                    );
+
+                    setDefenderCurrentHpInput(
+                      '',
                     );
 
                     clearResults();
-                    }}
+                  }}
                 >
                   <option value="">
                     Select defender
@@ -1074,20 +1081,11 @@ function ImportComparePage() {
                   {defenderMembers.map(
                     (member) => (
                       <option
-                        key={
-                          member.index
-                        }
-                        value={
-                          member.index
-                        }
+                        key={member.index}
+                        value={member.index}
                       >
-                        {member.index +
-                          1}
-                        .{' '}
-                        {
-                          member.build
-                            .species
-                        }
+                        {member.index + 1}.{' '}
+                        {member.build.species}
                       </option>
                     ),
                   )}
